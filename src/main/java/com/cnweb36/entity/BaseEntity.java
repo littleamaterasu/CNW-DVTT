@@ -1,6 +1,10 @@
-package com.cnweb36.entity;
+package com.cnweb36.Entity;
 
 import java.util.Date;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -9,54 +13,54 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
+public class BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column
-	@CreatedBy
-	private String createdBy;
+	//@CreatedBy
+	@Column(name = "createby", columnDefinition = "VARCHAR(50) ")
+	private String createBy;
 	
-	@Column
 	@CreatedDate
-	private Date createdDate;
+	@Column(name = "createdate")
+	private Date createDate;
 	
-	@Column
-	@LastModifiedBy
-	private String modifiedBy;
-	
-	@Column
 	@LastModifiedDate
+	@Column(name = "modifieddate")
 	private Date modifiedDate;
-	
-	@Column
-	private String status;
-	
-	public Long getId() { return id; }
 
-	public String getCreatedBy() { return createdBy; }
-	public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
-
-	public Date getCreatedDate() { return createdDate; }
-	public void setCreatedDate(Date createdDate) { this.createdDate = createdDate; }
-
-	public String getModifiedBy() { return modifiedBy; }
-	public void setModifiedBy(String modifiedBy) { this.modifiedBy = modifiedBy; }
-
-	public Date getModifiedDate() { return modifiedDate; }
-	public void setModifiedDate(Date modifiedDate) { this.modifiedDate = modifiedDate; }
 	
-	public String getStatus() { return status; }
-	public void setStatus(String status) { this.status = status; }
 	
+	public Long getId() {
+		return id;
+	}
+
+	public String getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 }
