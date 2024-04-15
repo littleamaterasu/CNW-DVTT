@@ -1,9 +1,9 @@
-package com.cnweb36.converter;
+package com.cnweb36.Converter;
 
 import org.springframework.stereotype.Component;
 
-import com.cnweb36.dto.AdminDTO;
-import com.cnweb36.entity.AdminEntity;
+import com.cnweb36.DTO.AdminDTO;
+import com.cnweb36.Entity.AdminEntity;
 
 @Component
 public class AdminConverter {

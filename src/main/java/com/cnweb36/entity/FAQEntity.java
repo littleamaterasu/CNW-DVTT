@@ -1,4 +1,4 @@
-package com.cnweb36.entity;
+package com.cnweb36.Entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

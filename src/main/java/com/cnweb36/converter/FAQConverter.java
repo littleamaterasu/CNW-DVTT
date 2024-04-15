@@ -1,10 +1,10 @@
-package com.cnweb36.converter;
+package com.cnweb36.Converter;
 
 import org.springframework.stereotype.Component;
 
-import com.cnweb36.dto.FAQDTO;
-//import com.cnweb36.entity.AdminEntity;
-import com.cnweb36.entity.FAQEntity;
+import com.cnweb36.DTO.FAQDTO;
+//import com.cnweb36.Entity.AdminEntity;
+import com.cnweb36.Entity.FAQEntity;
 
 @Component
 public class FAQConverter {

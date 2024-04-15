@@ -1,4 +1,4 @@
-package com.cnweb36.entity;
+package com.cnweb36.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

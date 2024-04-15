@@ -1,4 +1,4 @@
-package com.cnweb36.entity;
+package com.cnweb36.Entity;
 
 import java.util.Date;
 //import java.util.ArrayList;

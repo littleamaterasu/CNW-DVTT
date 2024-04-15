@@ -1,4 +1,4 @@
-package com.cnweb36.dto;
+package com.cnweb36.DTO;
 
 //import java.util.HashSet;
 //import java.util.Set;
