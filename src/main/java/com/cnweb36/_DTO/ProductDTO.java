@@ -2,8 +2,6 @@ package com.cnweb36.DTO;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
-
 public class ProductDTO {
 
 	private Long id;
