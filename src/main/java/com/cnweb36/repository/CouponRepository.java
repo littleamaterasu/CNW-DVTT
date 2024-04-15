@@ -1,4 +1,4 @@
-package com.cnweb36.repository;
+package com.cnweb36.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
