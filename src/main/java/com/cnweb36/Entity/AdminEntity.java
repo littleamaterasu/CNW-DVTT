@@ -5,6 +5,8 @@ package com.cnweb36.Entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.cnweb36.Config.Role;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,7 +38,7 @@ public class AdminEntity extends BaseEntity {
 	private String phone;
 	
 	@Column(nullable=false)
-	private String role;
+	private Role role;
 
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="admin", cascade=CascadeType.ALL)
 	private Set<FAQEntity> faqList = new HashSet<>();
@@ -59,8 +61,8 @@ public class AdminEntity extends BaseEntity {
 	public String getPhone() { return phone; }
 	public void setPhone(String phone) { this.phone = phone; }
 
-	public String getRole() { return role; }
-	public void setRole(String role) { this.role = role; }
+	public Role getRole() { return role; }
+	public void setRole(Role role) { this.role = role; }
 	
 	public Set<FAQEntity> getFAQList() { return faqList; }
 	public void setFAQList(Set<FAQEntity> faqList) { this.faqList = faqList; }

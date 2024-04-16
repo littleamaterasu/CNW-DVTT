@@ -1,5 +1,7 @@
 package com.cnweb36.Entity;
 
+import com.cnweb36.Config.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -27,10 +29,10 @@ public class UserEntity extends BaseEntity {
 	private String phone;
 	
 	@Column(name = "role")
-	private String role;
+	private Role role;
 
 	public UserEntity(String username, String password, String name, String email, String address, String phone,
-			String role) {
+		Role role) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -85,22 +87,11 @@ public class UserEntity extends BaseEntity {
 		this.address = address;
 	}
 
-	public String getPhone() {
-		return phone;
-	}
+	public String getPhone() { return phone; }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+	public void setPhone(String phone) { this.phone = phone; }
 
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	
+	public Role getRole() { return role; }
+	public void setRole(Role role) { this.role = role; }
 	
 }

@@ -1,5 +1,7 @@
 package com.cnweb36.DTO;
 
+import com.cnweb36.Config.Role;
+
 //import java.util.HashSet;
 //import java.util.Set;
 
@@ -10,7 +12,7 @@ public class AdminDTO extends BaseDTO {
 	private String email;
 	private String address;
 	private String phone;
-	private String role;
+	private Role role;
 //	private Set<FAQDTO> faqList = new HashSet<>();
 	
 	public String getUsername() { return username; }
@@ -31,8 +33,8 @@ public class AdminDTO extends BaseDTO {
 	public String getPhone() { return phone; }
 	public void setPhone(String phone) { this.phone = phone; }
 
-	public String getRole() { return role; }
-	public void setRole(String role) { this.role = role; }
+	public Role getRole() { return role; }
+	public void setRole(Role role) { this.role = role; }
 	
 //	public Set<FAQDTO> getFAQList() { return faqList; }
 //	public void setFAQList(Set<FAQDTO> faqList) { this.faqList = faqList; }

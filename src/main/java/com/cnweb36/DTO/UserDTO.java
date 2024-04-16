@@ -2,10 +2,8 @@ package com.cnweb36.DTO;
 
 import java.util.Date;
 
+import com.cnweb36.Config.Role;
 import com.cnweb36.Entity.UserEntity;
-
-
-
 public class UserDTO {
 	
 	private Long id;
@@ -18,7 +16,7 @@ public class UserDTO {
 	private String email;
 	private String address;
 	private String phone;
-	private String role;
+	private Role role;
 	
 	public UserEntity toEntity(UserDTO userDTO) {
 		UserEntity userEntity=new UserEntity();
@@ -29,7 +27,7 @@ public class UserDTO {
 		userEntity.setPassword(userDTO.getPassword());
 		userEntity.setPhone(userDTO.getPhone());
 		userEntity.setUsername(userDTO.getUsername());
-		userEntity.setRole("USER");
+		userEntity.setRole(userDTO.getRole());
 		
 		return userEntity;
 	}
@@ -94,13 +92,11 @@ public class UserDTO {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public String getRole() {
+	public Role getRole() {
 		return role;
 	}
-	public void setRole(String role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
-	
-	
 
 }
