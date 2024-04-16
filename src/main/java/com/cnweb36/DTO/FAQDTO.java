@@ -3,7 +3,7 @@ package com.cnweb36.DTO;
 public class FAQDTO extends BaseDTO {
 	private String question;
 	private String answer;
-	private AdminDTO admin;
+	// private AdminDTO admin;
 	
 	public String getQuestion() { return question; }
 	public void setQuestion(String question) { this.question = question; }
@@ -11,7 +11,7 @@ public class FAQDTO extends BaseDTO {
 	public String getAnswer() { return answer; }
 	public void setAnswer(String answer) { this.answer = answer; }
 	
-	public AdminDTO getAdmin() { return admin; }
-	public void setAdmin(AdminDTO admin) { this.admin = admin; }
+	// public AdminDTO getAdmin() { return admin; }
+	// public void setAdmin(AdminDTO admin) { this.admin = admin; }
 	
 }
