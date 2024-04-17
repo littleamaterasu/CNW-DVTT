@@ -5,10 +5,12 @@ import java.util.Date;
 //import java.util.List;
 //import java.util.HashSet;
 //import java.util.Set;
+import java.util.List;
 
 //import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 //import jakarta.persistence.FetchType;
 //import jakarta.persistence.OneToMany;
 //import jakarta.persistence.JoinColumn;
@@ -51,6 +53,9 @@ public class CouponEntity extends BaseEntity {
 	
 	@Column(columnDefinition="text")
 	private String info;
+	
+	@OneToMany(mappedBy = "coupon_payment")
+	private List<PaymentEntity> ListPayment;
 
 //	@OneToMany(fetch=FetchType.LAZY, mappedBy="admin", cascade=CascadeType.ALL)
 //	private Set<FAQEntity> faqList = new HashSet<>();
@@ -81,6 +86,15 @@ public class CouponEntity extends BaseEntity {
 
 	public String getInfo() { return info; }
 	public void setInfo(String info) { this.info = info; }
+	
+	public List<PaymentEntity> getListPayment() {
+		return ListPayment;
+	}
+	public void setListPayment(List<PaymentEntity> listPayment) {
+		ListPayment = listPayment;
+	}
+	
+	
 	
 //	public Set<FAQEntity> getFAQList() { return faqList; }
 //	public void setFAQList(Set<FAQEntity> faqList) { this.faqList = faqList; }

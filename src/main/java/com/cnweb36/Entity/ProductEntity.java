@@ -1,7 +1,13 @@
 package com.cnweb36.Entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -44,6 +50,19 @@ public class ProductEntity extends BaseEntity {
 	@Column(name="rating")
 	private Float rating;
 
+	@OneToMany(mappedBy = "product_order")
+	private List<OrderEntity> listOrder;
+	
+	@ManyToOne
+	@JoinColumn(name = "providerid")
+	private ProviderEntity provider_product;
+	
+	@ManyToMany(mappedBy = "listProductCategory")
+	private List<CategoryEntity> listCategory;
+	
+	@ManyToMany(mappedBy = "listProductAuthor")
+	private List<AuthorEntity> listAuthor;
+	
 	public ProductEntity(String name, String imageUrl, Float price, Float discount, Integer soldCount,
 			Integer remainedCount, Integer year, Integer page, String cover, Integer weight, String info,
 			Float rating) {
@@ -161,5 +180,38 @@ public class ProductEntity extends BaseEntity {
 	public void setRating(Float rating) {
 		this.rating = rating;
 	}
+
+	public List<OrderEntity> getListOrder() {
+		return listOrder;
+	}
+
+	public void setListOrder(List<OrderEntity> listOrder) {
+		this.listOrder = listOrder;
+	}
+
+	public ProviderEntity getProvider_product() {
+		return provider_product;
+	}
+
+	public void setProvider_product(ProviderEntity provider_product) {
+		this.provider_product = provider_product;
+	}
+
+	public List<CategoryEntity> getListCategory() {
+		return listCategory;
+	}
+
+	public void setListCategory(List<CategoryEntity> listCategory) {
+		this.listCategory = listCategory;
+	}
+
+	public List<AuthorEntity> getListAuthor() {
+		return listAuthor;
+	}
+
+	public void setListAuthor(List<AuthorEntity> listAuthor) {
+		this.listAuthor = listAuthor;
+	}
+	
 	
 }

@@ -2,6 +2,8 @@ package com.cnweb36.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 
@@ -28,8 +30,18 @@ public class OrderEntity extends BaseEntity {
 	@Column(name="_dislike")
 	private Integer dislike;
 	
-	
+	@ManyToOne
+    @JoinColumn(name="userid", nullable=false)
+	private AccountEntity user_order;
 
+	@ManyToOne
+	@JoinColumn(name="productid", nullable=false)
+	private ProductEntity product_order;
+	
+	@ManyToOne
+	@JoinColumn(name="paymentid", nullable=false)
+	private PaymentEntity payment_order;
+	
 	public OrderEntity() {
 		super();
 	}
@@ -90,6 +102,30 @@ public class OrderEntity extends BaseEntity {
 
 	public void setDislike(Integer dislike) {
 		this.dislike = dislike;
+	}
+
+	public AccountEntity getUser_order() {
+		return user_order;
+	}
+
+	public void setUser_order(AccountEntity user_order) {
+		this.user_order = user_order;
+	}
+
+	public ProductEntity getProduct_order() {
+		return product_order;
+	}
+
+	public void setProduct_order(ProductEntity product_order) {
+		this.product_order = product_order;
+	}
+
+	public PaymentEntity getPayment_order() {
+		return payment_order;
+	}
+
+	public void setPayment_order(PaymentEntity payment_order) {
+		this.payment_order = payment_order;
 	}
 	
 	

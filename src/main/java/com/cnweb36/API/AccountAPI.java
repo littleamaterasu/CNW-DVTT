@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cnweb36.DTO.UserDTO;
-import com.cnweb36.Service.UserService;
+import com.cnweb36.DTO.AccountDTO;
+import com.cnweb36.Service.AccountService;
 
 class notice{
 	
@@ -37,17 +37,17 @@ class notice{
 }
 
 @RestController
-public class UserAPI {
+public class AccountAPI {
 	
 	@Autowired
-	private UserService userService;
+	private AccountService userService;
 	
 	@PostMapping("/guest/register")
-	public notice regiter(@RequestBody UserDTO userDTO) {
+	public notice regiter(@RequestBody AccountDTO AccountDTO) {
 		notice notice=new notice();
 		
-		Long result=userService.register(userDTO);
-		System.out.println(userDTO.getName());
+		Long result=userService.usersignup(AccountDTO);
+		System.out.println(AccountDTO.getName());
 		notice.setUserid(result);
 		if(result==-1l) {
 			notice.setContent("username or password already exists!");
