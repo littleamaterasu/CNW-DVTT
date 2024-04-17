@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.cnweb36.Entity.PaymentEntity;
 
 @Repository
-public interface PaymentRepo extends JpaRepository<PaymentEntity, Long> {
+public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 	
 
 }

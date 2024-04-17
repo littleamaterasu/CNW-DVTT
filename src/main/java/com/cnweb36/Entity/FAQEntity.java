@@ -20,7 +20,7 @@ public class FAQEntity extends BaseEntity {
 
 	@ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="adminId", nullable=false)
-	private AdminEntity admin;
+	private AccountEntity admin;
 	
 	public String getQuestion() { return question; }
 	public void setQuestion(String question) { this.question = question; }
@@ -28,7 +28,7 @@ public class FAQEntity extends BaseEntity {
 	public String getAnswer() { return answer; }
 	public void setAnswer(String answer) { this.answer = answer; }
 	
-	public AdminEntity getAdmin() { return admin; }
-	public void setAdmin(AdminEntity admin) { this.admin = admin; }
+	public AccountEntity getAdmin() { return admin; }
+	public void setAdmin(AccountEntity admin) { this.admin = admin; }
 	
 }
