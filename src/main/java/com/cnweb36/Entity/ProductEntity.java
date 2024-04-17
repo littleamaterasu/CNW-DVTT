@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -55,6 +56,12 @@ public class ProductEntity extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "providerid")
 	private ProviderEntity provider_product;
+	
+	@ManyToMany(mappedBy = "listProductCategory")
+	private List<CategoryEntity> listCategory;
+	
+	@ManyToMany(mappedBy = "listProductAuthor")
+	private List<AuthorEntity> listAuthor;
 	
 	public ProductEntity(String name, String imageUrl, Float price, Float discount, Integer soldCount,
 			Integer remainedCount, Integer year, Integer page, String cover, Integer weight, String info,
@@ -188,6 +195,22 @@ public class ProductEntity extends BaseEntity {
 
 	public void setProvider_product(ProviderEntity provider_product) {
 		this.provider_product = provider_product;
+	}
+
+	public List<CategoryEntity> getListCategory() {
+		return listCategory;
+	}
+
+	public void setListCategory(List<CategoryEntity> listCategory) {
+		this.listCategory = listCategory;
+	}
+
+	public List<AuthorEntity> getListAuthor() {
+		return listAuthor;
+	}
+
+	public void setListAuthor(List<AuthorEntity> listAuthor) {
+		this.listAuthor = listAuthor;
 	}
 	
 	
