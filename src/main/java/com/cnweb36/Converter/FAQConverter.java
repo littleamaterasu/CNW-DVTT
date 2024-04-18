@@ -2,7 +2,7 @@ package com.cnweb36.Converter;
 
 import org.springframework.stereotype.Component;
 
-import com.cnweb36.DTO.FAQDTO;
+import com.cnweb36.DTO.Entity.FAQDTO;
 //import com.cnweb36.Entity.AdminEntity;
 import com.cnweb36.Entity.FAQEntity;
 
