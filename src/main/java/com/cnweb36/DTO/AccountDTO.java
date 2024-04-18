@@ -1,8 +1,8 @@
 package com.cnweb36.DTO;
 
 import java.util.Date;
+import java.util.List;
 
-import com.cnweb36.Config.Role;
 public class AccountDTO {
 	
 	private Long id;
@@ -15,7 +15,7 @@ public class AccountDTO {
 	private String email;
 	private String address;
 	private String phone;
-	private Role role;
+	private List<String> roles;
 	
 	public Long getId() {
 		return id;
@@ -77,11 +77,11 @@ public class AccountDTO {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public Role getRole() {
-		return role;
+	public List<String> getRole() {
+		return roles;
 	}
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRole(List<String> roles) {
+		this.roles = roles;
 	}
 
 }

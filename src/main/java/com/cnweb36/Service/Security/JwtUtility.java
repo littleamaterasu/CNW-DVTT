@@ -24,13 +24,13 @@ import jakarta.servlet.http.HttpServletRequest;
 public class JwtUtility {
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtility.class);
 
-	@Value("${example.demo.jwtSecret}")
+	@Value("${cnweb36.jwtSecret}")
 	private String jwtSecret;
 
-	@Value("${example.demo.jwtExpirationMs}")
+	@Value("${cnweb36.jwtExpirationMs}")
 	private int jwtExpirationMs;
 
-	@Value("${example.demo.jwtCookieName}")
+	@Value("${cnweb36.jwtCookieName}")
 	private String jwtCookie;
   
 //	public String generateJwtToken(Authentication authentication) {
