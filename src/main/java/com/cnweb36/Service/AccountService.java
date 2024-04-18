@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cnweb36.Converter.AccountConverter;
-import com.cnweb36.DTO.AccountDTO;
+import com.cnweb36.DTO.Entity.AccountDTO;
 import com.cnweb36.Entity.AccountEntity;
 import com.cnweb36.Repository.AccountRepository;
 
@@ -22,7 +22,7 @@ public class AccountService {
 		if (!accountRepository.findByUsername(username).isPresent()) {
 
 			AccountEntity AccountEntity = AccountConverter.toEntity(AccountDTO);
-			AccountEntity.setRole("ROLE_USER");
+			AccountEntity.setRoles("ROLE_USER");
 
 			return accountRepository.save(AccountEntity).getId();
 		}
