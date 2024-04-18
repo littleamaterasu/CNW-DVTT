@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="FAQ")
+@Table(name="faq")
 public class FAQEntity extends BaseEntity {
 	@Column(nullable=false, columnDefinition="text")
 	private String question;
@@ -19,7 +19,7 @@ public class FAQEntity extends BaseEntity {
 	private String answer;
 
 	@ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="adminId", nullable=false)
+    @JoinColumn(name="admin_id", nullable=false)
 	private AccountEntity admin;
 	
 	public String getQuestion() { return question; }

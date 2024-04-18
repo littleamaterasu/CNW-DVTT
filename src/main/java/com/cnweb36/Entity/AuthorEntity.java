@@ -1,6 +1,7 @@
 package com.cnweb36.Entity;
 
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,22 +21,18 @@ public class AuthorEntity extends BaseEntity {
 	
 	@ManyToMany
 	@JoinTable(
-			  name = "author_product", 
-			  joinColumns = @JoinColumn(name = "productid"), 
-			  inverseJoinColumns = @JoinColumn(name = "authorid"))
-	private List<ProductEntity> listProductAuthor;
+		  name = "author_product", 
+		  joinColumns = @JoinColumn(name = "product_id"), 
+		  inverseJoinColumns = @JoinColumn(name = "author_id"))
+	private Set<ProductEntity> productList;
 
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 
 	public String getInfo() { return info; }
 	public void setInfo(String info) { this.info = info; }
-	public List<ProductEntity> getListProductAuthor() {
-		return listProductAuthor;
-	}
-	public void setListProductAuthor(List<ProductEntity> listProductAuthor) {
-		this.listProductAuthor = listProductAuthor;
-	}
 	
+	public Set<ProductEntity> getProductList() { return productList; }
+	public void setProductList(Set<ProductEntity> productList) { this.productList = productList; }
 	
 }

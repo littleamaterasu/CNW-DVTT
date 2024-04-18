@@ -16,8 +16,8 @@ public class ProviderEntity extends BaseEntity {
 	@Column(columnDefinition="text")
 	private String info;
 	
-	@OneToMany(mappedBy = "provider_product")
-	private List<ProductEntity> listProduct;
+	@OneToMany(mappedBy = "provider")
+	private List<ProductEntity> productList;
 
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
@@ -25,12 +25,7 @@ public class ProviderEntity extends BaseEntity {
 	public String getInfo() { return info; }
 	public void setInfo(String info) { this.info = info; }
 	
-	public List<ProductEntity> getListProduct() {
-		return listProduct;
-	}
-	public void setListProduct(List<ProductEntity> listProduct) {
-		this.listProduct = listProduct;
-	}
-	
+	public List<ProductEntity> getProductList() { return productList; }
+	public void setProductList(List<ProductEntity> productList) { this.productList = productList; }	
 	
 }

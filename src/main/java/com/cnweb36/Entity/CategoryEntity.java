@@ -1,6 +1,7 @@
 package com.cnweb36.Entity;
 
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,20 +22,17 @@ public class CategoryEntity extends BaseEntity {
 	@ManyToMany
 	@JoinTable(
 			  name = "category_product", 
-			  joinColumns = @JoinColumn(name = "productid"), 
-			  inverseJoinColumns = @JoinColumn(name = "categoryid"))
-	private List<ProductEntity> listProductCategory;
+			  joinColumns = @JoinColumn(name = "product_id"), 
+			  inverseJoinColumns = @JoinColumn(name = "category_id"))
+	private Set<ProductEntity> productList;
 
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 
 	public String getInfo() { return info; }
 	public void setInfo(String info) { this.info = info; }
-	public List<ProductEntity> getListProductCategory() {
-		return listProductCategory;
-	}
-	public void setListProductCategory(List<ProductEntity> listProductCategory) {
-		this.listProductCategory = listProductCategory;
-	}
+	
+	public Set<ProductEntity> getProductList() { return productList; }
+	public void setProductList(Set<ProductEntity> productList) { this.productList = productList; }
 	
 }

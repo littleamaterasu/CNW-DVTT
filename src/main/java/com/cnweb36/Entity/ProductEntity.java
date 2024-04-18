@@ -1,6 +1,7 @@
 package com.cnweb36.Entity;
 
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,10 +22,10 @@ public class ProductEntity extends BaseEntity {
 	private String imageUrl;
 	
 	@Column(name="price")
-	private Float price;
+	private Long price;
 	
 	@Column(name="discount")
-	private Float discount;
+	private Integer discount;
 	
 	@Column(name="soldCount")
 	private Integer soldCount;
@@ -50,20 +51,21 @@ public class ProductEntity extends BaseEntity {
 	@Column(name="rating")
 	private Float rating;
 
-	@OneToMany(mappedBy = "product_order")
-	private List<OrderEntity> listOrder;
+	@OneToMany(mappedBy = "product")
+	private List<OrderEntity> orderList;
 	
 	@ManyToOne
-	@JoinColumn(name = "providerid")
-	private ProviderEntity provider_product;
+	@JoinColumn(name = "provider_id")
+	private ProviderEntity provider;
 	
-	@ManyToMany(mappedBy = "listProductCategory")
-	private List<CategoryEntity> listCategory;
+	@ManyToMany(mappedBy = "productList")
+	private Set<CategoryEntity> categoryList;
 	
-	@ManyToMany(mappedBy = "listProductAuthor")
-	private List<AuthorEntity> listAuthor;
+	@ManyToMany(mappedBy = "productList")
+	private Set<AuthorEntity> authorList;
 	
-	public ProductEntity(String name, String imageUrl, Float price, Float discount, Integer soldCount,
+	public ProductEntity() { super(); }
+	public ProductEntity(String name, String imageUrl, Long price, Integer discount, Integer soldCount,
 			Integer remainedCount, Integer year, Integer page, String cover, Integer weight, String info,
 			Float rating) {
 		super();
@@ -81,137 +83,53 @@ public class ProductEntity extends BaseEntity {
 		this.rating = rating;
 	}
 
-	public ProductEntity() {
-		super();
-	}
 
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
+	public void setName(String name) { this.name = name; }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	public String getImageUrl() { return imageUrl; }
+	public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
-	public String getImageUrl() {
-		return imageUrl;
-	}
+	public Long getPrice() { return price; }
+	public void setPrice(Long price) { this.price = price; }
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
+	public Integer getDiscount() { return discount; }
+	public void setDiscount(Integer discount) { this.discount = discount; }
 
-	public Float getPrice() {
-		return price;
-	}
+	public Integer getSoldCount() { return soldCount; }
+	public void setSoldCount(Integer soldCount) { this.soldCount = soldCount; }
 
-	public void setPrice(Float price) {
-		this.price = price;
-	}
+	public Integer getRemainedCount() { return remainedCount; }
+	public void setRemainedCount(Integer remainedCount) { this.remainedCount = remainedCount; }
 
-	public Float getDiscount() {
-		return discount;
-	}
+	public Integer getYear() { return year; }
+	public void setYear(Integer year) { this.year = year; }
 
-	public void setDiscount(Float discount) {
-		this.discount = discount;
-	}
+	public Integer getPage() { return page; }
+	public void setPage(Integer page) { this.page = page; }
 
-	public Integer getSoldCount() {
-		return soldCount;
-	}
+	public String getCover() { return cover; }
+	public void setCover(String cover) { this.cover = cover; }
 
-	public void setSoldCount(Integer soldCount) {
-		this.soldCount = soldCount;
-	}
+	public Integer getWeight() { return weight; }
+	public void setWeight(Integer weight) { this.weight = weight; }
 
-	public Integer getRemainedCount() {
-		return remainedCount;
-	}
+	public String getInfo() { return info; }
+	public void setInfo(String info) { this.info = info; }
 
-	public void setRemainedCount(Integer remainedCount) {
-		this.remainedCount = remainedCount;
-	}
+	public Float getRating() { return rating; }
+	public void setRating(Float rating) { this.rating = rating; }
 
-	public Integer getYear() {
-		return year;
-	}
+	public List<OrderEntity> getOrderList() { return orderList; }
+	public void setOrderList(List<OrderEntity> orderList) { this.orderList = orderList; }
 
-	public void setYear(Integer year) {
-		this.year = year;
-	}
+	public ProviderEntity getProvider() { return provider; }
+	public void setProvider(ProviderEntity provider) { this.provider = provider; }
 
-	public Integer getPage() {
-		return page;
-	}
+	public Set<CategoryEntity> getCategoryList() { return categoryList; }
+	public void setCategoryList(Set<CategoryEntity> categoryList) { this.categoryList = categoryList; }
 
-	public void setPage(Integer page) {
-		this.page = page;
-	}
-
-	public String getCover() {
-		return cover;
-	}
-
-	public void setCover(String cover) {
-		this.cover = cover;
-	}
-
-	public Integer getWeight() {
-		return weight;
-	}
-
-	public void setWeight(Integer weight) {
-		this.weight = weight;
-	}
-
-	public String getInfo() {
-		return info;
-	}
-
-	public void setInfo(String info) {
-		this.info = info;
-	}
-
-	public Float getRating() {
-		return rating;
-	}
-
-	public void setRating(Float rating) {
-		this.rating = rating;
-	}
-
-	public List<OrderEntity> getListOrder() {
-		return listOrder;
-	}
-
-	public void setListOrder(List<OrderEntity> listOrder) {
-		this.listOrder = listOrder;
-	}
-
-	public ProviderEntity getProvider_product() {
-		return provider_product;
-	}
-
-	public void setProvider_product(ProviderEntity provider_product) {
-		this.provider_product = provider_product;
-	}
-
-	public List<CategoryEntity> getListCategory() {
-		return listCategory;
-	}
-
-	public void setListCategory(List<CategoryEntity> listCategory) {
-		this.listCategory = listCategory;
-	}
-
-	public List<AuthorEntity> getListAuthor() {
-		return listAuthor;
-	}
-
-	public void setListAuthor(List<AuthorEntity> listAuthor) {
-		this.listAuthor = listAuthor;
-	}
-	
+	public Set<AuthorEntity> getAuthorList() {	return authorList; }
+	public void setAuthorList(Set<AuthorEntity> authorList) { this.authorList = authorList; }
 	
 }

@@ -20,7 +20,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name="Coupon")
+@Table(name="coupon")
 public class CouponEntity extends BaseEntity {
 	@Column(nullable=false)
 	private String name;
@@ -54,12 +54,9 @@ public class CouponEntity extends BaseEntity {
 	@Column(columnDefinition="text")
 	private String info;
 	
-	@OneToMany(mappedBy = "coupon_payment")
-	private List<PaymentEntity> ListPayment;
+	@OneToMany(mappedBy = "coupon")
+	private List<PaymentEntity> paymentList;
 
-//	@OneToMany(fetch=FetchType.LAZY, mappedBy="admin", cascade=CascadeType.ALL)
-//	private Set<FAQEntity> faqList = new HashSet<>();
-	
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 	
@@ -87,14 +84,8 @@ public class CouponEntity extends BaseEntity {
 	public String getInfo() { return info; }
 	public void setInfo(String info) { this.info = info; }
 	
-	public List<PaymentEntity> getListPayment() {
-		return ListPayment;
-	}
-	public void setListPayment(List<PaymentEntity> listPayment) {
-		ListPayment = listPayment;
-	}
-	
-	
+	public List<PaymentEntity> getPaymentList() { return paymentList; }
+	public void setPaymentList(List<PaymentEntity> paymentList) { this.paymentList = paymentList; }	
 	
 //	public Set<FAQEntity> getFAQList() { return faqList; }
 //	public void setFAQList(Set<FAQEntity> faqList) { this.faqList = faqList; }

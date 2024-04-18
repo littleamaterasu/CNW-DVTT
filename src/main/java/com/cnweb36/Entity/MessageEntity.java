@@ -14,36 +14,20 @@ public class MessageEntity extends BaseEntity {
 	private String content;
 
 	@ManyToOne
-	@JoinColumn(name = "adminid", nullable = false)
-	private AccountEntity admin_message;
+	@JoinColumn(name = "admin_id", nullable = false)
+	private AccountEntity admin;
 	
 	@ManyToOne
-	@JoinColumn(name = "userid", nullable = false)
-	private AccountEntity user_message;
+	@JoinColumn(name = "user_id", nullable = false)
+	private AccountEntity user;
 	
-	public String getContent() {
-		return content;
-	}
+	public String getContent() { return content; }
+	public void setContent(String content) { this.content = content; }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+	public AccountEntity getAdmin() { return admin; }
+	public void setAdmin_message(AccountEntity admin) { this.admin = admin; }
 
-	public AccountEntity getAdmin_message() {
-		return admin_message;
-	}
-
-	public void setAdmin_message(AccountEntity admin_message) {
-		this.admin_message = admin_message;
-	}
-
-	public AccountEntity getUser_message() {
-		return user_message;
-	}
-
-	public void setUser_message(AccountEntity user_message) {
-		this.user_message = user_message;
-	}
-	
+	public AccountEntity getUser() { return user; }
+	public void setUser(AccountEntity user) { this.user = user; }	
 	
 }
