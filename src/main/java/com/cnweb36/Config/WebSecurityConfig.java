@@ -62,6 +62,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     	.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .authorizeHttpRequests(auth -> auth
         	.requestMatchers("/guest/**").permitAll()
+        	.requestMatchers("/user/**").hasRole("USER")
         	.requestMatchers("/admin1/**").hasAnyRole("ADMIN_1", "ADMIN_2", "ADMIN_3")
         	.requestMatchers("/admin2/**").hasAnyRole("ADMIN_2", "ADMIN_3")
         	.requestMatchers("/admin3/**").hasRole("ADMIN_3")
