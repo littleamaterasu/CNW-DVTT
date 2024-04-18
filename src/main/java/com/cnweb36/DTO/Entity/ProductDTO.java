@@ -1,4 +1,4 @@
-package com.cnweb36.DTO;
+package com.cnweb36.DTO.Entity;
 
 import java.util.Date;
 
@@ -10,23 +10,20 @@ public class ProductDTO {
 	private Date modifiedDate;
 	private String name;
 	private String imageUrl;
-	private Float price;
-	private Float discount;
+	private Long price;
+	private Integer discount;
 	private Integer soldCount;
 	private Integer remainedCount;
 	private Integer year;
 	private Integer page;
 	private String cover;
-	private Integer weight;
-	
-	
-	
+	private Integer weight;	
 	
 	public ProductDTO() {
 		super();
 	}
 	public ProductDTO(Long id, String createBy, Date createDate, Date modifiedDate, String name, String imageUrl,
-			Float price, Float discount, Integer soldCount, Integer remainedCount, Integer year, Integer page,
+			Long price, Integer discount, Integer soldCount, Integer remainedCount, Integer year, Integer page,
 			String cover, Integer weight) {
 		super();
 		this.id = id;
@@ -80,16 +77,16 @@ public class ProductDTO {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
-	public Float getPrice() {
+	public Long getPrice() {
 		return price;
 	}
-	public void setPrice(Float price) {
+	public void setPrice(Long price) {
 		this.price = price;
 	}
-	public Float getDiscount() {
+	public Integer getDiscount() {
 		return discount;
 	}
-	public void setDiscount(Float discount) {
+	public void setDiscount(Integer discount) {
 		this.discount = discount;
 	}
 	public Integer getSoldCount() {

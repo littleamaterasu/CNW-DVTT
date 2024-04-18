@@ -1,4 +1,4 @@
-package com.cnweb36.DTO;
+package com.cnweb36.DTO.Entity;
 
 public class CategoryDTO extends BaseDTO {
 	private String name;
