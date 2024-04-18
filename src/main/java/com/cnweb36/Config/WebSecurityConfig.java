@@ -59,6 +59,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
+    	.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .authorizeHttpRequests(auth -> auth
         	.requestMatchers("/guest/**").permitAll()
         	.requestMatchers("/admin1/**").hasAnyRole("ADMIN_1", "ADMIN_2", "ADMIN_3")
