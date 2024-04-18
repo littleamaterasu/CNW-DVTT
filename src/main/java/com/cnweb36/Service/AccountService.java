@@ -19,8 +19,7 @@ public class AccountService {
 	public Long usersignup(AccountDTO AccountDTO) {
 
 		String username = AccountDTO.getUsername();
-		String password = AccountDTO.getPassword();
-		if (!accountRepository.findByUsername(username).isPresent() && !accountRepository.findByPassword(password).isPresent()) {
+		if (!accountRepository.findByUsername(username).isPresent()) {
 
 			AccountEntity AccountEntity = AccountConverter.toEntity(AccountDTO);
 			AccountEntity.setRole("ROLE_USER");
@@ -33,8 +32,7 @@ public class AccountService {
 	public Long adminsignup1(AccountDTO AccountDTO) {
 
 		String username = AccountDTO.getUsername();
-		String password = AccountDTO.getPassword();
-		if (!accountRepository.findByUsername(username).isPresent() && !accountRepository.findByPassword(password).isPresent()) {
+		if (!accountRepository.findByUsername(username).isPresent()) {
 
 			AccountEntity AccountEntity = AccountConverter.toEntity(AccountDTO);
 			AccountEntity.setRoles("ROLE_ADMIN_1");
@@ -47,8 +45,7 @@ public class AccountService {
 	public Long usersignup2(AccountDTO AccountDTO) {
 
 		String username = AccountDTO.getUsername();
-		String password = AccountDTO.getPassword();
-		if (!accountRepository.findByUsername(username).isPresent() && !accountRepository.findByPassword(password).isPresent()) {
+		if (!accountRepository.findByUsername(username).isPresent()) {
 
 			AccountEntity AccountEntity = AccountConverter.toEntity(AccountDTO);
 			AccountEntity.setRoles("ROLE_ADMIN1","ROLE_ADMIN_2");

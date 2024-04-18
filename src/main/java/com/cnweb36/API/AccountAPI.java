@@ -50,7 +50,7 @@ public class AccountAPI {
 		System.out.println(AccountDTO.getName());
 		notice.setUserid(result);
 		if(result==-1l) {
-			notice.setContent("username or password already exists!");
+			notice.setContent("username already exists!");
 		}else {
 			notice.setContent("Oke");
 		}
