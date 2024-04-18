@@ -11,8 +11,5 @@ import com.cnweb36.Entity.AccountEntity;
 public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 	
 	Optional<AccountEntity> findByUsername(String username);
-
-	//AccountEntity findByUsername(String username);
-
 	Optional<AccountEntity> findByPassword(String password);
 }
