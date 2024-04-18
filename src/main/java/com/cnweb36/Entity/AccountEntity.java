@@ -10,7 +10,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="user")
+@Table(name="account")
 public class AccountEntity extends BaseEntity {
 	
 	@Column(name = "username")

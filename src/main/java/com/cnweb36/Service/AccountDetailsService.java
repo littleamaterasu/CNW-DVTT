@@ -22,7 +22,7 @@ public class AccountDetailsService implements UserDetailsService {
     	AccountEntity accountEntity = accountRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
-        return UserDetails.build(accountEntity);
+        return AccountDetails.build(accountEntity);
     }
 
 }
