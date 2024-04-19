@@ -12,8 +12,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
-import com.cnweb36.Service.Security.AccountDetails;
-
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -47,7 +45,7 @@ public class JwtUtility {
 	private Key key() {
 		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
 	}	
-	public static String generateCsrfToken() {
+	public String generateCsrfToken() {
 		return UUID.randomUUID().toString();
 	}
 //	public String generateTokenFromUsername(String username, String token) {   

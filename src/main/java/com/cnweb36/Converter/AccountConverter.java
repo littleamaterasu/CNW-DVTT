@@ -2,7 +2,7 @@ package com.cnweb36.Converter;
 
 import org.springframework.stereotype.Component;
 
-import com.cnweb36.DTO.AccountDTO;
+import com.cnweb36.DTO.Entity.AccountDTO;
 import com.cnweb36.Entity.AccountEntity;
 
 @Component

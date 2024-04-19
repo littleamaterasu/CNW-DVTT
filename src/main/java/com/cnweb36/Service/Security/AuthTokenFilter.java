@@ -23,7 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.cnweb36.Service.AccountDetailsService;
 
 public class AuthTokenFilter extends OncePerRequestFilter {	
-	@Value("${example.demo.csrfHeader}")
+	@Value("${cnweb36.csrfHeader}")
 	private String csrfHeader;
 	
 	@Autowired

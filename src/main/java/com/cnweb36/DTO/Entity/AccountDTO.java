@@ -1,4 +1,4 @@
-package com.cnweb36.DTO;
+package com.cnweb36.DTO.Entity;
 
 import java.util.Date;
 import java.util.List;

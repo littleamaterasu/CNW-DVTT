@@ -1,4 +1,4 @@
-package com.cnweb36.DTO;
+package com.cnweb36.DTO.Entity;
 
 import java.util.Date;
 
@@ -13,7 +13,6 @@ public class CouponDTO extends BaseDTO {
 	private Date endTime;
 	private String info;
 
-//	@OneToMany(fetch=FetchType.LAZY, mappedBy="admin", cascade=CascadeType.ALL)
 //	private Set<FAQEntity> faqList = new HashSet<>();
 	
 	public String getName() { return name; }

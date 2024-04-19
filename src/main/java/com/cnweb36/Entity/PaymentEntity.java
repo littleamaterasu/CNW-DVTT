@@ -1,6 +1,6 @@
 package com.cnweb36.Entity;
 
-import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,24 +25,21 @@ public class PaymentEntity extends BaseEntity {
 	@Column(name="pay")
 	private Float pay;
 
-	@OneToMany(mappedBy = "payment_order")
-	private List<OrderEntity> listOrder;
+	@OneToMany(mappedBy = "payment")
+	private Set<OrderEntity> orderList;
 	
-	@OneToMany(mappedBy = "paymentid")
-	private List<Payment_logEntity> listLog;
+	@OneToMany(mappedBy = "payment")
+	private Set<PaymentLogEntity> paymentLogList;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_payment")
-	private AccountEntity user_payment;
+	private AccountEntity user;
 	
 	@ManyToOne
-	@JoinColumn(name="couponid", nullable = false)
-	private CouponEntity coupon_payment;
+	@JoinColumn(name="coupon_id", nullable = false)
+	private CouponEntity coupon;
 	
-	public PaymentEntity() {
-		super();
-	}
-
+	public PaymentEntity() { super(); }
 	public PaymentEntity(String address, String phone, String note, Float pay) {
 		super();
 		this.address = address;
@@ -51,70 +48,28 @@ public class PaymentEntity extends BaseEntity {
 		this.pay = pay;
 	}
 
-	public String getAddress() {
-		return address;
-	}
+	public String getAddress() { return address; }
+	public void setAddress(String address) { this.address = address; }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+	public String getPhone() { return phone; }
+	public void setPhone(String phone) { this.phone = phone; }
 
-	public String getPhone() {
-		return phone;
-	}
+	public String getNote() { return note; }
+	public void setNote(String note) { this.note = note; }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+	public Float getPay() { return pay; }
+	public void setPay(Float pay) { this.pay = pay; }
 
-	public String getNote() {
-		return note;
-	}
+	public Set<OrderEntity> getOrderList() { return orderList; }
+	public void setOrderList(Set<OrderEntity> orderList) { this.orderList = orderList; }
 
-	public void setNote(String note) {
-		this.note = note;
-	}
+	public Set<PaymentLogEntity> getPaymentLogList() { return paymentLogList; }
+	public void setPaymentLogList(Set<PaymentLogEntity> paymentLogList) { this.paymentLogList = paymentLogList; }
 
-	public Float getPay() {
-		return pay;
-	}
+	public AccountEntity getUser() { return user; }
+	public void setUser(AccountEntity user) { this.user = user; }
 
-	public void setPay(Float pay) {
-		this.pay = pay;
-	}
-
-	public List<OrderEntity> getListOrder() {
-		return listOrder;
-	}
-
-	public void setListOrder(List<OrderEntity> listOrder) {
-		this.listOrder = listOrder;
-	}
-
-	public List<Payment_logEntity> getListLog() {
-		return listLog;
-	}
-
-	public void setListLog(List<Payment_logEntity> listLog) {
-		this.listLog = listLog;
-	}
-
-	public AccountEntity getUser_payment() {
-		return user_payment;
-	}
-
-	public void setUser_payment(AccountEntity user_payment) {
-		this.user_payment = user_payment;
-	}
-
-	public CouponEntity getCoupon_payment() {
-		return coupon_payment;
-	}
-
-	public void setCoupon_payment(CouponEntity coupon_payment) {
-		this.coupon_payment = coupon_payment;
-	}
-	
-	
+	public CouponEntity getCoupon() { return coupon; }
+	public void setCoupon(CouponEntity coupon) { this.coupon = coupon; }
 	
 }
