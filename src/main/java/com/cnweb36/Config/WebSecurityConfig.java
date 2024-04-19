@@ -36,15 +36,15 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 		return new AuthTokenFilter();
 	}
 	
-	  @Bean
-	  public DaoAuthenticationProvider authenticationProvider() {
-	      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-	       
-	      authProvider.setUserDetailsService(accountDetailsService);
-	      authProvider.setPasswordEncoder(passwordEncoder());
-	   
-	      return authProvider;
-	  }
+	@Bean
+	public DaoAuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+       
+		authProvider.setUserDetailsService(accountDetailsService);
+		authProvider.setPasswordEncoder(passwordEncoder());
+   
+		return authProvider;
+	}
 	  
   	@Bean
   	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -61,12 +61,13 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     http.csrf(csrf -> csrf.disable())
     	.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .authorizeHttpRequests(auth -> auth
-        	.requestMatchers("/guest/**").permitAll()
-        	.requestMatchers("/user/**").hasRole("USER")
-        	.requestMatchers("/admin1/**").hasAnyRole("ADMIN_1", "ADMIN_2", "ADMIN_3")
-        	.requestMatchers("/admin2/**").hasAnyRole("ADMIN_2", "ADMIN_3")
-        	.requestMatchers("/admin3/**").hasRole("ADMIN_3")
-              .anyRequest().authenticated()
+//        	.requestMatchers("/guest/**").permitAll()
+//        	.requestMatchers("/user/**").hasRole("USER")
+//        	.requestMatchers("/admin1/**").hasAnyRole("ADMIN_1", "ADMIN_2", "ADMIN_3")
+//        	.requestMatchers("/admin2/**").hasAnyRole("ADMIN_2", "ADMIN_3")
+//        	.requestMatchers("/admin3/**").hasRole("ADMIN_3")
+        	.anyRequest().permitAll()
+//            .anyRequest().authenticated()
         );
     http.authenticationProvider(authenticationProvider());
  

@@ -1,6 +1,5 @@
 package com.cnweb36.Entity;
 
-import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -52,7 +51,7 @@ public class ProductEntity extends BaseEntity {
 	private Float rating;
 
 	@OneToMany(mappedBy = "product")
-	private List<OrderEntity> orderList;
+	private Set<OrderEntity> orderList;
 	
 	@ManyToOne
 	@JoinColumn(name = "provider_id")
@@ -120,8 +119,8 @@ public class ProductEntity extends BaseEntity {
 	public Float getRating() { return rating; }
 	public void setRating(Float rating) { this.rating = rating; }
 
-	public List<OrderEntity> getOrderList() { return orderList; }
-	public void setOrderList(List<OrderEntity> orderList) { this.orderList = orderList; }
+	public Set<OrderEntity> getOrderList() { return orderList; }
+	public void setOrderList(Set<OrderEntity> orderList) { this.orderList = orderList; }
 
 	public ProviderEntity getProvider() { return provider; }
 	public void setProvider(ProviderEntity provider) { this.provider = provider; }

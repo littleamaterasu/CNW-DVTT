@@ -1,6 +1,6 @@
 package com.cnweb36.Entity;
 
-import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,10 +26,10 @@ public class PaymentEntity extends BaseEntity {
 	private Float pay;
 
 	@OneToMany(mappedBy = "payment")
-	private List<OrderEntity> orderList;
+	private Set<OrderEntity> orderList;
 	
 	@OneToMany(mappedBy = "payment")
-	private List<PaymentLogEntity> paymentLogList;
+	private Set<PaymentLogEntity> paymentLogList;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_payment")
@@ -60,11 +60,11 @@ public class PaymentEntity extends BaseEntity {
 	public Float getPay() { return pay; }
 	public void setPay(Float pay) { this.pay = pay; }
 
-	public List<OrderEntity> getOrderList() { return orderList; }
-	public void setOrderList(List<OrderEntity> orderList) { this.orderList = orderList; }
+	public Set<OrderEntity> getOrderList() { return orderList; }
+	public void setOrderList(Set<OrderEntity> orderList) { this.orderList = orderList; }
 
-	public List<PaymentLogEntity> getPaymentLogList() { return paymentLogList; }
-	public void setPaymentLogList(List<PaymentLogEntity> paymentLogList) { this.paymentLogList = paymentLogList; }
+	public Set<PaymentLogEntity> getPaymentLogList() { return paymentLogList; }
+	public void setPaymentLogList(Set<PaymentLogEntity> paymentLogList) { this.paymentLogList = paymentLogList; }
 
 	public AccountEntity getUser() { return user; }
 	public void setUser(AccountEntity user) { this.user = user; }

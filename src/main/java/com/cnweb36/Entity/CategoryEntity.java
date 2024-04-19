@@ -1,6 +1,5 @@
 package com.cnweb36.Entity;
 
-import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;

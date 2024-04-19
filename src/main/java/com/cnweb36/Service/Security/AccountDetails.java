@@ -44,7 +44,7 @@ public class AccountDetails implements UserDetails {
 //	userRole.setName(ERole.ROLE_ADMIN);
 //	Set<RoleEnity> userRoles = new HashSet<RoleEnity>();
 //	userRoles.add(userRole);
-	List<String> accountRoles = accountEntity.getRoles();
+	Set<String> accountRoles = accountEntity.getRoles();
 	
 //    List<GrantedAuthority> authorities = user.getRoles().stream()
 //        .map(role -> new SimpleGrantedAuthority(role.getName().name()))

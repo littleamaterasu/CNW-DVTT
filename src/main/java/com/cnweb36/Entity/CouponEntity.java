@@ -2,10 +2,9 @@ package com.cnweb36.Entity;
 
 import java.util.Date;
 //import java.util.ArrayList;
-//import java.util.List;
-//import java.util.HashSet;
 //import java.util.Set;
-import java.util.List;
+//import java.util.HashSet;
+import java.util.Set;
 
 //import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -55,7 +54,7 @@ public class CouponEntity extends BaseEntity {
 	private String info;
 	
 	@OneToMany(mappedBy = "coupon")
-	private List<PaymentEntity> paymentList;
+	private Set<PaymentEntity> paymentList;
 
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
@@ -84,8 +83,8 @@ public class CouponEntity extends BaseEntity {
 	public String getInfo() { return info; }
 	public void setInfo(String info) { this.info = info; }
 	
-	public List<PaymentEntity> getPaymentList() { return paymentList; }
-	public void setPaymentList(List<PaymentEntity> paymentList) { this.paymentList = paymentList; }	
+	public Set<PaymentEntity> getPaymentList() { return paymentList; }
+	public void setPaymentList(Set<PaymentEntity> paymentList) { this.paymentList = paymentList; }	
 	
 //	public Set<FAQEntity> getFAQList() { return faqList; }
 //	public void setFAQList(Set<FAQEntity> faqList) { this.faqList = faqList; }
