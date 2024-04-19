@@ -15,7 +15,7 @@ public class AccountConverter {
 		AccountEntity.setAddress(AccountDTO.getAddress());
 		AccountEntity.setEmail(AccountDTO.getEmail());
 		AccountEntity.setName(AccountDTO.getName());
-		AccountEntity.setPassword(AccountDTO.getPassword());
+//		AccountEntity.setPassword(AccountDTO.getPassword());
 		AccountEntity.setPhone(AccountDTO.getPhone());
 		AccountEntity.setUsername(AccountDTO.getUsername());
 

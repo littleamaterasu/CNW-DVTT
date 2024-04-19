@@ -71,7 +71,7 @@ public class AccountEntity extends BaseEntity {
 		for(String s: roleList ) {
 			roles = roles.concat(s).concat("=");
 		}
-		this.roles = roles;
+		this.roles = roles.substring(0,roles.length()-1);
 	}	
 
 	public String getUsername() { return username; }
