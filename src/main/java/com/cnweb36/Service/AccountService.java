@@ -92,7 +92,24 @@ public class AccountService {
 			String password = encoder.encode(AccountDTO.getPassword());
 			
 			AccountEntity.setPassword(password);
-			AccountEntity.setRoles("ROLE_ADMIN1", "ROLE_ADMIN_2");
+			AccountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2");
+
+			return accountRepository.save(AccountEntity).getId();
+		}
+		return -1l;
+	}
+	
+	public Long adminsignup3(AccountDTO AccountDTO) {
+
+		String username = AccountDTO.getUsername();
+		if (!accountRepository.findByUsername(username).isPresent()) {
+
+			AccountEntity AccountEntity = accountConverter.toEntity(AccountDTO);
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			String password = encoder.encode(AccountDTO.getPassword());
+			
+			AccountEntity.setPassword(password);
+			AccountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2","ROLE_ADMIN_3");
 
 			return accountRepository.save(AccountEntity).getId();
 		}

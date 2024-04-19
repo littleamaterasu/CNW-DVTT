@@ -36,7 +36,7 @@ public class AccountAPI {
 				.body(new LoginResponse(loginDTO.getId(), loginDTO.getRoleList(), loginDTO.getCsrfToken()));
 	}
 
-	@PostMapping("/user/signup")
+	@PostMapping("/signup/user")
 	public SignUpResponse regiter(@RequestBody AccountDTO AccountDTO) {
 		SignUpResponse SignUpResponse = new SignUpResponse();
 
@@ -52,7 +52,7 @@ public class AccountAPI {
 
 	// admin signup for create admin1
 
-	@PostMapping("/admin1/signup")
+	@PostMapping("/signup/admin1")
 	@PreAuthorize("hasRole('ROLE_ADMIN_2') or hasRole('ROLE_ADMIN_3')")
 	public SignUpResponse admin1signup(@RequestBody AccountDTO AccountDTO) {
 		SignUpResponse SignUpResponse = new SignUpResponse();
@@ -67,12 +67,27 @@ public class AccountAPI {
 		return SignUpResponse;
 	}
 
-	@PostMapping("/admin2/signup")
+	@PostMapping("/signup/admin2")
 	@PreAuthorize("hasRole('ROLE_ADMIN_3')")
 	public SignUpResponse admin2signup(@RequestBody AccountDTO AccountDTO) {
 		SignUpResponse SignUpResponse = new SignUpResponse();
 
 		Long result = accountService.adminsignup2(AccountDTO);
+		SignUpResponse.setId(result);
+		if (result == -1l) {
+			SignUpResponse.setContent("admin already exists!");
+		} else {
+			SignUpResponse.setContent("Oke");
+		}
+		return SignUpResponse;
+	}
+	
+	@PostMapping("/signup/admin3")
+	@PreAuthorize("hasRole('ROLE_ADMIN_3')")
+	public SignUpResponse admin3signup(@RequestBody AccountDTO AccountDTO) {
+		SignUpResponse SignUpResponse = new SignUpResponse();
+
+		Long result = accountService.adminsignup3(AccountDTO);
 		SignUpResponse.setId(result);
 		if (result == -1l) {
 			SignUpResponse.setContent("admin already exists!");
