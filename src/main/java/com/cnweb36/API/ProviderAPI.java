@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cnweb36.DTO.Entity.AuthorDTO;
+import com.cnweb36.DTO.Entity.ProviderDTO;
 import com.cnweb36.DTO.Response.NoticeResponse;
-import com.cnweb36.Service.AuthorService;
+import com.cnweb36.Service.ProviderService;
 
 @RestController
-@RequestMapping("/author")
-public class AuthorAPI {
+@RequestMapping("/provider")
+public class ProviderAPI {
 
 	@Autowired
-	private AuthorService authorService;
+	private ProviderService providerService;
 	
 	@PostMapping("/post")
-	@PreAuthorize("hasRole('ROLE_ADMIN_1') or hasRole('ROLE_ADMIN_2') or hasRole('ROLE_ADMIN_3')")
-	public NoticeResponse AddProduct(@RequestBody AuthorDTO authorDTO) {
+	@PreAuthorize("hasRole('ROLE_ADMIN_2') or hasRole('ROLE_ADMIN_3') or hasRole('ROLE_ADMIN_1')")
+	public NoticeResponse AddProduct(@RequestBody ProviderDTO providerDTO) {
 		NoticeResponse noticeResponse=new NoticeResponse();
 		try {
-			return authorService.AddOrUpdateAuthor(authorDTO);
+			return providerService.AddOrUpdateProvider(providerDTO);
 		} catch (Exception e) {
 			noticeResponse.setStatus(-1l);
 			noticeResponse.setContent(e.getMessage());
@@ -35,7 +35,7 @@ public class AuthorAPI {
 	}
 	
 	@GetMapping("/get")
-	public List<AuthorDTO> getListAuthor() {
-		return authorService.getListAuthor();
+	public List<ProviderDTO> getListProvider() {
+		return providerService.getListProvider();
 	}
 }
