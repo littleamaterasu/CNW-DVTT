@@ -1,7 +1,9 @@
 package com.cnweb36.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.cnweb36.DTO.Entity.CategoryDTO;
@@ -33,6 +35,20 @@ public class CategoryService {
 			noticeResponse.setContent("Update a category");
 		}
 		return noticeResponse;
+	}
+	
+	public List<CategoryDTO> getListCategory() {
+		List<CategoryDTO> listCategory=new ArrayList<>();
+		
+		for(CategoryEntity e: categoryRepository.findAll()) {
+			CategoryDTO categoryDTO=new CategoryDTO();
+			categoryDTO.setId(e.getId());
+			categoryDTO.setInfo(e.getInfo());
+			categoryDTO.setName(e.getName());
+			
+			listCategory.add(categoryDTO);
+		}
+		return listCategory;
 	}
 	
 	

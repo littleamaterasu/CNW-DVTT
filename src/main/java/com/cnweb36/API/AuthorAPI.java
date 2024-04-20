@@ -10,32 +10,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cnweb36.DTO.Entity.CategoryDTO;
+import com.cnweb36.DTO.Entity.AuthorDTO;
 import com.cnweb36.DTO.Response.NoticeResponse;
-import com.cnweb36.Service.CategoryService;
+import com.cnweb36.Service.AuthorService;
 
 @RestController
-@RequestMapping("/category")
-public class CategoryAPI {
-	
+@RequestMapping("/author")
+public class AuthorAPI {
+
 	@Autowired
-	private CategoryService categoryService;
+	private AuthorService authorService;
 	
 	@PostMapping("/post")
-	@PreAuthorize("hasRole('ROLE_ADMIN_2') or hasRole('ROLE_ADMIN_3') or hasRole('ROLE_ADMIN_1')")
-	public NoticeResponse addOrUpdateCategory(@RequestBody CategoryDTO categoryDTO) {
+	@PreAuthorize("hasRole('ROLE_ADMIN_2') or hasRole('ROLE_ADMIN_3') or hasRole('ROLE_ADMIN_3')")
+	public NoticeResponse AddProduct(@RequestBody AuthorDTO authorDTO) {
+		NoticeResponse noticeResponse=new NoticeResponse();
 		try {
-			return categoryService.AddOrUpdateCategory(categoryDTO);
-			
-			
+			return authorService.AddOrUpdateAuthor(authorDTO);
 		} catch (Exception e) {
-			NoticeResponse noticeResponse=new NoticeResponse(-1l, e.getMessage());
+			noticeResponse.setStatus(-1l);
+			noticeResponse.setContent(e.getMessage());
 			return noticeResponse;
 		}
 	}
 	
 	@GetMapping("/get")
-	public List<CategoryDTO> getListCategory(){
-		return categoryService.getListCategory();
+	public List<AuthorDTO> getListAuthor() {
+		return authorService.getListAuthor();
 	}
 }
