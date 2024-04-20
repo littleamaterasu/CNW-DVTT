@@ -40,6 +40,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		
 		try {
 			String jwt = parseJwt(request);
+			System.out.println(jwt);
 			if (jwt != null && jwtUtility.validateJwtToken(jwt)) {
 //				String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 //				System.out.println(test);

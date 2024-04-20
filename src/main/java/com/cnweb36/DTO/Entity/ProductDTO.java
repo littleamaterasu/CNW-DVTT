@@ -1,6 +1,7 @@
 package com.cnweb36.DTO.Entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class ProductDTO {
 
@@ -8,6 +9,7 @@ public class ProductDTO {
 	private String createBy;
 	private Date createDate;
 	private Date modifiedDate;
+	
 	private String name;
 	private String imageUrl;
 	private Long price;
@@ -17,8 +19,38 @@ public class ProductDTO {
 	private Integer year;
 	private Integer page;
 	private String cover;
+	private String info;
 	private Integer weight;	
+	private List<String> author;
+	private List<String> category;
+	private String provider;
 	
+	
+
+	public String getProvider() {
+		return provider;
+	}
+	public void setProvider(String provider) {
+		this.provider = provider;
+	}
+	public List<String> getAuthor() {
+		return author;
+	}
+	public void setAuthor(List<String> author) {
+		this.author = author;
+	}
+	public List<String> getCategory() {
+		return category;
+	}
+	public void setCategory(List<String> category) {
+		this.category = category;
+	}
+	public String getInfo() {
+		return info;
+	}
+	public void setInfo(String info) {
+		this.info = info;
+	}
 	public ProductDTO() {
 		super();
 	}

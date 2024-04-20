@@ -9,6 +9,7 @@ public class AccountDTO {
 	private String createBy;
 	private Date createDate;
 	private Date modifiedDate;
+	
 	private String username;	
 	private String password;
 	private String name;
