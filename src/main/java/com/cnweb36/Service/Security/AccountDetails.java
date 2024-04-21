@@ -1,6 +1,7 @@
 package com.cnweb36.Service.Security;
 
 import java.util.Collection;
+import java.util.Date;
 //import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -27,15 +28,18 @@ public class AccountDetails implements UserDetails {
 
   @JsonIgnore
   private String password;
+  
+  private Date signoutTime;
 
   private Collection<? extends GrantedAuthority> authorities;
 
-  public AccountDetails(Long id, String username, String email, String password,
+  public AccountDetails(Long id, String username, String email, String password, Date signoutTime,
       Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
+    this.signoutTime = signoutTime;
     this.authorities = authorities;
   }
 
@@ -58,6 +62,7 @@ public class AccountDetails implements UserDetails {
     		accountEntity.getUsername(), 
     		accountEntity.getEmail(),
     		accountEntity.getPassword(), 
+    		accountEntity.getSignoutTime(),
     		accountAuthorities);
   }
 
@@ -84,7 +89,15 @@ public class AccountDetails implements UserDetails {
     return username;
   }
 
-  @Override
+  	public Date getSignoutTime() {
+  		return signoutTime;
+	}
+	
+	public void setSignoutTime(Date signoutTime) {
+		this.signoutTime = signoutTime;
+	}
+
+@Override
   public boolean isAccountNonExpired() {
     return true;
   }

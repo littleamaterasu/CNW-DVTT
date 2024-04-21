@@ -2,12 +2,12 @@ package com.cnweb36.DTO.Response;
 
 import java.util.List;
 
-public class LoginResponse {
+public class SignInResponse {
 	private Long userId;
 	private List<String> role;
 	private String token;
 	
-	public LoginResponse(Long userId, List<String> role, String token) {
+	public SignInResponse(Long userId, List<String> role, String token) {
 		super();
 		this.userId = userId;
 		this.role = role;
