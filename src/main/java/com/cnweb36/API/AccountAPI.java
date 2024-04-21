@@ -54,7 +54,7 @@ public class AccountAPI {
 	}
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3")
 	@PostMapping("/signout/all")
-	public ResponseEntity<?> accountSignoutAll(@CookieValue("JWT") String jwtToken) {
+	public ResponseEntity<?> accountSignoutAll(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken) {
 		String cleanJwtCookie = accountService.accountSignoutAll(jwtUtility.getUserNameFromJwtToken(jwtToken));
 		
 		HttpHeaders headers = new HttpHeaders();
