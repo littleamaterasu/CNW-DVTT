@@ -39,7 +39,7 @@ public class AccountAPI {
 	}
 
 	@PostMapping("/signup/user")
-	public SignUpResponse regiter(@RequestBody AccountDTO AccountDTO) {
+	public SignUpResponse userRegister(@RequestBody AccountDTO AccountDTO) {
 		SignUpResponse SignUpResponse = new SignUpResponse();
 
 		Long result = accountService.usersignup(AccountDTO);
@@ -56,7 +56,7 @@ public class AccountAPI {
 
 	@PostMapping("/signup/admin1")
 	@PreAuthorize("hasRole('ROLE_ADMIN_2') or hasRole('ROLE_ADMIN_3')")
-	public SignUpResponse admin1signup(@RequestBody AccountDTO AccountDTO) {
+	public SignUpResponse admin1Register(@RequestBody AccountDTO AccountDTO) {
 		SignUpResponse SignUpResponse = new SignUpResponse();
 
 		Long result = accountService.adminsignup1(AccountDTO);
@@ -71,7 +71,7 @@ public class AccountAPI {
 
 	@PostMapping("/signup/admin2")
 	@PreAuthorize("hasRole('ROLE_ADMIN_3')")
-	public SignUpResponse admin2signup(@RequestBody AccountDTO AccountDTO) {
+	public SignUpResponse admin2Register(@RequestBody AccountDTO AccountDTO) {
 		SignUpResponse SignUpResponse = new SignUpResponse();
 
 		Long result = accountService.adminsignup2(AccountDTO);
@@ -86,7 +86,7 @@ public class AccountAPI {
 	
 	@PostMapping("/signup/admin3")
 	@PreAuthorize("hasRole('ROLE_ADMIN_3')")
-	public SignUpResponse admin3signup(@RequestBody AccountDTO AccountDTO) {
+	public SignUpResponse admin3Register(@RequestBody AccountDTO AccountDTO) {
 		SignUpResponse SignUpResponse = new SignUpResponse();
 
 		Long result = accountService.adminsignup3(AccountDTO);
