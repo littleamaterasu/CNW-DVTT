@@ -31,6 +31,9 @@ public class JwtUtility {
 	@Value("${cnweb36.jwtCookieName}")
 	private String jwtCookie;
   
+	@Value("${cnweb36.sameSiteSetting}")
+	private String sameSiteSetting;
+	
 //	public String generateJwtToken(Authentication authentication) {
 //		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 //
@@ -103,12 +106,14 @@ public class JwtUtility {
 	    	  	.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 	    	  	.signWith(key(), SignatureAlgorithm.HS256)
 	    	  	.compact();
-	    ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/").maxAge(24 * 60 * 60).httpOnly(true).build();
+	    ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/").maxAge(24 * 60 * 60)
+	    		.httpOnly(true).sameSite(sameSiteSetting).secure(true).build();
 	    return cookie;
 	}
 	public ResponseCookie generateCleanJwtCookie() {
-		ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/").build();
+		ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/").maxAge(24 * 60 * 60)
+	    		.httpOnly(true).sameSite(sameSiteSetting).secure(true).build();
 		return cookie;
-	}	
-
+	}
+	
 }
