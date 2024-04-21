@@ -12,19 +12,19 @@ import jakarta.persistence.Table;
 @Table(name="`order`")
 public class OrderEntity extends BaseEntity {
 
-	@Column(name="quantity")
+	@Column(name="`quantity`")
 	private Integer quantity;
 	
-	@Column(name="price")
+	@Column(name="`price`")
 	private Float price;
 	
-	@Column(name="rate")
+	@Column(name="`rate`")
 	private Integer rate;
 	
-	@Column(name="comment")
+	@Column(name="`comment`")
 	private String comment;
 	
-	@Column(name="like")
+	@Column(name="`like`")
 	private Integer like;
 	
 	@Column(name="dislike")

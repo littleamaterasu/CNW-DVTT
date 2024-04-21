@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cnweb36.DTO.Entity.ProductDTO;
@@ -14,12 +15,13 @@ import com.cnweb36.Service.ProductService;
 
 @CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
 @RestController
+@RequestMapping("/product")
 public class ProductAPI {
 
 	@Autowired
 	private ProductService productService;
 	
-	@PostMapping("/product/add")
+	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_ADMIN_2') or hasRole('ROLE_ADMIN_3')")
 	public NoticeResponse AddProduct(@RequestBody ProductDTO productDTO) {
 		NoticeResponse noticeResponse=new NoticeResponse();
