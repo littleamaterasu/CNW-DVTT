@@ -2,6 +2,7 @@ package com.cnweb36.Entity;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,10 +13,10 @@ import jakarta.persistence.Table;
 @Table(name="account")
 public class AccountEntity extends BaseEntity {
 	
-	@Column(name = "username")
+	@Column(name = "username", nullable = false)
 	private String username;
 	
-	@Column(name = "password")
+	@Column(name = "password", nullable = false)
 	private String password;
 	
 	@Column(name = "name", columnDefinition = "VARCHAR(50) ")
@@ -33,6 +34,9 @@ public class AccountEntity extends BaseEntity {
 	@Column(name = "role")
 	private String roles;
 	
+	@Column(name = "signoutTime")
+	private Date signoutTime;
+
 	@OneToMany(mappedBy = "admin")
 	private Set<FAQEntity> faqList; 
 	
@@ -91,7 +95,10 @@ public class AccountEntity extends BaseEntity {
 
 	public String getPhone() { return phone; }
 	public void setPhone(String phone) { this.phone = phone; }
-
+	
+	public Date getSignoutTime() { return signoutTime; }
+	public void setSignoutTime(Date signoutTime) { this.signoutTime = signoutTime; }
+	
 	public Set<FAQEntity> getFAQList() { return faqList; }
 	public void setFAQList(Set<FAQEntity> faqList) { this.faqList = faqList; }
 

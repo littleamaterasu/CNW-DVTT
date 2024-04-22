@@ -2,13 +2,13 @@ package com.cnweb36.DTO.Entity;
 
 import java.util.List;
 
-public class LoginDTO {
+public class SignInDTO {
 	private Long id;
 	private List<String> roleList;
 	private String csrfToken;
 	private String jwtCookie;
 	
-	public LoginDTO(Long id, List<String> roleList, String csrfToken, String jwtCookie) {
+	public SignInDTO(Long id, List<String> roleList, String csrfToken, String jwtCookie) {
 		super();
 		this.id = id;
 		this.roleList = roleList;

@@ -1,6 +1,7 @@
 package com.cnweb36.Service.Security;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Objects;
 //import java.util.stream.Collectors;
 
@@ -39,24 +40,30 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		throws ServletException, IOException {
 		
 		try {
-			String jwt = parseJwt(request);
+			String jwt = jwtUtility.getJwtFromCookies(request);
 			if (jwt != null && jwtUtility.validateJwtToken(jwt)) {
 //				String test = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 //				System.out.println(test);
 				String username = jwtUtility.getUserNameFromJwtToken(jwt);
 				String csrfToken = jwtUtility.getCsrfTokenFromJwtToken(jwt);
+				Date issuedDate = jwtUtility.getIssuedDateFromJwtToken(jwt);
+				
 				String requestCsrfToken = request.getHeader(csrfHeader);
 				
 				if (Objects.equals(csrfToken, requestCsrfToken)) {
-					UserDetails userDetails = accountDetailsService.loadUserByUsername(username);
-					UsernamePasswordAuthenticationToken authentication =
-						new UsernamePasswordAuthenticationToken(
-						userDetails,
-						null,
-						userDetails.getAuthorities());
-					authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-	
-					SecurityContextHolder.getContext().setAuthentication(authentication);
+					UserDetails userDetails = accountDetailsService.loadUserByUsername(username);					
+					if (((AccountDetails)userDetails).getSignoutTime() == null || 
+						((AccountDetails)userDetails).getSignoutTime().before(issuedDate)) {
+						
+						UsernamePasswordAuthenticationToken authentication =
+								new UsernamePasswordAuthenticationToken(
+								userDetails,
+								null,
+								userDetails.getAuthorities());
+							authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+			
+							SecurityContextHolder.getContext().setAuthentication(authentication);
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -66,15 +73,15 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-  	private String parseJwt(HttpServletRequest request) {
-//  		String headerAuth = request.getHeader("Authorization");
-//	
-//	    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-//	    	return headerAuth.substring(7);
-//	    }
-//	
-//	    return null;
-	    String jwt = jwtUtility.getJwtFromCookies(request);
-	    return jwt;
-  	}
+//  	private String parseJwt(HttpServletRequest request) {
+////  		String headerAuth = request.getHeader("Authorization");
+////	
+////	    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+////	    	return headerAuth.substring(7);
+////	    }
+////	
+////	    return null;
+//	    String jwt = jwtUtility.getJwtFromCookies(request);
+//	    return jwt;
+//  	}
 }
