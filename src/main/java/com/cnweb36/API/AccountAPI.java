@@ -21,7 +21,7 @@ import com.cnweb36.Service.Security.JwtUtility;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
+//@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
 @RestController
 @RequestMapping("/account")
 public class AccountAPI {
@@ -43,7 +43,7 @@ public class AccountAPI {
 				.body(new SignInResponse(signInDTO.getId(), signInDTO.getRoleList(), signInDTO.getCsrfToken()));
 	}
 	
-	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3")
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
 	@PostMapping("/signout")
 	public ResponseEntity<?> accountSignout() {
 		String cleanJwtCookie = accountService.accountSignout();
@@ -52,7 +52,7 @@ public class AccountAPI {
 		headers.add(HttpHeaders.SET_COOKIE, cleanJwtCookie);
 		return ResponseEntity.ok().headers(headers).body(null);
 	}
-	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3")
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
 	@PostMapping("/signout/all")
 	public ResponseEntity<?> accountSignoutAll(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken) {
 		String cleanJwtCookie = accountService.accountSignoutAll(jwtUtility.getUserNameFromJwtToken(jwtToken));

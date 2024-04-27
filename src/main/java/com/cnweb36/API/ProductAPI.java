@@ -1,15 +1,19 @@
 package com.cnweb36.API;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cnweb36.DTO.Entity.ProductDTO;
+import com.cnweb36.DTO.Response.Book;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.Service.ProductService;
 
@@ -37,5 +41,13 @@ public class ProductAPI {
 		}
 	}
 	
-	
+	@GetMapping("/getAll")
+	public List<Book> getAllBook(@RequestParam Integer page) {
+		try {
+			if(page==null||page<1) page=1;
+			return productService.getAllBook(page);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

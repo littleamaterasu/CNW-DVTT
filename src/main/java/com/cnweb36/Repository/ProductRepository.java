@@ -7,6 +7,5 @@ import com.cnweb36.Entity.ProductEntity;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
-	
 
 }
