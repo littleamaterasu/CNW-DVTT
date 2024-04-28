@@ -64,6 +64,7 @@ public class ProductService {
 			book.setId(e.getId());
 			book.setName(e.getName());
 			book.setImageUrl(e.getImageUrl());
+			book.setPrice(e.getPrice());
 			
 			listBook.add(book);
 		}
@@ -71,7 +72,13 @@ public class ProductService {
 	}
 	
 	public ProductDTO getone(Long id) {
-		
+		ProductEntity productEntity;
+        productEntity = productRepository.findOneById(id);
+        if(productEntity==null) {
+        	return new ProductDTO();
+        }else {
+        	return productConverter.toDTO(productEntity);
+        }
 	}
 		
 }

@@ -42,7 +42,7 @@ public class ProductAPI {
 	}
 	
 	@GetMapping("/getAll")
-	public List<Book> getAllBook(@RequestParam Integer page) {
+	public List<Book> getAllBook(@RequestParam(required = false) Integer page) {
 		try {
 			if(page==null||page<1) page=1;
 			return productService.getAllBook(page);
@@ -50,4 +50,14 @@ public class ProductAPI {
 			return null;
 		}
 	}
+	
+	@GetMapping("/getOne")
+	public ProductDTO getOne(@RequestParam Long id) {
+		try {
+			return productService.getone(id);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 }

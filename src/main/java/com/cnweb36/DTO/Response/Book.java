@@ -5,6 +5,14 @@ public class Book {
 	private Long id;
 	private String name;
 	private String imageUrl;
+	private Long price;
+	
+	public Long getPrice() {
+		return price;
+	}
+	public void setPrice(Long price) {
+		this.price = price;
+	}
 	public Long getId() {
 		return id;
 	}
