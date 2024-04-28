@@ -1,23 +1,38 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import './App.css';
+
 import Login from './Login/Login';
 import SignUp from './SignUp/SignUp';
 import Home from './Home/Home';
 import SearchResults from './SearchResults/SearchResults'; // Import component for search results
-import './App.css';
 import Book from './Book/Book';
+import ChangeInformation from './ChangeInformation/ChangeInformation';
+import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+  }
+
   return (
     <Router>
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} onLogout={handleLogout} />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/search/genre/:genreName" element={<SearchResults type="genre" />} /> {/* Route for searching by genre */}
-          <Route path="/search/keyword/:keyword" element={<SearchResults type="keyword" />} /> {/* Route for searching by keyword */}
+          <Route path="/search/genre/:genreName" element={<SearchResults type="genre" />} />
+          <Route path="/search/keyword/:keyword" element={<SearchResults type="keyword" />} />
           <Route path="book/id/:id" element={<Book />} />
+          <PrivateRoute path="/user/changeInformation" element={<ChangeInformation />} isAuthenticated={isAuthenticated} />
         </Routes>
       </div>
     </Router>
@@ -25,4 +40,3 @@ function App() {
 }
 
 export default App;
-``;
