@@ -15,6 +15,9 @@ function Header() {
             <Link to="/user/changeInformation">
                 <button>Change User Information</button>
             </Link>
+            <Link to="/user/FAQ">
+                <button>Need help?</button>
+            </Link>
         </div>
     )
 }

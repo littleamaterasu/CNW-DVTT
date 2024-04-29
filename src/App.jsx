@@ -11,6 +11,7 @@ import SearchResults from './SearchResults/SearchResults'; // Import component f
 import Book from './Book/Book';
 import ChangeInformation from './ChangeInformation/ChangeInformation';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
+import FAQ from './FAQ/FAQ';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -33,13 +34,15 @@ function App() {
           <Route path="/search/genre/:genreName" element={<SearchResults type="genre" />} />
           <Route path="/search/keyword/:keyword" element={<SearchResults type="keyword" />} />
           <Route path="book/id/:id" element={<Book />} />
+          <Route path="/user/FAQ" element={<FAQ />} />
           <Route path="/user/changeInformation"
             element={
               <PrivateRoute>
                 <ChangeInformation />
               </PrivateRoute>
             }
-            auth={isAuthenticated} />
+            auth={isAuthenticated}
+          />
         </Routes>
       </div>
     </Router>
