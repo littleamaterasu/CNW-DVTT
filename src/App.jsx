@@ -12,6 +12,7 @@ import Book from './Book/Book';
 import ChangeInformation from './ChangeInformation/ChangeInformation';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 import FAQ from './FAQ/FAQ';
+import Cart from './Cart/Cart';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,6 +36,7 @@ function App() {
           <Route path="/search/keyword/:keyword" element={<SearchResults type="keyword" />} />
           <Route path="book/id/:id" element={<Book />} />
           <Route path="/user/FAQ" element={<FAQ />} />
+          <Route path='user/cart' element={<Cart />} />
           <Route path="/user/changeInformation"
             element={
               <PrivateRoute>
