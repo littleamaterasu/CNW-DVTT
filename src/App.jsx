@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
 
 import './App.css';
 
@@ -32,7 +33,13 @@ function App() {
           <Route path="/search/genre/:genreName" element={<SearchResults type="genre" />} />
           <Route path="/search/keyword/:keyword" element={<SearchResults type="keyword" />} />
           <Route path="book/id/:id" element={<Book />} />
-          <PrivateRoute path="/user/changeInformation" element={<ChangeInformation />} isAuthenticated={isAuthenticated} />
+          <Route path="/user/changeInformation"
+            element={
+              <PrivateRoute>
+                <ChangeInformation />
+              </PrivateRoute>
+            }
+            auth={isAuthenticated} />
         </Routes>
       </div>
     </Router>

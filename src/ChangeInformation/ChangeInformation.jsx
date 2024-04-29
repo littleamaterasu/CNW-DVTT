@@ -1,13 +1,19 @@
+import Header from "../Components/Header/Header"
+
 function ChangeInformation() {
     const SubmitInfo = async () => {
         // API
     }
 
     return (
-        <form onSubmit={SubmitInfo}>
-            <input type="text" placeholder="Tên người dùng" />
-            <input type="submit" />
-        </form>
+        <div>
+            <Header />
+            <form onSubmit={SubmitInfo}>
+                <input type="text" placeholder="Tên người dùng" />
+                <input type="submit" />
+            </form>
+        </div>
+
     )
 }
 export default ChangeInformation

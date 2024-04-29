@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Header from '../Components/Header/Header';
 
 function Book() {
     const [data, setData] = useState(null);
@@ -24,10 +25,20 @@ function Book() {
     }, []);
 
     if (!data) {
-        return <p>Loading...</p>;
+        return (
+            <div>
+                <Header />
+                <p>Loading...</p>
+            </div>
+        )
     }
 
-    return <p>{data.name}</p>;
+    return (
+        <div>
+            <Header />
+            <p>{data.name}</p>
+        </div>
+    )
 }
 
 export default Book;

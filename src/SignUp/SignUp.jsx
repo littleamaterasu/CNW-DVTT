@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import { Link } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
 function SignUp() {
@@ -42,6 +43,12 @@ function SignUp() {
     return (
         <div>
             <form onSubmit={handleSubmit}>
+                <Link to="/">
+                    <button>Home</button>
+                </Link>
+                <Link to="/login">
+                    <button>Login</button>
+                </Link>
                 <input
                     type="text"
                     placeholder="Your User Name"

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import "./Login.css";
 
 function Login({ onLogin, onLogout }) {
@@ -34,6 +35,12 @@ function Login({ onLogin, onLogout }) {
 
     return (
         <form onSubmit={handleSubmit}>
+            <Link to="/">
+                <button>Home</button>
+            </Link>
+            <Link to="/signup">
+                <button>Register</button>
+            </Link>
             <input
                 type="text"
                 placeholder="Username"

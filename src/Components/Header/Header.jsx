@@ -12,6 +12,9 @@ function Header() {
             <Link to="/signup">
                 <button>Register</button>
             </Link>
+            <Link to="/user/changeInformation">
+                <button>Change User Information</button>
+            </Link>
         </div>
     )
 }

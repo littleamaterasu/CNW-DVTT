@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Header from '../Components/Header/Header';
 
 function SearchResults({ type }) {
     const { genreName, keyword } = useParams();
@@ -44,6 +45,7 @@ function SearchResults({ type }) {
 
     return (
         <div>
+            <Header />
             <h2>Search Results</h2>
             <ul>
                 {results.map((result, index) => (
