@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cnweb36.DTO.Entity.AccountDTO;
 import com.cnweb36.DTO.Entity.SignInDTO;
 import com.cnweb36.DTO.Request.SignInRequest;
+import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.DTO.Response.SignInResponse;
 import com.cnweb36.DTO.Response.SignUpResponse;
 import com.cnweb36.Service.AccountService;
 import com.cnweb36.Service.Security.JwtUtility;
+import com.cnweb36.Service.SendMail.EmailService;
 
 import jakarta.validation.Valid;
 
@@ -31,6 +33,9 @@ public class AccountAPI {
 	
 	@Autowired
 	private JwtUtility jwtUtility;
+	
+	@Autowired
+	private EmailService emailService;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> accountSignin(@Valid @RequestBody SignInRequest signInRequest) {
@@ -123,4 +128,13 @@ public class AccountAPI {
 		return SignUpResponse;
 	}
 	
+	@PostMapping("/changePassword")
+	public NoticeResponse change(@RequestBody SignInRequest signInRequest) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		String text="test send email";
+		String subject="no sub";
+		String to="ndtung103664@gmail.com";
+		emailService.sendMessage(to, subject, text);
+		return noticeResponse;
+	}
 }
