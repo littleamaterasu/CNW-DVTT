@@ -9,9 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.cnweb36.DTO.Entity.OrderDTO;
 import com.cnweb36.DTO.Response.CommentResponse;
+import com.cnweb36.Entity.AccountEntity;
 import com.cnweb36.Entity.OrderEntity;
 import com.cnweb36.Entity.ProductEntity;
+import com.cnweb36.Repository.AccountRepository;
 import com.cnweb36.Repository.OrderRepository;
 import com.cnweb36.Repository.ProductRepository;
 
@@ -22,6 +25,8 @@ public class OrderService {
 	private OrderRepository orderRepository;
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private AccountRepository accountRepository;
 	
 	public List<CommentResponse> getListComment(Long productId, Integer page) {
 		
@@ -35,5 +40,18 @@ public class OrderService {
 		}	
 		
 		return listComment;
+	}
+	
+	public Long addOrder(OrderDTO orderRequest) {
+		AccountEntity accountEntity= accountRepository.findEntityById(orderRequest.getUserId());
+		ProductEntity productEntity= productRepository.findOneById(orderRequest.getProductId());
+		OrderEntity orderEntity=new OrderEntity();
+		orderEntity.setUser(accountEntity);
+		orderEntity.setProduct(productEntity);
+		orderEntity.setStatus("0");
+		orderEntity.setQuantity(orderRequest.getQuantity());
+		orderEntity.setPrice(orderRequest.getPrice());
+		
+		return orderRepository.save(orderEntity).getId();
 	}
 }

@@ -39,7 +39,7 @@ public class OrderEntity extends BaseEntity {
 	private ProductEntity product;
 	
 	@ManyToOne
-	@JoinColumn(name="payment_id", nullable=false)
+	@JoinColumn(name="payment_id")
 	private PaymentEntity payment;
 	
 	public OrderEntity() { super(); }
