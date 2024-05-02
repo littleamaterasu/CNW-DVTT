@@ -3,16 +3,9 @@ package com.cnweb36.DTO.Entity;
 
 public class OrderDTO {
 
-	private Long userId;
 	private Long productId;
 	private Integer quantity;
 	private Float price;
-	public Long getUserId() {
-		return userId;
-	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
 	public Long getProductId() {
 		return productId;
 	}

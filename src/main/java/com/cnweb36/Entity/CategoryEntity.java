@@ -18,11 +18,7 @@ public class CategoryEntity extends BaseEntity {
 	@Column(columnDefinition="text")
 	private String info;
 	
-	@ManyToMany
-	@JoinTable(
-			  name = "category_product", 
-			  joinColumns = @JoinColumn(name = "product_id"), 
-			  inverseJoinColumns = @JoinColumn(name = "category_id"))
+	@ManyToMany(mappedBy = "categoryList")
 	private Set<ProductEntity> productList;
 
 	public String getName() { return name; }

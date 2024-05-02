@@ -13,6 +13,6 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 	Optional<AccountEntity> findByUsername(String username);
 //	Optional<AccountEntity> findByPassword(String password);
 	
-	@Query("select a from AccountEntity a where a.id=?1")
-	AccountEntity findEntityById(Long id);
+	@Query("select a from AccountEntity a where a.username=?1")
+	AccountEntity findEntityByUsername(String username);
 }

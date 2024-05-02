@@ -42,8 +42,8 @@ public class OrderService {
 		return listComment;
 	}
 	
-	public Long addOrder(OrderDTO orderRequest) {
-		AccountEntity accountEntity= accountRepository.findEntityById(orderRequest.getUserId());
+	public Long addOrder(OrderDTO orderRequest, String username) {
+		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
 		ProductEntity productEntity= productRepository.findOneById(orderRequest.getProductId());
 		OrderEntity orderEntity=new OrderEntity();
 		orderEntity.setUser(accountEntity);

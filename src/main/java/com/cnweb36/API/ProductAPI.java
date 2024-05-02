@@ -52,12 +52,9 @@ public class ProductAPI {
 	}
 	
 	@GetMapping("/getOne")
-	public ProductDTO getOne(@RequestParam Long id) {
-		try {
+	public ProductDTO getOne(@RequestParam(name="id") Long id) {
 			return productService.getone(id);
-		} catch (Exception e) {
-			return null;
-		}
+		
 	}
 	
 }

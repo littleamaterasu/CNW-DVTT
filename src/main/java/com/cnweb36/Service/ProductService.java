@@ -44,7 +44,6 @@ public class ProductService {
 			listAuthor.add(authorRepository.findByName(s));
 		}
 		productEntity.setAuthorList(listAuthor);
-		
 		Set<CategoryEntity> listCategory=new HashSet<>();
 		for(String s: productDTO.getCategory()) {
 			listCategory.add(categoryRepository.findByName(s));
@@ -72,7 +71,7 @@ public class ProductService {
 	}
 	
 	public ProductDTO getone(Long id) {
-		ProductEntity productEntity;
+		ProductEntity productEntity=new ProductEntity();
         productEntity = productRepository.findOneById(id);
         if(productEntity==null) {
         	return new ProductDTO();
