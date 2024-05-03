@@ -5,6 +5,7 @@ import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -57,10 +58,18 @@ public class ProductEntity extends BaseEntity {
 	@JoinColumn(name = "provider_id")
 	private ProviderEntity provider;
 	
-	@ManyToMany(mappedBy = "productList")
+	@ManyToMany
+	@JoinTable(
+			  name = "category_product", 
+			  joinColumns = @JoinColumn(name = "product_id"), 
+			  inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<CategoryEntity> categoryList;
 	
-	@ManyToMany(mappedBy = "productList")
+	@ManyToMany
+	@JoinTable(
+			  name = "author_product", 
+			  joinColumns = @JoinColumn(name = "product_id"), 
+			  inverseJoinColumns = @JoinColumn(name = "author_id"))
 	private Set<AuthorEntity> authorList;
 	
 	public ProductEntity() { super(); }

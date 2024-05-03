@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cnweb36.DTO.Entity.CategoryDTO;
+import com.cnweb36.DTO.Response.Book;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.Service.CategoryService;
 
@@ -37,5 +39,10 @@ public class CategoryAPI {
 	@GetMapping("/get")
 	public List<CategoryDTO> getListCategory(){
 		return categoryService.getListCategory();
+	}
+	
+	@GetMapping("/getAllProduct")
+	public List<Book> getAllProduct(@RequestParam String categoryName){
+		return categoryService.getAllProduct(categoryName);
 	}
 }

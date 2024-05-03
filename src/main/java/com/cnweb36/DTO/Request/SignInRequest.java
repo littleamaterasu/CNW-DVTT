@@ -1,6 +1,6 @@
 package com.cnweb36.DTO.Request;
 
-public class LoginRequest {
+public class SignInRequest {
 	private String username;
 	private String password;
 	

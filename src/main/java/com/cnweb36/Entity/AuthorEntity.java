@@ -18,11 +18,7 @@ public class AuthorEntity extends BaseEntity {
 	@Column(columnDefinition="text")
 	private String info;
 	
-	@ManyToMany
-	@JoinTable(
-		  name = "author_product", 
-		  joinColumns = @JoinColumn(name = "product_id"), 
-		  inverseJoinColumns = @JoinColumn(name = "author_id"))
+	@ManyToMany(mappedBy = "authorList")
 	private Set<ProductEntity> productList;
 
 	public String getName() { return name; }

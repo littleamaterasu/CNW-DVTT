@@ -3,6 +3,7 @@ package com.cnweb36.Service.Security;
 import java.security.Key;
 import java.util.Date;
 import java.util.UUID;
+//import java.time.Instant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,9 @@ import org.springframework.http.ResponseCookie;
 //import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -68,9 +72,27 @@ public class JwtUtility {
 		return getSubjectFromJwtToken(token).split("===")[0];
 	}
 	public String getCsrfTokenFromJwtToken(String token) {
-		String subject = getSubjectFromJwtToken(token);
-		if (subject.contains("===")) return getSubjectFromJwtToken(token).split("===")[1];
-		else return null;
+		try {
+			return getSubjectFromJwtToken(token).split("===")[1];			
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	public Date getIssuedDateFromJwtToken(String token) {
+		try {
+		    return JWT.decode(token).getIssuedAt();
+		} catch (JWTDecodeException e) {
+			logger.error("Invalid JWT token: {}", e.getMessage());
+			return null;
+		}
+	}
+	public Date getExpirationDateFromJwtToken(String token) {
+		try {
+		    return JWT.decode(token).getExpiresAt();
+		} catch (JWTDecodeException e) {
+			logger.error("Invalid JWT token: {}", e.getMessage());
+			return null;
+		}
 	}
 	
 	public String getJwtFromCookies(HttpServletRequest request) {
@@ -99,7 +121,7 @@ public class JwtUtility {
 	    return false;
 	}
 
-	public ResponseCookie generateJwtCookie(AccountDetails userPrincipal, String csrfToken) {		
+	public ResponseCookie generateJwtCookie(AccountDetails userPrincipal, String csrfToken) {	
 	    String jwt = Jwts.builder()
 	    		.setSubject(userPrincipal.getUsername() + "===" + csrfToken)
 	    		.setIssuedAt(new Date())

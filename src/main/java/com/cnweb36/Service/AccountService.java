@@ -1,5 +1,6 @@
 package com.cnweb36.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.cnweb36.Converter.AccountConverter;
 import com.cnweb36.DTO.Entity.AccountDTO;
-import com.cnweb36.DTO.Entity.LoginDTO;
-import com.cnweb36.DTO.Request.LoginRequest;
+import com.cnweb36.DTO.Entity.SignInDTO;
+import com.cnweb36.DTO.Request.SignInRequest;
 import com.cnweb36.Entity.AccountEntity;
 import com.cnweb36.Repository.AccountRepository;
 import com.cnweb36.Service.Security.AccountDetails;
@@ -33,9 +34,9 @@ public class AccountService {
 	@Autowired
 	private JwtUtility jwtUtility;
 
-	public LoginDTO login(LoginRequest loginRequest) {
+	public SignInDTO accountSignin(SignInRequest signInRequest) {
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-				loginRequest.getUsername(), loginRequest.getPassword());
+				signInRequest.getUsername(), signInRequest.getPassword());
 		Authentication authentication = authenticationManager.authenticate(authToken);
 		AccountDetails accountDetails = (AccountDetails) authentication.getPrincipal();
 
@@ -44,75 +45,87 @@ public class AccountService {
 		List<String> roleList = accountDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
-		return new LoginDTO(accountDetails.getId(), roleList, csrfToken, jwtCookie);
+		return new SignInDTO(accountDetails.getId(), roleList, csrfToken, jwtCookie);
 	}
 
-	public Long usersignup(AccountDTO AccountDTO) {
+	public Long userSignup(AccountDTO AccountDTO) {
 
 		String username = AccountDTO.getUsername();
 		if (!accountRepository.findByUsername(username).isPresent()) {
-			AccountEntity AccountEntity = accountConverter.toEntity(AccountDTO);
+			AccountEntity accountEntity = accountConverter.toEntity(AccountDTO);
 
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(AccountDTO.getPassword());
 
-			AccountEntity.setPassword(password);
-			AccountEntity.setRoles("ROLE_USER");
+			accountEntity.setPassword(password);
+			accountEntity.setRoles("ROLE_USER");
 
-			return accountRepository.save(AccountEntity).getId();
+			return accountRepository.save(accountEntity).getId();
 		}
 		return -1l;
 	}
 
-	public Long adminsignup1(AccountDTO AccountDTO) {
+	public Long admin1Signup(AccountDTO AccountDTO) {
 
 		String username = AccountDTO.getUsername();
 		if (!accountRepository.findByUsername(username).isPresent()) {
 
-			AccountEntity AccountEntity = accountConverter.toEntity(AccountDTO);
+			AccountEntity accountEntity = accountConverter.toEntity(AccountDTO);
 			
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(AccountDTO.getPassword());
 			
-			AccountEntity.setPassword(password);
-			AccountEntity.setRoles("ROLE_ADMIN_1");
+			accountEntity.setPassword(password);
+			accountEntity.setRoles("ROLE_ADMIN_1");
 
-			return accountRepository.save(AccountEntity).getId();
+			return accountRepository.save(accountEntity).getId();
 		}
 		return -1l;
 	}
 
-	public Long adminsignup2(AccountDTO AccountDTO) {
+	public Long admin2Signup(AccountDTO AccountDTO) {
 
 		String username = AccountDTO.getUsername();
 		if (!accountRepository.findByUsername(username).isPresent()) {
 
-			AccountEntity AccountEntity = accountConverter.toEntity(AccountDTO);
+			AccountEntity accountEntity = accountConverter.toEntity(AccountDTO);
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(AccountDTO.getPassword());
 			
-			AccountEntity.setPassword(password);
-			AccountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2");
+			accountEntity.setPassword(password);
+			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2");
 
-			return accountRepository.save(AccountEntity).getId();
+			return accountRepository.save(accountEntity).getId();
 		}
 		return -1l;
 	}
 	
-	public Long adminsignup3(AccountDTO AccountDTO) {
-
+	public Long admin3Signup(AccountDTO AccountDTO) {
 		String username = AccountDTO.getUsername();
 		if (!accountRepository.findByUsername(username).isPresent()) {
 
-			AccountEntity AccountEntity = accountConverter.toEntity(AccountDTO);
+			AccountEntity accountEntity = accountConverter.toEntity(AccountDTO);
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(AccountDTO.getPassword());
 			
-			AccountEntity.setPassword(password);
-			AccountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2","ROLE_ADMIN_3");
+			accountEntity.setPassword(password);
+			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2", "ROLE_ADMIN_3");
 
-			return accountRepository.save(AccountEntity).getId();
+			return accountRepository.save(accountEntity).getId();
 		}
 		return -1l;
+	}
+	
+	public String accountSignout() {
+		return jwtUtility.generateCleanJwtCookie().toString();
+	}
+	
+	public String accountSignoutAll(String username) {
+		AccountEntity accountEntity = accountRepository.findByUsername(username).get();
+		if (accountEntity != null) {
+			accountEntity.setSignoutTime(new Date());
+			accountRepository.save(accountEntity);
+		}
+		return accountSignout();
 	}
 }

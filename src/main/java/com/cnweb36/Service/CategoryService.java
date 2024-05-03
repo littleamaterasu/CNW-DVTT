@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cnweb36.DTO.Entity.CategoryDTO;
+import com.cnweb36.DTO.Response.Book;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.Entity.CategoryEntity;
+import com.cnweb36.Entity.ProductEntity;
 import com.cnweb36.Repository.CategoryRepository;
 
 @Service
@@ -37,6 +39,7 @@ public class CategoryService {
 		return noticeResponse;
 	}
 	
+	
 	public List<CategoryDTO> getListCategory() {
 		List<CategoryDTO> listCategory=new ArrayList<>();
 		
@@ -51,5 +54,19 @@ public class CategoryService {
 		return listCategory;
 	}
 	
-	
+	//get product 
+	public List<Book> getAllProduct(String categoryName) {
+		
+		CategoryEntity categoryEntity=categoryRepository.findByName(categoryName);
+		List<Book> listBook=new ArrayList<>();
+		for(ProductEntity e: categoryEntity.getProductList()) {
+			Book book =new Book();
+			book.setId(e.getId());
+			book.setImageUrl(e.getImageUrl());
+			book.setName(e.getName());
+			book.setPrice(e.getPrice());
+			listBook.add(book);
+		}
+		return listBook;
+	}
 }
