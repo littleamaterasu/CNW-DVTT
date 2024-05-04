@@ -1,10 +1,14 @@
 package com.cnweb36.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +19,7 @@ import com.cnweb36.Converter.AccountConverter;
 import com.cnweb36.DTO.Entity.AccountDTO;
 import com.cnweb36.DTO.Entity.SignInDTO;
 import com.cnweb36.DTO.Request.SignInRequest;
+import com.cnweb36.DTO.Response.UserResponse;
 import com.cnweb36.Entity.AccountEntity;
 import com.cnweb36.Repository.AccountRepository;
 import com.cnweb36.Service.Security.AccountDetails;
@@ -127,5 +132,37 @@ public class AccountService {
 			accountRepository.save(accountEntity);
 		}
 		return accountSignout();
+	}
+	
+	public AccountDTO getUser(Long id, String username) {
+		AccountEntity accountEntity=accountRepository.findEntityByUsername(username);
+		if(accountEntity.getId()==id) {
+			AccountDTO accountDTO=accountConverter.toDTO(accountEntity);
+			return accountDTO;
+		}else {
+			//check role=admin 
+			Boolean flag=false;
+			for(String role: accountEntity.getRoles()) {
+				if(role.compareTo("ROLE_ADMIN_1")==0) flag=true;
+			}
+			if(flag) {
+				AccountEntity accountEntity2=accountRepository.findEntityById(id);
+				AccountDTO accountDTO2=accountConverter.toDTO(accountEntity2);
+				return accountDTO2;
+			}else return new AccountDTO();
+		}
+	}
+	
+	public List<UserResponse> getAllUser(Integer page) {
+		List<UserResponse> listUser=new ArrayList<>();
+		if(page==null||page<1) page=1;  
+		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("createdDate").descending());
+		for(AccountEntity a: accountRepository.findByRolesContaining("ROLE_USER", pageWithTenElements)) {
+			UserResponse userResponse=new UserResponse();
+			userResponse.setId(a.getId());
+			userResponse.setName(a.getName());
+			listUser.add(userResponse);
+		}
+		return listUser;
 	}
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cnweb36.DTO.Entity.ProductDTO;
+import com.cnweb36.DTO.Request.KeyWordRequest;
 import com.cnweb36.DTO.Response.Book;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.Service.ProductService;
@@ -44,7 +45,6 @@ public class ProductAPI {
 	@GetMapping("/getAll")
 	public List<Book> getAllBook(@RequestParam(required = false) Integer page) {
 		try {
-			if(page==null||page<1) page=1;
 			return productService.getAllBook(page);
 		} catch (Exception e) {
 			return null;
@@ -57,4 +57,13 @@ public class ProductAPI {
 		
 	}
 	
+	@PostMapping("/getWithKeyword")
+	public List<Book> getWithKey(@RequestBody KeyWordRequest keyWordRequest){
+		return productService.getwithkey(keyWordRequest.getKeyword(), keyWordRequest.getPage());
+	}
+	
+	@GetMapping("/getTopten")
+	public List<Book> gettopten(@RequestParam Integer page){
+		return productService.getTop10(page);
+	}
 }

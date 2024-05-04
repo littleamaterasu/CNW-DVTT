@@ -59,13 +59,7 @@ public class ProductService {
 		List<Book> listBook=new ArrayList<>();
 		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("modifiedDate").descending());
 		for(ProductEntity e: productRepository.findAll(pageWithTenElements)) {
-			Book book= new Book();
-			book.setId(e.getId());
-			book.setName(e.getName());
-			book.setImageUrl(e.getImageUrl());
-			book.setPrice(e.getPrice());
-			
-			listBook.add(book);
+			listBook.add(productConverter.toBook(e));
 		}
 		return listBook;
 	}
@@ -79,5 +73,24 @@ public class ProductService {
         	return productConverter.toDTO(productEntity);
         }
 	}
+	
+	public List<Book> getwithkey(String keyword, Integer page) {
+		if(page==null) page=(int)1;
+		List<Book> listBook=new ArrayList<>();
+		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("modifiedDate").descending());
+		for(ProductEntity e: productRepository.findByNameContaining(keyword, pageWithTenElements)) {
+			listBook.add(productConverter.toBook(e));
+		}
+		return listBook;
+	}
 		
+	public List<Book> getTop10(Integer page) {
+		List<Book> listBook=new ArrayList<>();
+		if(page==null||page<1) page=1;  
+		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("soldCount").descending());
+		for(ProductEntity e: productRepository.findAll(pageWithTenElements)) {
+			listBook.add(productConverter.toBook(e));
+		}
+		return listBook;
+	}
 }

@@ -1,14 +1,18 @@
 package com.cnweb36.API;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cnweb36.DTO.Entity.AccountDTO;
@@ -17,13 +21,14 @@ import com.cnweb36.DTO.Request.SignInRequest;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.DTO.Response.SignInResponse;
 import com.cnweb36.DTO.Response.SignUpResponse;
+import com.cnweb36.DTO.Response.UserResponse;
 import com.cnweb36.Service.AccountService;
 import com.cnweb36.Service.Security.JwtUtility;
 import com.cnweb36.Service.SendMail.EmailService;
 
 import jakarta.validation.Valid;
 
-//@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
+@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
 @RestController
 @RequestMapping("/account")
 public class AccountAPI {
@@ -136,5 +141,19 @@ public class AccountAPI {
 		String to="ndtung103664@gmail.com";
 		emailService.sendMessage(to, subject, text);
 		return noticeResponse;
+	}
+	
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@GetMapping("/getUser")
+	public AccountDTO getuser(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,@RequestParam(name="id" )Long id) {
+		
+		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
+		return accountService.getUser(id, username);
+	}
+	
+	@PreAuthorize("hasAnyRole('ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@GetMapping("/getAllUser")
+	public List<UserResponse> getAllUser(@RequestParam(name="page",required = false) Integer page ) {
+		return accountService.getAllUser(page);
 	}
 }

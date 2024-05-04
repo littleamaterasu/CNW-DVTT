@@ -15,9 +15,13 @@ public class EmailServiceImpl implements EmailService{
       String to, String subject, String text) {
       
         SimpleMailMessage message = new SimpleMailMessage(); 
+        //người gửi
         message.setFrom("nguyendinhtung103664@gmail.com");
+        //người nhận
         message.setTo(to); 
+        // tiêu đề
         message.setSubject(subject); 
+        // Nội dung
         message.setText(text);
         emailSender.send(message);
  

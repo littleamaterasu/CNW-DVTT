@@ -3,6 +3,7 @@ package com.cnweb36.DTO.Entity;
 import java.util.Date;
 
 public class CouponDTO extends BaseDTO {
+	private Long id;
 	private String name;
 	private int limit;
 	private int discountPercent;
@@ -15,7 +16,14 @@ public class CouponDTO extends BaseDTO {
 
 //	private Set<FAQEntity> faqList = new HashSet<>();
 	
+	
 	public String getName() { return name; }
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public void setName(String name) { this.name = name; }
 	
 	public int getLimit() { return limit; }

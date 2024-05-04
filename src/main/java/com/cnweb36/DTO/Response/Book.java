@@ -6,7 +6,15 @@ public class Book {
 	private String name;
 	private String imageUrl;
 	private Long price;
+	private Integer soldCount;
 	
+	
+	public Integer getSoldCount() {
+		return soldCount;
+	}
+	public void setSoldCount(Integer soldCount) {
+		this.soldCount = soldCount;
+	}
 	public Long getPrice() {
 		return price;
 	}

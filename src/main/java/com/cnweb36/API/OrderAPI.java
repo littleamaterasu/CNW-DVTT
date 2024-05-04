@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cnweb36.DTO.Entity.OrderDTO;
+import com.cnweb36.DTO.Response.Book;
 import com.cnweb36.DTO.Response.CommentResponse;
 import com.cnweb36.DTO.Response.NoticeResponse;
+import com.cnweb36.DTO.Response.OrderResponse;
 import com.cnweb36.Service.OrderService;
 import com.cnweb36.Service.Security.JwtUtility;
 
+@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
 @RestController
 @RequestMapping("/order")
 public class OrderAPI {
@@ -54,5 +58,30 @@ public class OrderAPI {
 			noticeResponse.setContent("Something went wrong!");
 		}
 		return noticeResponse;
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@GetMapping("/getProductSold")
+	public List<Book> getProductSold(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,
+			@RequestParam(name="page",required = false) Integer page) {
+	    
+		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
+		return orderService.getProductSold(username, page);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@GetMapping("/getCart")
+	public List<Book> getCart(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,
+			@RequestParam(name="page",required = false) Integer page) {
+	    
+		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
+		return orderService.getCart(username, page);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@GetMapping("/getStatus")
+	public List<OrderResponse> getStatus(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken) {
+		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
+		return orderService.getStatus(username);
 	}
 }
