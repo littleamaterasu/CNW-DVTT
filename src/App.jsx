@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 import './App.css';
@@ -16,13 +16,16 @@ import Cart from './Cart/Cart';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
   const onLogin = () => {
     setIsAuthenticated(true);
+    if (isAuthenticated) navigate('/');
   };
 
   const onLogout = () => {
     setIsAuthenticated(false);
+    if (!isAuthenticated) navigate('/');
   }
 
   return (

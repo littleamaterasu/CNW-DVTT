@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import "./Login.css";
 
 function Login({ onLogin, onLogout }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const navigate = useNavigate();
-
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -19,10 +17,8 @@ function Login({ onLogin, onLogout }) {
                     'Accept': 'application/json',
                 },
                 body: JSON.stringify({ username, password }),
-                credentials: 'include' // Gửi kèm cookie
             });
 
-            // Assuming your API returns a status code to indicate success or failure
             if (!response.ok) {
                 throw new Error('Login failed');
             }
@@ -30,8 +26,6 @@ function Login({ onLogin, onLogout }) {
             const data = await response.json();
             localStorage.setItem('CSRF', data.token);
             onLogin();
-
-            navigate('/')
 
         } catch (error) {
             setError('Invalid username or password');
