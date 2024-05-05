@@ -10,14 +10,14 @@ function ChangeInformation() {
         async function fetchData() {
             try {
 
-                const placeholderResponse = await fetch('http://172.11.0.231:8081/account/getUser?id=7', {
+                const placeholderResponse = await fetch('http://localhost:8081/account/getUser?id=1', {
                     headers: {
                         'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
                     },
                     credentials: 'include',
                 });
                 const placeholderData = await placeholderResponse.json();
-                setUserName(placeholderData.userName);
+                setUserName(placeholderData.name);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

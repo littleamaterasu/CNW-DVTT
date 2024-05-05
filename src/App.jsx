@@ -4,28 +4,31 @@ import { useState } from 'react';
 
 import './App.css';
 
+import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
+
 import Login from './Login/Login';
 import SignUp from './SignUp/SignUp';
 import Home from './Home/Home';
 import SearchResults from './SearchResults/SearchResults'; // Import component for search results
 import Book from './Book/Book';
 import ChangeInformation from './ChangeInformation/ChangeInformation';
-import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
+import OrderInfo from './Order/OrderInfo/OrderInfo';
 import FAQ from './FAQ/FAQ';
 import Cart from './Cart/Cart';
+import OrderList from './Order/OrderList/OrderList';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onLogin = () => {
     setIsAuthenticated(true);
-    if (isAuthenticated) navigate('/');
+    // if (isAuthenticated) navigate('/');
   };
 
   const onLogout = () => {
     setIsAuthenticated(false);
-    if (!isAuthenticated) navigate('/');
+    // if (!isAuthenticated) navigate('/');
   }
 
   return (
@@ -44,6 +47,20 @@ function App() {
             element={
               // <PrivateRoute auth={isAuthenticated}>
               <ChangeInformation />
+              // {/* </PrivateRoute> */}
+            }
+          />
+          <Route path="/order/list"
+            element={
+              // <PrivateRoute auth={isAuthenticated}>
+              <OrderList />
+              // {/* </PrivateRoute> */}
+            }
+          />
+          <Route path="/order/info/:id"
+            element={
+              // <PrivateRoute auth={isAuthenticated}>
+              <OrderInfo />
               // {/* </PrivateRoute> */}
             }
           />

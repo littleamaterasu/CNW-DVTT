@@ -16,7 +16,7 @@ function SignUp() {
         event.preventDefault();
 
         try {
-            const response = await axios.post("http://172.11.1.117:8081/account/signup/user", {
+            const response = await axios.post("http://localhost:8081/account/signup/user", {
                 username,
                 password,
                 name,
