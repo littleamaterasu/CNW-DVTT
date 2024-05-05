@@ -64,15 +64,15 @@ public class PaymentService {
 		}
 		paymentEntity.setOrderList(listOrder);
 		
-		Set<PaymentLogEntity> listpaymentlog=new HashSet<>();
-		for(Long id: paymentDTO.getPaymentLogListid()) {
-			try {
-				listpaymentlog.add(paymentLogRepository.findEntityById(id));
-			} catch (Exception e) {
-				throw new Exception("No paymentLong has id ="+ id);
-			}
-		}
-		paymentEntity.setPaymentLogList(listpaymentlog);
+//		Set<PaymentLogEntity> listpaymentlog=new HashSet<>();
+//		for(Long id: paymentDTO.getPaymentLogListid()) {
+//			try {
+//				listpaymentlog.add(paymentLogRepository.findEntityById(id));
+//			} catch (Exception e) {
+//				throw new Exception("No paymentLong has id ="+ id);
+//			}
+//		}
+//		paymentEntity.setPaymentLogList(listpaymentlog);
 		
 		paymentEntity.setStatus("1"); // payment dang cho thanh toan
 		return paymentRepository.save(paymentEntity).getId();

@@ -36,7 +36,7 @@ public class PaymentEntity extends BaseEntity {
 	private AccountEntity user;
 	
 	@ManyToOne
-	@JoinColumn(name="coupon_id", nullable = false)
+	@JoinColumn(name="coupon_id")
 	private CouponEntity coupon;
 	
 	public PaymentEntity() { super(); }
