@@ -10,7 +10,7 @@ function Book() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
+                const response = await fetch(`http://172.11.0.231:8081/product/getOne?id=${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
@@ -23,6 +23,10 @@ function Book() {
 
         fetchData();
     }, []);
+
+    const handleGoBack = () => {
+        window.history.back();
+    };
 
     if (!data) {
         return (
@@ -37,6 +41,7 @@ function Book() {
         <div>
             <Header />
             <p>{data.name}</p>
+            <button onClick={handleGoBack}>Go Back</button>
         </div>
     )
 }

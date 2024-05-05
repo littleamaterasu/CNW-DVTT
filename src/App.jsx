@@ -17,11 +17,11 @@ import Cart from './Cart/Cart';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleLogin = () => {
+  const onLogin = () => {
     setIsAuthenticated(true);
   };
 
-  const handleLogout = () => {
+  const onLogout = () => {
     setIsAuthenticated(false);
   }
 
@@ -30,7 +30,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login onLogin={handleLogin} onLogout={handleLogout} />} />
+          <Route path="/login" element={<Login onLogin={onLogin} onLogout={onLogout} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/search/genre/:genreName" element={<SearchResults type="genre" />} />
           <Route path="/search/keyword/:keyword" element={<SearchResults type="keyword" />} />
@@ -39,11 +39,10 @@ function App() {
           <Route path='user/cart' element={<Cart />} />
           <Route path="/user/changeInformation"
             element={
-              <PrivateRoute>
-                <ChangeInformation />
-              </PrivateRoute>
+              // <PrivateRoute auth={isAuthenticated}>
+              <ChangeInformation />
+              // {/* </PrivateRoute> */}
             }
-            auth={isAuthenticated}
           />
         </Routes>
       </div>

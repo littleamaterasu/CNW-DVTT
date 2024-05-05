@@ -1,19 +1,54 @@
-import Header from "../Components/Header/Header"
+import React, { useState, useEffect } from 'react';
+import Header from "../Components/Header/Header";
 
 function ChangeInformation() {
-    const SubmitInfo = async () => {
-        // API
-    }
+    const [userName, setUserName] = useState('');
+    const [newUserName, setNewUserName] = useState('');
+
+    useEffect(() => {
+        // Fetch placeholder value for userName and CSRF token from the API when the component mounts
+        async function fetchData() {
+            try {
+
+                const placeholderResponse = await fetch('http://172.11.0.231:8081/account/getUser?id=7', {
+                    headers: {
+                        'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
+                    },
+                    credentials: 'include',
+                });
+                const placeholderData = await placeholderResponse.json();
+                setUserName(placeholderData.userName);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        fetchData();
+    }, []);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+    };
+
+    const handleInputChange = (event) => {
+        setNewUserName(event.target.value);
+    };
 
     return (
         <div>
             <Header />
-            <form onSubmit={SubmitInfo}>
-                <input type="text" placeholder="Tên người dùng" />
-                <input type="submit" />
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    placeholder={userName}
+                    value={newUserName}
+                    onChange={handleInputChange}
+                />
+                <input type="submit" value="Submit" />
             </form>
         </div>
-
-    )
+    );
 }
-export default ChangeInformation
+
+export default ChangeInformation;

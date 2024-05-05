@@ -1,33 +1,38 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import "./Login.css";
 
 function Login({ onLogin, onLogout }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await axios.post("http://172.11.1.117:8081/account/login", {
-                username,
-                password
-            }, {
-                withCredentials: true // Allow Axios to send and receive cookies
+            const response = await fetch("http://172.11.0.231:8081/account/signin", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+                credentials: 'include' // Gửi kèm cookie
             });
 
             // Assuming your API returns a status code to indicate success or failure
-            if (response.status !== 200) {
+            if (!response.ok) {
                 throw new Error('Login failed');
             }
 
-            console.log(response.headers); // Check the response headers
+            const data = await response.json();
+            localStorage.setItem('CSRF', data.token);
+            onLogin();
 
-            // If login is successful, you might want to redirect the user or update the UI accordingly
-            console.log('Login successful');
+            navigate('/')
+
         } catch (error) {
             setError('Invalid username or password');
         }
