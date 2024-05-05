@@ -3,6 +3,7 @@ package com.cnweb36.DTO.Entity;
 
 public class OrderDTO {
 
+	private Long orderId;
 	private Long productId;
 	private Integer quantity;
 	private Float price;
@@ -23,5 +24,11 @@ public class OrderDTO {
 	}
 	public void setPrice(Float price) {
 		this.price = price;
+	}
+	public Long getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
 }

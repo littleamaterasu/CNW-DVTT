@@ -17,6 +17,7 @@ public class PaymentResponse {
 	private String status;
 	private CouponDTO couponDTO;
 	private List<Book> listBook;
+	private List<Long> listOrderId;
 	
 	public Long getUserId() {
 		return userId;
@@ -78,6 +79,13 @@ public class PaymentResponse {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public List<Long> getListOrderId() {
+		return listOrderId;
+	}
+	public void setListOrderId(List<Long> listOrderId) {
+		this.listOrderId = listOrderId;
+	}
+
 	
 	
 }

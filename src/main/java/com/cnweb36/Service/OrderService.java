@@ -63,26 +63,30 @@ public class OrderService {
 		return orderRepository.save(orderEntity).getId();
 	}
 	
-	public List<Book> getProductSold(String username, Integer page) {
-		List<Book> listBook=new ArrayList<>();
+	public List<OrderResponse> getProductSold(String username, Integer page) {
+		List<OrderResponse> listBook=new ArrayList<>();
 		if(page==null||page<1) page=1;
 		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("modifiedDate").descending());
 		AccountEntity accountEntity=accountRepository.findEntityByUsername(username);
 		for(OrderEntity o: orderRepository.findProductSold(accountEntity, pageWithTenElements)) {
+			OrderResponse orderResponse= new OrderResponse(o.getId(), o.getStatus());
 			Book book=productConverter.toBook(o.getProduct_order());
-			listBook.add(book);
+			orderResponse.setBook(book);
+			listBook.add(orderResponse);
 		}
 		return listBook;
 	}
 	
-	public List<Book> getCart(String username, Integer page) {
-		List<Book> listBook=new ArrayList<>();
+	public List<OrderResponse> getCart(String username, Integer page) {
+		List<OrderResponse> listBook=new ArrayList<>();
 		if(page==null||page<1) page=1;
 		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("modifiedDate").descending());
 		AccountEntity accountEntity=accountRepository.findEntityByUsername(username);
 		for(OrderEntity o: orderRepository.findcart(accountEntity, pageWithTenElements)) {
+			OrderResponse orderResponse= new OrderResponse(o.getId(), o.getStatus());
 			Book book=productConverter.toBook(o.getProduct_order());
-			listBook.add(book);
+			orderResponse.setBook(book);
+			listBook.add(orderResponse);
 		}
 		return listBook;
 	}
@@ -91,7 +95,10 @@ public class OrderService {
 		List<OrderResponse> listOrder= new ArrayList<>();
 		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
 		for(OrderEntity o: accountEntity.getOrderList()) {
-			listOrder.add(new OrderResponse(o.getId(), o.getStatus()));
+			OrderResponse orderResponse= new OrderResponse(o.getId(), o.getStatus());
+			Book book=productConverter.toBook(o.getProduct_order());
+			orderResponse.setBook(book);
+			listOrder.add(orderResponse);
 		}
 		return listOrder;
 		

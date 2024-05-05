@@ -47,8 +47,8 @@ public class PaymentAPI {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/get")
-	public PaymentResponse getPayment(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken, @RequestParam(name="paymentid") Long paymentid) {
+	public PaymentResponse getPayment(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken, @RequestParam(name="paymentId") Long paymentId) {
 		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
-		return paymentService.getPayment(username, paymentid);
+		return paymentService.getPayment(username, paymentId);
 	}
 }
