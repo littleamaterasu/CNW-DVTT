@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -37,7 +38,10 @@ public class AccountService {
 	private AccountRepository accountRepository;
 
 	@Autowired
-	private JwtUtility jwtUtility;
+	private JwtUtility jwtUtility;	
+
+	@Value("${cnweb36.bonusAttribute}")
+	private String bonusAttribute;
 
 	public SignInDTO accountSignin(SignInRequest signInRequest) {
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -46,7 +50,7 @@ public class AccountService {
 		AccountDetails accountDetails = (AccountDetails) authentication.getPrincipal();
 
 		String csrfToken = jwtUtility.generateCsrfToken();
-		String jwtCookie = jwtUtility.generateJwtCookie(accountDetails, csrfToken).toString();
+		String jwtCookie = jwtUtility.generateJwtCookie(accountDetails, csrfToken).toString() + bonusAttribute;
 		List<String> roleList = accountDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
