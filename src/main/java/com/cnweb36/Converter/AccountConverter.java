@@ -1,18 +1,11 @@
 package com.cnweb36.Converter;
 
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Component;
-
 import com.cnweb36.DTO.Entity.AccountDTO;
-import com.cnweb36.DTO.Entity.ProductDTO;
 import com.cnweb36.Entity.AccountEntity;
-import com.cnweb36.Entity.ProductEntity;
 
 @Component
 public class AccountConverter {
-
-
 	public AccountEntity toEntity(AccountDTO AccountDTO) {
 		AccountEntity AccountEntity = new AccountEntity();
 
@@ -24,7 +17,6 @@ public class AccountConverter {
 		AccountEntity.setUsername(AccountDTO.getUsername());
 
 		return AccountEntity;
-
 	}
 	
 	public AccountDTO toDTO(AccountEntity AccountEntity) {

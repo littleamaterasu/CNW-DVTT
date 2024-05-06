@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.cnweb36.Converter.AccountConverter;
 import com.cnweb36.DTO.Entity.AccountDTO;
 import com.cnweb36.DTO.Entity.SignInDTO;
+import com.cnweb36.DTO.Request.Admin3FirstSignupRequest;
 import com.cnweb36.DTO.Request.ChangeInfoRequest;
 import com.cnweb36.DTO.Request.ChangePasswordRequest;
 import com.cnweb36.DTO.Request.SignInRequest;
@@ -55,6 +56,9 @@ public class AccountService {
 	@Value("${cnweb36.bonusAttribute}")
 	private String bonusAttribute;
 	
+	@Value("${cnweb36.admin3Passkey}")
+	private String admin3Passkey;
+	
 	private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	public SignInDTO accountSignin(SignInRequest signInRequest) {
@@ -71,11 +75,11 @@ public class AccountService {
 		return new SignInDTO(accountDetails.getId(), roleList, csrfToken, jwtCookie);
 	}
 
-	public Long userSignup(AccountDTO AccountDTO) {
+	public Long userSignup(AccountDTO accountDTO) {
 
-		String username = AccountDTO.getUsername();
+		String username = accountDTO.getUsername();
 		if (!accountRepository.findByUsername(username).isPresent()) {
-			AccountEntity accountEntity = accountConverter.toEntity(AccountDTO);
+			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
 
 			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(AccountDTO.getPassword());
@@ -88,12 +92,12 @@ public class AccountService {
 		return -1l;
 	}
 
-	public Long admin1Signup(AccountDTO AccountDTO) {
+	public Long admin1Signup(AccountDTO accountDTO) {
 
-		String username = AccountDTO.getUsername();
+		String username = accountDTO.getUsername();
 		if (!accountRepository.findByUsername(username).isPresent()) {
 
-			AccountEntity accountEntity = accountConverter.toEntity(AccountDTO);
+			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
 			
 			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(AccountDTO.getPassword());
@@ -106,9 +110,9 @@ public class AccountService {
 		return -1l;
 	}
 
-	public Long admin2Signup(AccountDTO AccountDTO) {
+	public Long admin2Signup(AccountDTO accountDTO) {
 
-		String username = AccountDTO.getUsername();
+		String username = accountDTO.getUsername();
 		if (!accountRepository.findByUsername(username).isPresent()) {
 
 			AccountEntity accountEntity = accountConverter.toEntity(AccountDTO);
@@ -123,13 +127,29 @@ public class AccountService {
 		return -1l;
 	}
 	
-	public Long admin3Signup(AccountDTO AccountDTO) {
-		String username = AccountDTO.getUsername();
+	public Long admin3Signup(AccountDTO accountDTO) {
+		String username = accountDTO.getUsername();
 		if (!accountRepository.findByUsername(username).isPresent()) {
 
-			AccountEntity accountEntity = accountConverter.toEntity(AccountDTO);
-			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String password = encoder.encode(AccountDTO.getPassword());
+			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			String password = encoder.encode(accountDTO.getPassword());
+			
+			accountEntity.setPassword(password);
+			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2", "ROLE_ADMIN_3");
+
+			return accountRepository.save(accountEntity).getId();
+		}
+		return -1l;
+	}
+		
+	public Long admin3FirstSignupRequest(Admin3FirstSignupRequest admin3DTO) {
+		Pageable pageWithFirstElement = PageRequest.of(0, 1, Sort.unsorted());
+		List<AccountEntity> admin3EntityList = accountRepository.findByRolesContaining("ROLE_ADMIN_3", pageWithFirstElement);
+		if (!admin3EntityList.isEmpty() && (admin3DTO.getPasskey() == admin3Passkey)) {
+			AccountEntity accountEntity = accountConverter.toEntity((AccountDTO)admin3DTO);
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			String password = encoder.encode(admin3DTO.getPassword());
 			
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2", "ROLE_ADMIN_3");
@@ -174,7 +194,7 @@ public class AccountService {
 	public List<UserResponse> getAllUser(Integer page) {
 		List<UserResponse> listUser=new ArrayList<>();
 		if(page==null||page<1) page=1;  
-		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("createdDate").descending());
+		Pageable pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("createdDate").descending());
 		for(AccountEntity a: accountRepository.findByRolesContaining("ROLE_USER", pageWithTenElements)) {
 			UserResponse userResponse=new UserResponse();
 			userResponse.setId(a.getId());

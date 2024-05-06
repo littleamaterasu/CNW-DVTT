@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cnweb36.DTO.Entity.AccountDTO;
 import com.cnweb36.DTO.Entity.SignInDTO;
-import com.cnweb36.DTO.Request.ChangeInfoRequest;
-import com.cnweb36.DTO.Request.ChangePasswordRequest;
-import com.cnweb36.DTO.Request.OTPRequest;
 import com.cnweb36.DTO.Request.SignInRequest;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.DTO.Response.SignInResponse;
@@ -126,6 +123,20 @@ public class AccountAPI {
 		Long result = accountService.admin3Signup(AccountDTO);
 		SignUpResponse.setId(result);
 		if (result == -1l) {
+			SignUpResponse.setContent("Admin already exists!");
+		} else {
+			SignUpResponse.setContent("Oke");
+		}
+		return SignUpResponse;
+	}
+	
+	@PostMapping("/signup/admin3/first")
+	public SignUpResponse admin3FirstSignupRequest(@RequestBody Admin3FirstSignupRequest admin3DTO) {
+		SignUpResponse SignUpResponse = new SignUpResponse();
+
+		Long result = accountService.admin3Signup(admin3DTO);
+		SignUpResponse.setId(result);
+		if (result == -1l) {
 			SignUpResponse.setContent("admin already exists!");
 		} else {
 			SignUpResponse.setContent("Oke");
@@ -133,6 +144,15 @@ public class AccountAPI {
 		return SignUpResponse;
 	}
 	
+	@PostMapping("/changePassword")
+	public NoticeResponse change(@RequestBody SignInRequest signInRequest) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		String text="test send email";
+		String subject="no sub";
+		String to="ndtung103664@gmail.com";
+		emailService.sendMessage(to, subject, text);
+		return noticeResponse;
+	}
 	
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
 	@GetMapping("/getUser")
