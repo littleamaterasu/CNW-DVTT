@@ -4,7 +4,14 @@ public class OrderResponse {
 
 	private Long orderId;
 	private String status;
+	private Book book;
 	
+	public Book getBook() {
+		return book;
+	}
+	public void setBook(Book book) {
+		this.book = book;
+	}
 	public OrderResponse(Long orderId, String status) {
 		super();
 		this.orderId = orderId;

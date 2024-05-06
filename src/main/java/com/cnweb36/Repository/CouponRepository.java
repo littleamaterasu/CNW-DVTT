@@ -6,4 +6,5 @@ import com.cnweb36.Entity.CouponEntity;
 
 public interface CouponRepository extends JpaRepository<CouponEntity, Long> {
 	CouponEntity findByName(String name);
-}
+	CouponEntity findEntityById(Long id);
+	}

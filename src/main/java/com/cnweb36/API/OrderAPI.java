@@ -62,7 +62,7 @@ public class OrderAPI {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/getProductSold")
-	public List<Book> getProductSold(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,
+	public List<OrderResponse> getProductSold(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,
 			@RequestParam(name="page",required = false) Integer page) {
 	    
 		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
@@ -71,7 +71,7 @@ public class OrderAPI {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/getCart")
-	public List<Book> getCart(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,
+	public List<OrderResponse> getCart(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,
 			@RequestParam(name="page",required = false) Integer page) {
 	    
 		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
