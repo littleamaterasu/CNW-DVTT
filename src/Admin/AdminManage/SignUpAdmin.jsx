@@ -32,7 +32,7 @@ function SignUpAdmin() {
 
             }, {
                 headers: {
-                    'X-CSRFTOKEN': '5beb102a-7d8a-48b1-b55b-6112485c0ac1' // Add CSRF Token to headers
+                    'X-CSRF-TOKEN': localStorage.getItem('CSRF') // Add CSRF Token to headers
                 },
                 withCredentials: true, // Send cookies
 
