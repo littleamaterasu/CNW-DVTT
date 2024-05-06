@@ -50,6 +50,9 @@ public class ProductEntity extends BaseEntity {
 	
 	@Column(name="rating")
 	private Float rating;
+	
+	@Column(name="numberRate")
+	private Integer numberRate;
 
 	@OneToMany(mappedBy = "product")
 	private Set<OrderEntity> orderList;
@@ -139,5 +142,12 @@ public class ProductEntity extends BaseEntity {
 
 	public Set<AuthorEntity> getAuthorList() {	return authorList; }
 	public void setAuthorList(Set<AuthorEntity> authorList) { this.authorList = authorList; }
+	public Integer getNumberRate() {
+		return numberRate;
+	}
+	public void setNumberRate(Integer numberRate) {
+		this.numberRate = numberRate;
+	}
+	
 	
 }

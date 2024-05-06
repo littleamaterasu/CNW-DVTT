@@ -51,7 +51,8 @@ public class ProductService {
 		productEntity.setCategoryList(listCategory);
 		
 		productEntity.setProvider(providerRepository.findByName(productDTO.getProvider()));
-		
+		productEntity.setNumberRate(0);
+		productEntity.setRating(0f);
 		return productRepository.save(productEntity).getId();
 	}
 	
