@@ -16,6 +16,8 @@ import OrderInfo from './Order/OrderInfo/OrderInfo';
 import FAQ from './FAQ/FAQ';
 import Cart from './Cart/Cart';
 import OrderList from './Order/OrderList/OrderList';
+import PaymentInfo from './Payment/PaymentInfo/PaymentInfo';
+import PaymentList from './Payment/PaymenList/PaymentList';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,21 +49,35 @@ function App() {
             element={
               // <PrivateRoute auth={isAuthenticated}>
               <ChangeInformation />
-              // {/* </PrivateRoute> */}
+              // { </PrivateRoute> }
             }
           />
           <Route path="/order/list"
             element={
               // <PrivateRoute auth={isAuthenticated}>
               <OrderList />
-              // {/* </PrivateRoute> */}
+              // { </PrivateRoute> }
             }
           />
           <Route path="/order/info/:id"
             element={
               // <PrivateRoute auth={isAuthenticated}>
               <OrderInfo />
-              // {/* </PrivateRoute> */}
+              // { </PrivateRoute> }
+            }
+          />
+          <Route path="/payment/info/:id"
+            element={
+              // <PrivateRoute auth={isAuthenticated}>
+              <PaymentInfo />
+              // { </PrivateRoute> }
+            }
+          />
+          <Route path="/payment/list"
+            element={
+              // <PrivateRoute auth={isAuthenticated}>
+              <PaymentList />
+              // { </PrivateRoute> }
             }
           />
         </Routes>
