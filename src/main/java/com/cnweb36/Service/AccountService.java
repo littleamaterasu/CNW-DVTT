@@ -31,7 +31,6 @@ import com.cnweb36.Repository.UserOTPRepository;
 import com.cnweb36.Service.Security.AccountDetails;
 import com.cnweb36.Service.Security.JwtUtility;
 import com.cnweb36.Service.SendMail.EmailService;
-import com.cnweb36.Service.SendMail.EmailServiceImpl;
 
 @Service
 public class AccountService {
@@ -82,7 +81,7 @@ public class AccountService {
 			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
 
 			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String password = encoder.encode(AccountDTO.getPassword());
+			String password = encoder.encode(accountDTO.getPassword());
 
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_USER");
@@ -100,7 +99,7 @@ public class AccountService {
 			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
 			
 			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String password = encoder.encode(AccountDTO.getPassword());
+			String password = encoder.encode(accountDTO.getPassword());
 			
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1");
@@ -115,9 +114,9 @@ public class AccountService {
 		String username = accountDTO.getUsername();
 		if (!accountRepository.findByUsername(username).isPresent()) {
 
-			AccountEntity accountEntity = accountConverter.toEntity(AccountDTO);
+			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
 			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String password = encoder.encode(AccountDTO.getPassword());
+			String password = encoder.encode(accountDTO.getPassword());
 			
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2");
