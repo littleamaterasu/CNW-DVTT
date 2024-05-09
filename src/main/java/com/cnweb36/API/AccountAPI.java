@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cnweb36.DTO.Entity.AccountDTO;
 import com.cnweb36.DTO.Entity.SignInDTO;
 import com.cnweb36.DTO.Request.Admin3FirstSignupRequest;
+import com.cnweb36.DTO.Request.ChangeInfoRequest;
+import com.cnweb36.DTO.Request.ChangePasswordRequest;
+import com.cnweb36.DTO.Request.OTPRequest;
 import com.cnweb36.DTO.Request.SignInRequest;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.DTO.Response.SignInResponse;
@@ -25,7 +28,6 @@ import com.cnweb36.DTO.Response.SignUpResponse;
 import com.cnweb36.DTO.Response.UserResponse;
 import com.cnweb36.Service.AccountService;
 import com.cnweb36.Service.Security.JwtUtility;
-import com.cnweb36.Service.SendMail.EmailService;
 
 import jakarta.validation.Valid;
 
@@ -39,9 +41,6 @@ public class AccountAPI {
 	
 	@Autowired
 	private JwtUtility jwtUtility;
-	
-	@Autowired
-	private EmailService emailService;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> accountSignin(@Valid @RequestBody SignInRequest signInRequest) {
@@ -148,16 +147,7 @@ public class AccountAPI {
 		return SignUpResponse;
 	}
 	
-	@PostMapping("/changePassword")
-	public NoticeResponse changePassword(@RequestBody SignInRequest signInRequest) {
-		NoticeResponse noticeResponse=new NoticeResponse();
-		String text="test send email";
-		String subject="no sub";
-		String to="ndtung103664@gmail.com";
-		emailService.sendMessage(to, subject, text);
-		return noticeResponse;
-	}
-	
+
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
 	@GetMapping("/getUser")
 	public AccountDTO getuser(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,@RequestParam(name="id" )Long id) {
@@ -170,5 +160,80 @@ public class AccountAPI {
 	@GetMapping("/getAllUser")
 	public List<UserResponse> getAllUser(@RequestParam(name="page",required = false) Integer page ) {
 		return accountService.getAllUser(page);
+	}
+	
+	//change password and info
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@PostMapping("/changeInfo")
+	public NoticeResponse changeinfo(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,@RequestBody ChangeInfoRequest changeInfoRequest) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
+		try {
+			String result=accountService.changeInfo(changeInfoRequest, username);
+			if(result.compareTo("Oke")==0) {
+				noticeResponse.setStatus(1l);
+			}else noticeResponse.setStatus(0l);
+			noticeResponse.setContent(result);
+		} catch (Exception e) {
+			noticeResponse.setContent(e.getMessage());
+			noticeResponse.setStatus(-1l);
+		}
+		return noticeResponse;
+	}
+	
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@PostMapping("/changepassword")
+	public NoticeResponse changepass(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,@RequestBody ChangePasswordRequest changePasswordRequest) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
+		try {
+			String result=accountService.changePassword(changePasswordRequest, username);
+			if(result.compareTo("Oke")==0) {
+				noticeResponse.setStatus(1l);
+			}else noticeResponse.setStatus(0l);
+			noticeResponse.setContent(result);
+		} catch (Exception e) {
+			noticeResponse.setContent(e.getMessage());
+			noticeResponse.setStatus(-1l);
+		}
+		return noticeResponse;
+	}
+	
+	@PostMapping("/getOTP")
+	public NoticeResponse getOTP(@RequestBody OTPRequest otpRequest) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		try {
+			String result= accountService.getOTP(otpRequest.getUsername());
+			if(result.compareTo("Oke")==0) {
+				noticeResponse.setStatus(1l);
+				noticeResponse.setContent("Đã gửi thành công OTP đến tài khoản email của bạn!");
+			}else {
+				noticeResponse.setStatus(0l);
+				noticeResponse.setContent(result);
+			}
+		} catch (Exception e) {
+			noticeResponse.setStatus(-1l);
+			noticeResponse.setContent(e.getMessage());
+		}
+		return noticeResponse;
+	}
+	
+	@PostMapping("/getpass/mail")
+	public NoticeResponse changePassWithOTP(@RequestBody SignInRequest signInRequest) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		try {
+			String result= accountService.changePassWithOTP(signInRequest.getUsername(), signInRequest.getPassword());
+			if(result.compareTo("Oke")==0) {
+				noticeResponse.setStatus(1l);
+				noticeResponse.setContent("Đã gửi thành công password đến tài khoản email của bạn!");
+			}else {
+				noticeResponse.setStatus(0l);
+				noticeResponse.setContent(result);
+			}
+		} catch (Exception e) {
+			noticeResponse.setStatus(-1l);
+			noticeResponse.setContent(e.getMessage());
+		}
+		return noticeResponse;
 	}
 }

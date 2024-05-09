@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cnweb36.DTO.Entity.OrderDTO;
+import com.cnweb36.DTO.Request.RatingRequest;
 import com.cnweb36.DTO.Response.Book;
 import com.cnweb36.DTO.Response.CommentResponse;
 import com.cnweb36.DTO.Response.NoticeResponse;
@@ -83,5 +84,24 @@ public class OrderAPI {
 	public List<OrderResponse> getStatus(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken) {
 		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
 		return orderService.getStatus(username);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@PostMapping("/rating")
+	public NoticeResponse rating(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,@RequestBody RatingRequest ratingRequest) {
+		String username= jwtUtility.getUserNameFromJwtToken(jwtToken);
+		NoticeResponse noticeResponse=new NoticeResponse();
+		try {
+			String result= orderService.rate(ratingRequest, username);
+			if(result.compareTo("Cảm ơn bạn đã đánh giá")==0) {
+				noticeResponse.setStatus(1l);
+			}else {
+				noticeResponse.setStatus(0l);
+			}
+			noticeResponse.setContent(result);
+			return noticeResponse;
+		} catch (Exception e) {
+			return new NoticeResponse(-1l, e.getMessage());
+		}
 	}
 }

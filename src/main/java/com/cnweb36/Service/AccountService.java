@@ -20,12 +20,17 @@ import com.cnweb36.Converter.AccountConverter;
 import com.cnweb36.DTO.Entity.AccountDTO;
 import com.cnweb36.DTO.Entity.SignInDTO;
 import com.cnweb36.DTO.Request.Admin3FirstSignupRequest;
+import com.cnweb36.DTO.Request.ChangeInfoRequest;
+import com.cnweb36.DTO.Request.ChangePasswordRequest;
 import com.cnweb36.DTO.Request.SignInRequest;
 import com.cnweb36.DTO.Response.UserResponse;
 import com.cnweb36.Entity.AccountEntity;
+import com.cnweb36.Entity.UserOTPEntity;
 import com.cnweb36.Repository.AccountRepository;
+import com.cnweb36.Repository.UserOTPRepository;
 import com.cnweb36.Service.Security.AccountDetails;
 import com.cnweb36.Service.Security.JwtUtility;
+import com.cnweb36.Service.SendMail.EmailService;
 
 @Service
 public class AccountService {
@@ -39,13 +44,21 @@ public class AccountService {
 	private AccountRepository accountRepository;
 
 	@Autowired
-	private JwtUtility jwtUtility;	
+	private JwtUtility jwtUtility;
+	
+	@Autowired
+	private UserOTPRepository userOTPRepository;
+	
+	@Autowired
+	private EmailService emailService;
 
 	@Value("${cnweb36.bonusAttribute}")
 	private String bonusAttribute;
 	
 	@Value("${cnweb36.admin3Passkey}")
 	private String admin3Passkey;
+	
+	private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	public SignInDTO accountSignin(SignInRequest signInRequest) {
 		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -67,7 +80,7 @@ public class AccountService {
 		if (!accountRepository.findByUsername(username).isPresent()) {
 			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
 
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(accountDTO.getPassword());
 
 			accountEntity.setPassword(password);
@@ -85,7 +98,7 @@ public class AccountService {
 
 			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
 			
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(accountDTO.getPassword());
 			
 			accountEntity.setPassword(password);
@@ -102,7 +115,7 @@ public class AccountService {
 		if (!accountRepository.findByUsername(username).isPresent()) {
 
 			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(accountDTO.getPassword());
 			
 			accountEntity.setPassword(password);
@@ -188,5 +201,92 @@ public class AccountService {
 			listUser.add(userResponse);
 		}
 		return listUser;
+	}
+	
+	// change info and pass
+	
+	public String changeInfo(ChangeInfoRequest changeInfoRequest, String username) {
+		AccountEntity accountEntity=accountRepository.findEntityByUsername(username);
+	
+		if(encoder.matches(changeInfoRequest.getPassword(), accountEntity.getPassword())) {
+			accountEntity.setAddress(changeInfoRequest.getAddress());
+			accountEntity.setPhone(changeInfoRequest.getPhone());
+			if(accountEntity.getEmail()==null) {
+				accountEntity.setEmail(changeInfoRequest.getEmail());
+			}
+			accountRepository.save(accountEntity);
+			return "Oke";
+		}else {
+			return "Mật khẩu không đúng";
+		}
+	}
+	
+	public String changePassword(ChangePasswordRequest changePasswordRequest, String username) {
+		AccountEntity accountEntity=accountRepository.findEntityByUsername(username);
+		
+		
+		if(encoder.matches(changePasswordRequest.getOldPassword(), accountEntity.getPassword())) {
+			String newpassword = encoder.encode(changePasswordRequest.getNewPassword());
+			accountEntity.setPassword(newpassword);
+			accountRepository.save(accountEntity);
+			return "Oke";
+		}else {
+			return "Mật khẩu không đúng";
+		}
+	}
+	
+	public String getOTP(String username) {
+		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
+		if(accountEntity!=null) {
+			if(accountEntity.getEmail()!=null) {
+				UserOTPEntity userOTPEntity =new UserOTPEntity();
+				String OTP=userOTPEntity.generateString(8);
+				userOTPEntity.setCount(0);
+				userOTPEntity.setOTP(encoder.encode(OTP));
+				userOTPEntity.setUsername(username);
+				userOTPRepository.save(userOTPEntity);
+				
+				// send OTP by email
+				String subject="OTP from cnweb36 - Expire in 5 minutes! ";
+				String text="Your OTP    :     "+ OTP;
+				emailService.sendMessage(accountEntity.getEmail(), subject, text);
+				
+				return "Oke";
+			}else {
+				return "Tài khoản này chưa cập nhật email";
+			}
+		}else {
+			return "Tài khoản này không tồn tại";
+		}
+	}
+	
+	public String changePassWithOTP(String username, String OTP) {
+		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
+		UserOTPEntity userOTPEntity= userOTPRepository.findEntityByUsername(username);
+		if(userOTPEntity!=null) {
+			if(userOTPEntity.OTPisValid()) {
+				if(encoder.matches(OTP,userOTPEntity.getOTP())) {
+					// set new password and send
+					String newPassword=userOTPEntity.generateString(12);
+					accountEntity.setPassword(encoder.encode(newPassword));
+					accountRepository.save(accountEntity);
+					
+					String subject="Password from cnweb36";
+					String text="Your password    :     "+ newPassword;
+					emailService.sendMessage(accountEntity.getEmail(), subject, text);
+					
+					userOTPRepository.delete(userOTPEntity);
+					return "Oke";
+				}else {
+					userOTPEntity.setCount(userOTPEntity.getCount()+1);
+					return "Nhập sai mã OTP lần "+userOTPRepository.save(userOTPEntity).getCount();
+				}
+			}else {
+				userOTPRepository.delete(userOTPEntity);
+				return "OTP của bạn đã hết hạn hoặc quá số lần nhập";
+			}
+		}else {
+			return "Chưa gửi OTP cho tài khoản này";
+		}
 	}
 }

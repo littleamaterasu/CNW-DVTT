@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.cnweb36.Converter.ProductConverter;
 import com.cnweb36.DTO.Entity.OrderDTO;
+import com.cnweb36.DTO.Request.RatingRequest;
 import com.cnweb36.DTO.Response.Book;
 import com.cnweb36.DTO.Response.CommentResponse;
 import com.cnweb36.DTO.Response.OrderResponse;
@@ -101,5 +102,35 @@ public class OrderService {
 		}
 		return listOrder;
 		
+	}
+	
+	public String rate(RatingRequest ratingRequest, String Username) {
+		OrderEntity orderEntity=orderRepository.findEntityById(ratingRequest.getOrderId());
+		AccountEntity accountEntity=accountRepository.findEntityByUsername(Username);
+		if(accountEntity.getId()==orderEntity.getUser().getId()) {
+			if(orderEntity.getStatus().compareTo("3")==0
+			 ||orderEntity.getStatus().compareTo("4")==0) {
+				orderEntity.setComment(ratingRequest.getComment());
+				orderEntity.setRate(ratingRequest.getRate());
+				if(ratingRequest.getLikeOrDislike()==1) orderEntity.setLike(1);
+				else orderEntity.setDislike(1);
+				orderRepository.save(orderEntity);
+				
+				// set product rate
+				ProductEntity productEntity=orderEntity.getProduct_order();
+				Float rate= productEntity.getRating();
+				Integer numberRate=productEntity.getNumberRate();
+				Float newRate=((rate*numberRate)+ratingRequest.getRate())/(numberRate+1);
+				productEntity.setRating(newRate);
+				productEntity.setNumberRate(numberRate+1);
+				productRepository.save(productEntity);
+				
+				return "Cảm ơn bạn đã đánh giá";
+			}else {
+				return "Bạn chưa thể đánh giá sản phẩm này";
+			}
+		}else {
+			return "Bạn không có quyền đánh giá sản phẩm này";
+		}
 	}
 }
