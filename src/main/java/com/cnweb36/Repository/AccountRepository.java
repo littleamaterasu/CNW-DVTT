@@ -21,5 +21,5 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 	@Query("select a from AccountEntity a where a.id=?1")
 	AccountEntity findEntityById(Long id);
 	
-	List<AccountEntity> findByRolesContaining(String userRole,Pageable pageable);
+	List<AccountEntity> findByRolesContaining(String userRole, Pageable pageable);
 }
