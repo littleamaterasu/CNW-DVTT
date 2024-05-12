@@ -21,6 +21,7 @@ function Login({ onLogin, onLogout }) {
                 body: JSON.stringify({ username, password }),
                 credentials: 'include' // Gửi kèm cookie
             });
+            console.log(response)
 
             // Assuming your API returns a status code to indicate success or failure
             if (!response.ok) {

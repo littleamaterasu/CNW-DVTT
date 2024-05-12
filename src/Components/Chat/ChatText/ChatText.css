@@ -1,0 +1,17 @@
+.self {
+    background-color: #DCF8C6;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    clear: both;
+    float: left;
+}
+
+.others {
+    background-color: #ECEFF1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    clear: both;
+    float: right;
+}
