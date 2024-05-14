@@ -15,7 +15,7 @@ import com.cnweb36.DTO.Entity.ProviderDTO;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.Service.ProviderService;
 
-@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/provider")
 public class ProviderAPI {

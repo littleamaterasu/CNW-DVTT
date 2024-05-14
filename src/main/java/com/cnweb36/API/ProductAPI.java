@@ -18,7 +18,7 @@ import com.cnweb36.DTO.Response.Book;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.Service.ProductService;
 
-@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/product")
 public class ProductAPI {

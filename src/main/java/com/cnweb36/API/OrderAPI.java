@@ -23,7 +23,7 @@ import com.cnweb36.DTO.Response.OrderResponse;
 import com.cnweb36.Service.OrderService;
 import com.cnweb36.Service.Security.JwtUtility;
 
-@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/order")
 public class OrderAPI {
