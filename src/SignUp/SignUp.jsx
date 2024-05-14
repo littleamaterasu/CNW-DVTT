@@ -56,7 +56,7 @@ function SignUp() {
     };
 
     const handleEmailConfirmation = () => {
-        if ((!isConfirmationSent || isCodeExpired) && !isConfirmed) {
+        if ((!isCodeExpired || !isConfirmed)) {
             // Generate random confirmation code
             const code = Math.floor(100000 + Math.random() * 900000);
 
@@ -87,69 +87,96 @@ function SignUp() {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <Link to="/">
-                    <button>Home</button>
-                </Link>
-                <Link to="/login">
-                    <button>Login</button>
-                </Link>
-                <input
-                    type="text"
-                    placeholder="Your User Name"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Your Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Your Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Your Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <ToastContainer />
+            <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-80">
+                <div className="flex justify-between mb-4">
+                    <Link to="/">
+                        <button type="button" className="text-blue-500">Home</button>
+                    </Link>
+                    <Link to="/login">
+                        <button type="button" className="text-blue-500">Login</button>
+                    </Link>
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Your User Name"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="password"
+                        placeholder="Your Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Your Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Your Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
 
-                {isConfirmed ? <p>Confirmed</p> : <p>Please confirm your email before signup</p>}
+                {isConfirmed ? <p className="text-green-500">Confirmed</p> : <p className="text-red-500">Please confirm your email before signup</p>}
 
                 {/* Display email confirmation section */}
-                <button onClick={handleEmailConfirmation}>Send Email</button>
+                <button type="button" onClick={handleEmailConfirmation} className="w-full bg-blue-500 text-white p-2 rounded mb-4">
+                    Send Email
+                </button>
 
-                <div>
+                <div className="mb-4">
                     <input
                         type="text"
                         placeholder="Confirmation Code"
                         value={confirmationCode}
                         onChange={(e) => setConfirmationCode(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
                     />
-                    <button onClick={handleConfirmationSubmit}>Check Confirmation</button>
+                    <button type="button" onClick={handleConfirmationSubmit} className="w-full bg-green-500 text-white p-2 rounded mt-2">
+                        Check Confirmation
+                    </button>
                 </div>
 
-                <input
-                    type="text"
-                    placeholder="Your Phone Number"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Your Address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                />
-                <button type="submit">Sign Up</button>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Your Phone Number"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Your Address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+                    Sign Up
+                </button>
             </form>
-            <ToastContainer />
         </div>
     );
 }

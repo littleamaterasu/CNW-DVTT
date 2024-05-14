@@ -3,9 +3,6 @@ import SearchBar from "../SearchBar/SearchBar";
 import Category from "../Category/Category";
 import { Link } from 'react-router-dom';
 import { io } from 'socket.io-client';
-import './Header.css';
-
-const id = ['tung', 'cnweb36']
 
 function Header({ isAuthenticated }) {
     const [showCategory, setShowCategory] = useState(false);
@@ -20,68 +17,77 @@ function Header({ isAuthenticated }) {
 
     const EnableChat = () => {
         setEnableChat(true);
-    }
+    };
 
-    const DisableChat = () => {
+    const disableChat = () => {
         setEnableChat(false);
-    }
-
+    };
 
     return (
-        <div>
-            <p>Header</p>
-            <SearchBar />
-            <Link to="/login">
-                <button>Login</button>
-            </Link>
-            <Link to="/signup">
-                <button>Register</button>
-            </Link>
-            {isAuthenticated && (
-                <>
-                    <Link to="/user/cart">
-                        <button>Cart</button>
+        <div className="bg-white shadow-md p-4">
+            <div className="flex justify-between items-center">
+                <SearchBar />
+                <div className="flex space-x-4">
+                    <Link to="/login">
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
                     </Link>
-                    <Link to="/user/changeInformation">
-                        <button>Change User Information</button>
+                    <Link to="/signup">
+                        <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Register</button>
                     </Link>
-                    <Link to="/user/FAQ">
-                        <button>Need help?</button>
-                    </Link>
-                </>
-            )}
-            {isAuthenticated && (
-                <>
-                    <Link to="/order/list">
-                        <button>Order List</button>
-                    </Link>
-                    <Link to="/payment/list">
-                        <button>Payment List</button>
-                    </Link>
-                </>
-            )}
-            <button onClick={toggleCategory}>Categories</button>
+                    {isAuthenticated && (
+                        <>
+                            <Link to="/user/cart">
+                                <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">Cart</button>
+                            </Link>
+                            <Link to="/user/changeInformation">
+                                <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700">Change User Information</button>
+                            </Link>
+                            <Link to="/user/FAQ">
+                                <button className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700">Need help?</button>
+                            </Link>
+                            <Link to="/order/list">
+                                <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Order List</button>
+                            </Link>
+                            <Link to="/payment/list">
+                                <button className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-700">Payment List</button>
+                            </Link>
+                        </>
+                    )}
+                    <button onClick={toggleCategory} className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900">Categories</button>
+                    <button onClick={EnableChat} className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700">Chat</button>
+                </div>
+            </div>
             {showCategory && <Category />}
-            <button onClick={EnableChat}>Chat</button>
-            {enableChat &&
-                <div className='chat'>
-                    <div className='chat-text'>
-
+            {enableChat && (
+                <div className="chat bg-gray-100 p-4 mt-4 rounded shadow-lg">
+                    <div className="chat-text h-40 overflow-y-auto p-2 mb-2 border border-gray-300 rounded">
+                        {/* Chat messages will be displayed here */}
                     </div>
-                    <div className='chat-form'>
+                    <div className="chat-form">
                         <form onSubmit={(e) => {
                             e.preventDefault();
-
                             console.log('Sending message:', message);
+                            socket.emit('message', { id, message });
                             setMessage('');
                         }}>
-                            <input type="text" value={message} onChange={e => setMessage(e.target.value)} />
-                            <input type="submit" value="Send" />
+                            <input
+                                type="text"
+                                value={message}
+                                onChange={e => setMessage(e.target.value)}
+                                className="w-full p-2 border border-gray-300 rounded mb-2"
+                            />
+                            <input
+                                type="submit"
+                                value="Send"
+                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            />
                         </form>
                     </div>
-                </div>}
+                    <button onClick={disableChat} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 mt-2">Close Chat</button>
+                </div>
+            )}
         </div>
-    )
+    );
 }
 
 export default Header;
