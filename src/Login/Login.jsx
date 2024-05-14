@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./Login.css";
+import { API_BASE_URL } from '../config';
 
-function Login({ onLogin, onLogout }) {
+function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (localStorage.getItem('userId')) {
+            navigate('/')
+        }
+    }, [])
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8081/account/signin", {
+            const response = await fetch(API_BASE_URL + '/account/signin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -21,47 +30,48 @@ function Login({ onLogin, onLogout }) {
                 body: JSON.stringify({ username, password }),
                 credentials: 'include' // Gửi kèm cookie
             });
-            console.log(response)
 
-            // Assuming your API returns a status code to indicate success or failure
             if (!response.ok) {
                 throw new Error('Login failed');
             }
 
             const data = await response.json();
             localStorage.setItem('CSRF', data.token);
-            onLogin();
-
+            localStorage.setItem();
             navigate('/')
 
         } catch (error) {
             setError('Invalid username or password');
+            toast.error('Login failed. Please check your username and password.');
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Link to="/">
-                <button>Home</button>
-            </Link>
-            <Link to="/signup">
-                <button>Register</button>
-            </Link>
-            <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button type="submit">Login</button>
-            {error && <div>{error}</div>}
-        </form>
+        <div className='login'>
+            <ToastContainer />
+            <form onSubmit={handleSubmit}>
+                <Link to="/">
+                    <button>Home</button>
+                </Link>
+                <Link to="/signup">
+                    <button>Register</button>
+                </Link>
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button type="submit">Login</button>
+                {error && <div>{error}</div>}
+            </form>
+        </div>
     );
 }
 
