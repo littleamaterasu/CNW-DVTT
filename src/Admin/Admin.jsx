@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 function Admin() {
 
     const navigate = useNavigate();
-
+    if (localStorage.getItem('role') === 'ROLE_USER') navigate('/');
     const HandleSwitchPage = (dir) => {
         navigate('/admin' + dir);
     }

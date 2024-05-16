@@ -11,7 +11,8 @@ function Login() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (localStorage.getItem('userId')) {
+        if (localStorage.getItem('id')) {
+            toast.error('You have already logged in!')
             navigate('/');
         }
     }, [navigate]);
@@ -19,8 +20,10 @@ function Login() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        console.log(`${API_BASE_URL[import.meta.env.MODE]}/account/signin`)
+
         try {
-            const response = await fetch(`${API_BASE_URL}/account/signin`, {
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/account/signin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +39,10 @@ function Login() {
 
             const data = await response.json();
             localStorage.setItem('CSRF', data.token);
+            localStorage.setItem('id', data.userId);
+            localStorage.setItem('role', data.role);
             navigate('/');
+
         } catch (error) {
             setError('Invalid username or password');
             toast.error('Login failed. Please check your username and password.');

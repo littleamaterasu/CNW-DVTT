@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../Components/Header/Header';
 import Preview from '../Components/Preview/Preview';
+import { API_BASE_URL } from '../config';
 
 function SearchResults({ type }) {
     const { genreName, keyword } = useParams();
@@ -19,6 +20,7 @@ function SearchResults({ type }) {
                 } else if (type === 'keyword') {
                     searchResults = await searchByKeyword(keyword, currentPage);
                 }
+                console.log('ok');
                 setResults(searchResults);
             } catch (error) {
                 console.error('Error fetching search results:', error);
@@ -30,7 +32,7 @@ function SearchResults({ type }) {
 
     const searchByGenre = async (genreName, page) => {
         try {
-            const response = await fetch();           // API
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}`);           // API
             const data = await response.json();
             return data;
         } catch (error) {
@@ -41,7 +43,7 @@ function SearchResults({ type }) {
 
     const searchByKeyword = async (keyword, page) => {
         try {
-            const response = await fetch(import.meta.env.VITE_BASE_API_URL + `/product/getWithKeyword`, {          // API
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/product/getWithKeyword`, {          // API
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

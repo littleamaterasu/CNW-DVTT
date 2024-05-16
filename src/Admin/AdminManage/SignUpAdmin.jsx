@@ -116,6 +116,7 @@ function SignUpAdmin() {
                         Role 2
                     </label>
                 </div>
+
                 <button type="submit">Sign Up</button>
             </form>
             <ToastContainer />

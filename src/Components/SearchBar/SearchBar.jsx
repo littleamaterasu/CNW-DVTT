@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../config";
 
 function SearchBar() {
     const [keyword, setKeyword] = useState('');
@@ -8,7 +9,7 @@ function SearchBar() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('https://jsonplaceholder.typicode.com/users');
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/product/getAll`);
             const jsonData = await response.json();
             setData(jsonData);
             setIsDataFetched(true)

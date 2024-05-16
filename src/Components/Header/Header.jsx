@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import SearchBar from "../SearchBar/SearchBar";
 import Category from "../Category/Category";
-import { Link } from 'react-router-dom';
-import { io } from 'socket.io-client';
+import { Link, useNavigate } from 'react-router-dom';
+import Chat from '../Chat/Chat';
 
 function Header({ isAuthenticated }) {
     const [showCategory, setShowCategory] = useState(false);
     const [enableChat, setEnableChat] = useState(false);
-    const [message, setMessage] = useState('');
-
-    const socket = io();
+    const navigate = useNavigate();
 
     const toggleCategory = () => {
         setShowCategory(!showCategory);
@@ -23,6 +21,13 @@ function Header({ isAuthenticated }) {
         setEnableChat(false);
     };
 
+    const handleLogout = () => {
+        localStorage.setItem('id', '');
+        localStorage.setItem('CSRF', '');
+        localStorage.setItem('role', '');
+        navigate('/login'); // Redirect to login page after logout
+    };
+
     return (
         <div className="bg-white shadow-md p-4">
             <div className="flex justify-between items-center">
@@ -34,7 +39,7 @@ function Header({ isAuthenticated }) {
                     <Link to="/signup">
                         <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Register</button>
                     </Link>
-                    {isAuthenticated && (
+                    {localStorage.getItem('id') && (
                         <>
                             <Link to="/user/cart">
                                 <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">Cart</button>
@@ -51,6 +56,7 @@ function Header({ isAuthenticated }) {
                             <Link to="/payment/list">
                                 <button className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-700">Payment List</button>
                             </Link>
+                            <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Logout</button>
                         </>
                     )}
                     <button onClick={toggleCategory} className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900">Categories</button>
@@ -59,30 +65,8 @@ function Header({ isAuthenticated }) {
             </div>
             {showCategory && <Category />}
             {enableChat && (
-                <div className="chat bg-gray-100 p-4 mt-4 rounded shadow-lg">
-                    <div className="chat-text h-40 overflow-y-auto p-2 mb-2 border border-gray-300 rounded">
-                        {/* Chat messages will be displayed here */}
-                    </div>
-                    <div className="chat-form">
-                        <form onSubmit={(e) => {
-                            e.preventDefault();
-                            console.log('Sending message:', message);
-                            socket.emit('message', { id, message });
-                            setMessage('');
-                        }}>
-                            <input
-                                type="text"
-                                value={message}
-                                onChange={e => setMessage(e.target.value)}
-                                className="w-full p-2 border border-gray-300 rounded mb-2"
-                            />
-                            <input
-                                type="submit"
-                                value="Send"
-                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                            />
-                        </form>
-                    </div>
+                <div>
+                    <Chat />
                     <button onClick={disableChat} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 mt-2">Close Chat</button>
                 </div>
             )}

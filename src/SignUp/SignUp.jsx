@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
+import { API_BASE_URL } from '../config';
 
 function SignUp() {
     const [username, setUsername] = useState('');
@@ -12,13 +12,17 @@ function SignUp() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
     const [confirmationCode, setConfirmationCode] = useState('');
+    const [inputConfirmationCode, setInputConfirmationCode] = useState('');
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [isCodeExpired, setIsCodeExpired] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsCodeExpired(true);
-        }, 300000); // 5 minutes in milliseconds
+        let timer;
+        if (confirmationCode) {
+            timer = setTimeout(() => {
+                setIsCodeExpired(true);
+            }, 300000); // 5 minutes in milliseconds
+        }
 
         return () => clearTimeout(timer);
     }, [confirmationCode]);
@@ -32,21 +36,29 @@ function SignUp() {
         }
 
         try {
-            const response = await axios.post(import.meta.env.VITE_BASE_API_URL + "/account/signup/user", {
-                username,
-                password,
-                name,
-                email,
-                phoneNumber,
-                address
+            const response = await fetch(API_BASE_URL + "/account/signup/user", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                    name,
+                    email,
+                    phoneNumber,
+                    address
+                }),
             });
 
-            if (response.status !== 200) {
+            if (!response.ok) {
                 throw new Error('Signup failed');
             }
 
-            if (response.data.id === -1) {
-                toast.error(response.data.content);
+            const data = await response.json();
+
+            if (data.id === -1) {
+                toast.error(data.content);
             } else {
                 toast.success('Signup successful');
             }
@@ -55,21 +67,39 @@ function SignUp() {
         }
     };
 
-    const handleEmailConfirmation = () => {
-        if ((!isCodeExpired || !isConfirmed)) {
-            // Generate random confirmation code
-            const code = Math.floor(100000 + Math.random() * 900000);
+    const handleEmailConfirmation = async () => {
+        if (!isCodeExpired && confirmationCode) {
+            toast.error('Confirmation code has already been sent. Please check your email.');
+            return;
+        }
 
-            // Save confirmation code
+        try {
+            const code = Math.floor(100000 + Math.random() * 900000);
             setConfirmationCode(code);
 
-            // Send confirmation email (API call)
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/checkMail`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: email,
+                    otp: code
+                }),
+                credentials: 'include' // Send cookies
+            });
 
-            // -----------------------------------
+            console.log(response);
+
+            if (!response.ok) {
+                throw new Error('Failed to send confirmation email');
+            }
 
             setIsCodeExpired(false);
-        } else {
-            toast.error('Confirmation code has already been sent. Please check your email.');
+            toast.success('Confirmation code sent to your email.');
+        } catch (error) {
+            toast.error('Failed to send confirmation email. Please try again.');
         }
     };
 
@@ -79,8 +109,9 @@ function SignUp() {
             return;
         }
 
-        if (confirmationCode === parseInt(confirmationCode, 10)) {
+        if (confirmationCode.toString() === inputConfirmationCode) {
             setIsConfirmed(true);
+            toast.success('Email confirmed!');
         } else {
             toast.error('Invalid confirmation code. Please try again.');
         }
@@ -146,8 +177,8 @@ function SignUp() {
                     <input
                         type="text"
                         placeholder="Confirmation Code"
-                        value={confirmationCode}
-                        onChange={(e) => setConfirmationCode(e.target.value)}
+                        value={inputConfirmationCode}
+                        onChange={(e) => setInputConfirmationCode(e.target.value)}
                         className="w-full p-2 border border-gray-300 rounded"
                     />
                     <button type="button" onClick={handleConfirmationSubmit} className="w-full bg-green-500 text-white p-2 rounded mt-2">
