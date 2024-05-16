@@ -17,7 +17,7 @@ import com.cnweb36.DTO.Response.PaymentResponse;
 import com.cnweb36.Service.PaymentService;
 import com.cnweb36.Service.Security.JwtUtility;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 @RestController
 @RequestMapping("/payment")
 public class PaymentAPI {

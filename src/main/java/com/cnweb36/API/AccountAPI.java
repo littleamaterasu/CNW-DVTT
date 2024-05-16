@@ -31,7 +31,7 @@ import com.cnweb36.Service.Security.JwtUtility;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 @RestController
 @RequestMapping("/account")
 public class AccountAPI {
@@ -41,6 +41,16 @@ public class AccountAPI {
 	
 	@Autowired
 	private JwtUtility jwtUtility;
+	
+	@PostMapping("/checkMail")
+	public NoticeResponse checkMail(@Valid @RequestBody OTPRequest otpRequest) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		String result= accountService.checkmail(otpRequest.getOtp(), otpRequest.getUsername());
+		noticeResponse.setContent(result);
+		noticeResponse.setStatus(0l);
+		
+		return noticeResponse;
+	}
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> accountSignin(@Valid @RequestBody SignInRequest signInRequest) {
@@ -237,9 +247,4 @@ public class AccountAPI {
 		return noticeResponse;
 	}
 	
-//	@GetMapping("/checkMail")
-//	public NoticeResponse checkMail(@RequestParam String email) {
-//		NoticeResponse noticeResponse=new NoticeResponse();
-//		String result= 
-//	}
 }

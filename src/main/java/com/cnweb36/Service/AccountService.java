@@ -289,4 +289,18 @@ public class AccountService {
 			return "Chưa gửi OTP cho tài khoản này";
 		}
 	}
+	
+	public String checkmail(String otp, String email) {
+		try {
+		String subject="OTP from cnweb36 to check mail";
+		String text="Your OTP    :     "+ otp;
+		emailService.sendMessage(email, subject, text);
+		System.out.println(email);
+		System.out.println(otp);
+		return "Oke";
+		}catch (Exception e) {
+			return e.getMessage();
+		}
+		
+	}
 }
