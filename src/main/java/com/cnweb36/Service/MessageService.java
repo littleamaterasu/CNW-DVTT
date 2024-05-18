@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.cnweb36.DTO.Entity.MessageDTO;
 import com.cnweb36.DTO.Response.MessageAdminResponse;
-import com.cnweb36.Entity.AccountEntity;
 import com.cnweb36.Entity.MessageEntity;
-import com.cnweb36.Repository.AccountRepository;
 import com.cnweb36.Repository.MessageRepository;
 
 @Service
@@ -24,21 +22,18 @@ public class MessageService {
 	@Autowired
 	private MessageRepository messageRepository;
 	
-	@Autowired
-	private AccountRepository accountRepository;
-	
 	public void save(MessageEntity messageEntity) {
 		messageRepository.save(messageEntity);
 	}
 	
 	public List<MessageDTO> userget(String username, Integer page) {
-		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
+
 		Pageable pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("createdDate").descending());
 		
 		List<MessageDTO> listMess=new ArrayList<>();
-		for(MessageEntity m: messageRepository.findMessByUser(accountEntity,pageWithTenElements)) {
-			listMess.add(new MessageDTO(m.getId(),m.getCreatedDate(), m.getModifiedDate(), m.getStatus(),
-										m.getUser().getUsername(), m.getAdmin(), m.getContent()));	
+		for(MessageEntity m: messageRepository.findMessByUser(username,pageWithTenElements)) {
+			listMess.add(new MessageDTO(m.getId() , m.getCreatedDate(), m.getModifiedDate(), m.getStatus(),
+										username, m.getFrom(), m.getContent()));	
 		}
 		
 		return listMess;
@@ -49,17 +44,17 @@ public class MessageService {
 		List<MessageAdminResponse> listResult=new ArrayList<>();
 		Map<String,List<MessageDTO>> myMap =new HashMap<>();
 		for(MessageEntity e: messageRepository.adminfindByDay(Day)) {
-			String username= e.getUser().getUsername();
+			String username= e.getUsername();
 			if(!myMap.containsKey(username)) {
 				List<MessageDTO> list= new ArrayList<>();
 				list.add(new MessageDTO(e.getId(), e.getCreatedDate(), e.getModifiedDate(),
-										e.getStatus(), username, e.getAdmin(), e.getContent()));
+										e.getStatus(), username, e.getFrom(), e.getContent()));
 				myMap.put(username, list);
 			}else {
 				
 				List<MessageDTO> list=myMap.get(username);
 				list.add(new MessageDTO(e.getId(), e.getCreatedDate(), e.getModifiedDate(),
-										e.getStatus(), username, e.getAdmin(), e.getContent()));
+										e.getStatus(), username, e.getFrom(), e.getContent()));
 				myMap.put(username, list);
 			}
 		}

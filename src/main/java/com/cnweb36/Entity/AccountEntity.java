@@ -45,9 +45,6 @@ public class AccountEntity extends BaseEntity {
 	
 	@OneToMany(mappedBy = "user")
 	private Set<PaymentEntity> paymentList;
-	
-	@OneToMany(mappedBy = "user")
-	private Set<MessageEntity> userMessList;
     
 	public AccountEntity() { super(); }
 	public AccountEntity(String username, String password, String name, String email, String address, String phone, Set<String> roles) {
@@ -101,11 +98,5 @@ public class AccountEntity extends BaseEntity {
 
 	public Set<OrderEntity> getOrderList() { return orderList; }
 	public void setOrderList(Set<OrderEntity> orderList) {	this.orderList = orderList;	}
-
-	public Set<PaymentEntity> getPaymentList() { return paymentList; }
-	public void setPaymentList(Set<PaymentEntity> paymentList) { this.paymentList = paymentList; }
-
-	public Set<MessageEntity> getUserMessList() { return userMessList;	}
-	public void setUserMessList(Set<MessageEntity> userMessList) { this.userMessList = userMessList; }
 	
 }

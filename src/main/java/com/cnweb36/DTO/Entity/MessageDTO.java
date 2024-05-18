@@ -9,18 +9,22 @@ public class MessageDTO {
 	private Date modifiedDate;
 	private String status;
 	private String username;	
-	private String admin;
+	private String from;
 	private String content;
 	
+	public MessageDTO() {
+		super();
+	}
+
 	public MessageDTO(Long id, Date createDate, Date modifiedDate, String status, String username,
-			String admin, String content) {
+			String from, String content) {
 		super();
 		this.id = id;
 		this.createDate = createDate;
 		this.modifiedDate = modifiedDate;
 		this.status = status;
 		this.username = username;
-		this.admin = admin;
+		this.from = from;
 		this.content = content;
 	}
 
@@ -64,12 +68,12 @@ public class MessageDTO {
 		this.username = username;
 	}
 
-	public String getAdmin() {
-		return admin;
+	public String getfrom() {
+		return from;
 	}
 
-	public void setAdmin(String admin) {
-		this.admin = admin;
+	public void setfrom(String from) {
+		this.from = from;
 	}
 
 	public String getContent() {
