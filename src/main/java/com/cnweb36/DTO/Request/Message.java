@@ -2,35 +2,36 @@ package com.cnweb36.DTO.Request;
 
 public class Message {
 
-	private String from;
-    private String text;
-    private String to;
-	
+	private String admin;
+    private String content;
+    private String username;
+    
 	public Message() {
 		super();
 	}
-	public Message(String from, String text, String to) {
+	public Message(String admin, String content, String user) {
 		super();
-		this.from = from;
-		this.text = text;
-		this.to = to;
+		this.admin = admin;
+		this.setContent(content);
+		this.username = user;
 	}
-	public String getFrom() {
-		return from;
+	public String getAdmin() {
+		return admin;
 	}
-	public void setFrom(String from) {
-		this.from = from;
+	public void setAdmin(String admin) {
+		this.admin = admin;
 	}
-	public String getText() {
-		return text;
+	public String getUser() {
+		return username;
 	}
-	public void setText(String text) {
-		this.text = text;
+	public void setUser(String user) {
+		this.username = user;
 	}
-	public String getTo() {
-		return to;
+	public String getContent() {
+		return content;
 	}
-	public void setTo(String to) {
-		this.to = to;
+	public void setContent(String content) {
+		this.content = content;
 	}
+	
 }

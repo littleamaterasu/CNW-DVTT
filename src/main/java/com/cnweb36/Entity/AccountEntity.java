@@ -46,9 +46,6 @@ public class AccountEntity extends BaseEntity {
 	@OneToMany(mappedBy = "user")
 	private Set<PaymentEntity> paymentList;
 	
-	@OneToMany(mappedBy = "admin")
-	private Set<MessageEntity> adminMessList;
-	
 	@OneToMany(mappedBy = "user")
 	private Set<MessageEntity> userMessList;
     
@@ -107,9 +104,6 @@ public class AccountEntity extends BaseEntity {
 
 	public Set<PaymentEntity> getPaymentList() { return paymentList; }
 	public void setPaymentList(Set<PaymentEntity> paymentList) { this.paymentList = paymentList; }
-
-	public Set<MessageEntity> getAdminMessList() { return adminMessList; }
-	public void setAdminMessList(Set<MessageEntity> adminMessList) { this.adminMessList = adminMessList; }
 
 	public Set<MessageEntity> getUserMessList() { return userMessList;	}
 	public void setUserMessList(Set<MessageEntity> userMessList) { this.userMessList = userMessList; }
