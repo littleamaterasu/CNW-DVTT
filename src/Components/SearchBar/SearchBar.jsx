@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../config";
 
@@ -18,7 +18,11 @@ function SearchBar() {
         }
     };
 
-    if (!isDataFetched) fetchData();
+    useEffect(() => {
+        if (!isDataFetched) {
+            fetchData();
+        }
+    }, [isDataFetched]);
 
     const handleInputChange = (event) => {
         const inputKeyword = event.target.value;
@@ -42,19 +46,32 @@ function SearchBar() {
 
     return (
         <div>
-            <form onSubmit={handleFormSubmit}>
-                <input type="text" placeholder="Nhập từ khóa" value={keyword} onChange={handleInputChange} />
-                <input type="submit" />
-                <ul>
-                    {filteredData.map((item, index) => (
-                        <li key={index}
-                            onClick={() => handleItemClick(item.id)}
-                            style={{
-                                cursor: 'pointer' // Đổi con trỏ chuột
-                            }}>{item.name}</li>
-                    ))}
-                </ul>
+            <form onSubmit={handleFormSubmit} className="flex items-center">
+                <input
+                    type="text"
+                    placeholder="Nhập từ khóa"
+                    value={keyword}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 flex-grow"
+                />
+                <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                >
+                    Search
+                </button>
             </form>
+            <ul className="mt-2">
+                {filteredData.map((item, index) => (
+                    <li
+                        key={index}
+                        onClick={() => handleItemClick(item.id)}
+                        className="py-2 px-3 border-b border-gray-200 cursor-pointer hover:bg-gray-100"
+                    >
+                        {item.name}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }

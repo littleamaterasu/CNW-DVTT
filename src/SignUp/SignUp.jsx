@@ -36,7 +36,7 @@ function SignUp() {
         }
 
         try {
-            const response = await fetch(API_BASE_URL + "/account/signup/user", {
+            const response = await fetch(API_BASE_URL[import.meta.env.MODE] + "/account/signup/user", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ function SignUp() {
             const code = Math.floor(100000 + Math.random() * 900000);
             setConfirmationCode(code);
 
-            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/checkMail`, {
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/account/checkMail`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,8 +89,6 @@ function SignUp() {
                 }),
                 credentials: 'include' // Send cookies
             });
-
-            console.log(response);
 
             if (!response.ok) {
                 throw new Error('Failed to send confirmation email');
@@ -207,6 +205,9 @@ function SignUp() {
                 <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
                     Sign Up
                 </button>
+                <div className="text-center mt-4">
+                    <Link to="/forgot-password" className="text-blue-500">Forgot Password?</Link>
+                </div>
             </form>
         </div>
     );

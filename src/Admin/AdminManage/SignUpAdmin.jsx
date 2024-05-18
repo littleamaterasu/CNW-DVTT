@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { API_BASE_URL } from '../../config';
 
 function SignUpAdmin() {
     const [username, setUsername] = useState('');
@@ -12,112 +12,121 @@ function SignUpAdmin() {
     const [address, setAddress] = useState('');
     const [role, setRole] = useState('');
 
-    const baseUrl = 'http://172.11.1.117:8081/account/signup/admin';
-
     const handleSubmit = async (event) => {
-
         event.preventDefault();
 
-        if (role === '') {
-            toast.error("Please select a role!");
+        // Check if any field is empty
+        if (!username || !password || !name || !email || !phoneNumber || !address || !role) {
+            toast.error("All fields are required!");
             return;
         }
 
-        console.log(baseUrl + role)
-
         try {
-            const response = await axios.post(baseUrl + role, {
-                username,
-                password,
-
-            }, {
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/account/signup/admin${role}`, {
+                method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': localStorage.getItem('CSRF') // Add CSRF Token to headers
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': localStorage.getItem('CSRF')
                 },
-                withCredentials: true, // Send cookies
-
+                credentials: 'include',
+                body: JSON.stringify({
+                    username,
+                    password,
+                    name,
+                    email,
+                    phoneNumber,
+                    address
+                })
             });
 
-            // Assuming your API returns a status code to indicate success or failure
+            const data = await response.json();
+
             if (response.status !== 200) {
-                console.log(response)
-                throw new Error('Signup failed');
+                throw new Error(data.message || 'Signup failed');
             }
 
-            if (response.data.id === -1) {
-                toast.error(response.data.content); // Display error message
+            if (data.id === -1) {
+                toast.error(data.content);
             } else {
-                toast.success('Signup successful'); // Display success message
+                toast.success('Signup successful');
             }
         } catch (error) {
-            console.log(error)
-            toast.error('Signup failed. Please check your information and try again.'); // Display error message
+            console.error('Error:', error);
+            toast.error('Signup failed. Please check your information and try again.');
         }
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
+                <h2 className="text-2xl font-bold mb-6 text-center">Admin Sign Up</h2>
                 <input
                     type="text"
                     placeholder="Your User Name"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
                 <input
                     type="password"
                     placeholder="Your Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
                 <input
                     type="text"
                     placeholder="Your Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
                 <input
                     type="text"
                     placeholder="Your Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
                 <input
                     type="text"
                     placeholder="Your Phone Number"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
+                    className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
                 <input
                     type="text"
                     placeholder="Your Address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
+                    className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
-                <div>
-                    <label>
+                <div className="mb-4">
+                    <label className="mr-4">
                         <input
                             type="radio"
                             value="1"
                             checked={role === '1'}
                             onChange={(e) => setRole(e.target.value)}
+                            className="mr-2"
                         />
                         Role 1
                     </label>
-                </div>
-                <div>
                     <label>
                         <input
                             type="radio"
                             value="2"
                             checked={role === '2'}
                             onChange={(e) => setRole(e.target.value)}
+                            className="mr-2"
                         />
                         Role 2
                     </label>
                 </div>
-
-                <button type="submit">Sign Up</button>
+                <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+                    Sign Up
+                </button>
             </form>
             <ToastContainer />
         </div>
