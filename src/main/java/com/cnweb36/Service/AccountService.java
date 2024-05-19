@@ -192,12 +192,19 @@ public class AccountService {
 	
 	public List<UserResponse> getAllUser(Integer page) {
 		List<UserResponse> listUser=new ArrayList<>();
-		if(page==null||page<1) page=1;  
-		Pageable pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("createdDate").descending());
-		for(AccountEntity a: accountRepository.findByRolesContaining("ROLE_USER", pageWithTenElements)) {
+		List<AccountEntity> listacc;
+		if(page==null||page<1) {
+			listacc=accountRepository.findByRolesContaining("ROLE_USER", Sort.by("createdDate").descending());
+		}else {
+			Pageable pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("createdDate").descending());
+			listacc=accountRepository.findByRolesContaining("ROLE_USER", pageWithTenElements);
+		}
+		
+		for(AccountEntity a: listacc) {
 			UserResponse userResponse=new UserResponse();
 			userResponse.setId(a.getId());
 			userResponse.setName(a.getName());
+			userResponse.setUsername(a.getUsername());
 			listUser.add(userResponse);
 		}
 		return listUser;
