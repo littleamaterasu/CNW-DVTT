@@ -51,6 +51,7 @@ public class ProductService {
 			productEntity.setWeight(productDTO.getWeight());
 			productEntity.setYear(productDTO.getYear());
 			productEntity.setAuthor(productDTO.getAuthor());
+			productEntity.setProvider2(productDTO.getProvider());
 		}else {
 			//create
 			productEntity=productConverter.toEntity(productDTO);
@@ -61,16 +62,21 @@ public class ProductService {
 			}
 			productEntity.setCategoryList(listCategory);
 			
-			productEntity.setProvider(providerRepository.findByName(productDTO.getProvider()));
 			productEntity.setNumberRate(0);
 			productEntity.setRating(0f);
 			return productRepository.save(productEntity).getId();
 	}
 	
 	public List<Book> getAllBook(Integer page) {
+		List<ProductEntity> listProduct;
+		if(page==null) {
+			listProduct= productRepository.findAll(Sort.by("modifiedDate").descending());
+		}else {
+			Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("modifiedDate").descending());
+			listProduct= productRepository.findAll(pageWithTenElements).toList();
+		}
 		List<Book> listBook=new ArrayList<>();
-		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("modifiedDate").descending());
-		for(ProductEntity e: productRepository.findAll(pageWithTenElements)) {
+		for(ProductEntity e: listProduct) {
 			listBook.add(productConverter.toBook(e));
 		}
 		return listBook;

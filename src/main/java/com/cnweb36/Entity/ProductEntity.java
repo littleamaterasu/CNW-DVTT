@@ -56,6 +56,9 @@ public class ProductEntity extends BaseEntity {
 	
 	@Column(name="author")
 	private String author;
+	
+	@Column(name="provider2")
+	private String provider2;
 
 	@OneToMany(mappedBy = "product")
 	private Set<OrderEntity> orderList;
@@ -156,6 +159,12 @@ public class ProductEntity extends BaseEntity {
 	}
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+	public String getProvider2() {
+		return provider2;
+	}
+	public void setProvider2(String provider2) {
+		this.provider2 = provider2;
 	}
 	
 	

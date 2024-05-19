@@ -211,9 +211,6 @@ public class AccountService {
 		if(encoder.matches(changeInfoRequest.getPassword(), accountEntity.getPassword())) {
 			accountEntity.setAddress(changeInfoRequest.getAddress());
 			accountEntity.setPhone(changeInfoRequest.getPhone());
-			if(accountEntity.getEmail()==null) {
-				accountEntity.setEmail(changeInfoRequest.getEmail());
-			}
 			accountRepository.save(accountEntity);
 			return "Oke";
 		}else {
