@@ -32,7 +32,7 @@ function SearchResults({ type }) {
 
     const searchByGenre = async (genreName, page) => {
         try {
-            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}`);           // API
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/product/getWithKeyword`);           // API
             const data = await response.json();
             return data;
         } catch (error) {

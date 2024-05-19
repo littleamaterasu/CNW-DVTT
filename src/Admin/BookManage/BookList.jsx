@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import BookCreate from './BookCreate';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -26,6 +27,7 @@ function BookList() {
             }
             const data = await response.json();
             setBooks(data);
+            console.log(data)
         } catch (error) {
             toast.error(error.message);
         }
@@ -41,7 +43,7 @@ function BookList() {
     };
 
     const handleNextPage = () => {
-        setPage(page + 1);
+        if (books.length() > 0) setPage(page + 1);
     };
 
     const handlePrevPage = () => {
@@ -53,7 +55,9 @@ function BookList() {
     return (
         <div className="book-list p-4">
             <ToastContainer />
-            <h1 className="text-2xl font-bold mb-4">Book List</h1>
+            <h4 className="text-lg font-medium mb-4">
+                <Link to="/admin">Admin homepage</Link> / Book List
+            </h4>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleFormToggle}>
                 {showBookCreate ? 'Hide Form' : 'Add Book'}
             </button>
@@ -67,16 +71,17 @@ function BookList() {
             )}
             <ul className="mt-4">
                 {books.map((book, index) => (
-                    <li key={index} className="border-b border-gray-300 py-4">
-                        <h2 className="text-xl font-semibold mb-2">{book.name}</h2>
-                        <img className="w-48 h-48 object-cover rounded" src={book.cover} alt="img" />
-                        <p className="text-gray-700">Author: {book.author}</p>
-                        <p className="text-gray-700">Genre: {book.genre}</p>
-                        <p className="text-gray-700">Publisher: {book.publisher}</p>
-                        <p className="text-gray-700">Written Year: {book.writtenYear}</p>
+                    <li key={index} className="border-b border-gray-300 py-4 flex items-start">
+                        <img className="w-auto max-h-48 object-cover rounded" src={book.imageUrl} alt="img" />
+                        <div className="ml-4">
+                            <h2 className="text-xl font-semibold mb-2">{book.name}</h2>
+                            <p>Price: {book.price}</p>
+                            <p>Sold Count: {book.soldCount}</p>
+                        </div>
                     </li>
                 ))}
             </ul>
+
             <div className="flex justify-between mt-4">
                 <button onClick={handlePrevPage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled={page === 1}>Previous Page</button>
                 <button onClick={handleNextPage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next Page</button>

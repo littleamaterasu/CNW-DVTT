@@ -2,23 +2,31 @@ import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { API_BASE_URL } from "../../config";
+import { OthersText, SelfText } from "./ChatText/ChatText";
 
 function Chat({ setShowChat }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [client, setClient] = useState(null);
 
+    // Lấy tin nhắn trong ngày
+
     useEffect(() => {
+
         const newClient = new Client({
-            brokerURL: 'ws://10.133.124.103:8081/hello',
+            brokerURL: `ws://localhost:8081/hello`,
+            connectHeaders: {
+                username: localStorage.getItem('username'),
+            },
             onConnect: () => {
                 newClient.subscribe('/user/queue/reply', message => {
-                    setMessages(prev => [...prev, message.body]);
+                    setMessages(prev => [...prev, <OthersText message={JSON.parse(message.body).content} />]);
                 });
 
                 newClient.publish({
                     destination: '/app/hello',
-                    body: 'React User'
+
                 });
             },
             debug: str => console.log(str),
@@ -34,10 +42,17 @@ function Chat({ setShowChat }) {
 
     const handleSend = () => {
         if (input.trim() && client) {
+
             client.publish({
                 destination: '/app/hello',
-                body: input
+                body: JSON.stringify({
+                    from: 'user',
+                    content: input,
+                    username: localStorage.getItem('username'), // username client => xác định room
+                })
             });
+            setMessages(prev => [...prev, <SelfText message={input} />]);
+
             setInput("");
         }
     };
@@ -52,7 +67,7 @@ function Chat({ setShowChat }) {
                 >
                     &times;
                 </button>
-                <h2 className="text-2xl mb-4">Chat</h2>
+                <h2 className="text-2xl mb-4">Chat with admin</h2>
                 <div className="chat-text h-40 overflow-y-auto p-2 mb-2 border border-gray-300 rounded">
                     {messages.map((message, index) => (
                         <div key={index}>{message}</div>

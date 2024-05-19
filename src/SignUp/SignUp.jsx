@@ -9,7 +9,7 @@ function SignUp() {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phone, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
     const [confirmationCode, setConfirmationCode] = useState('');
     const [inputConfirmationCode, setInputConfirmationCode] = useState('');
@@ -46,7 +46,7 @@ function SignUp() {
                     password,
                     name,
                     email,
-                    phoneNumber,
+                    phone,
                     address
                 }),
             });
@@ -188,7 +188,7 @@ function SignUp() {
                     <input
                         type="text"
                         placeholder="Your Phone Number"
-                        value={phoneNumber}
+                        value={phone}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="w-full p-2 border border-gray-300 rounded"
                     />

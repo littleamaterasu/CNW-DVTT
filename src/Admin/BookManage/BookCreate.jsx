@@ -6,11 +6,10 @@ import { API_BASE_URL } from '../../config';
 
 function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
     const [name, setName] = useState('');
-    const [selectedAuthors, setSelectedAuthors] = useState([]);
-    const [authorList, setAuthorList] = useState([]);
+    const [selectedAuthors, setSelectedAuthors] = useState('');
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [genreList, setGenreList] = useState([]);
-    const [cover, setCover] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
     const [weight, setWeight] = useState('');
     const [publisher, setPublisher] = useState('');
     const [writtenYear, setWrittenYear] = useState('');
@@ -49,6 +48,7 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
                     },
+                    credentials: 'include'
                 });
                 if (!response.ok) {
                     throw new Error('Failed to fetch genres');
@@ -72,7 +72,7 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
             name,
             author: selectedAuthors,
             category: selectedGenres,
-            cover,
+            imageUrl,
             weight,
             publisher,
             writtenYear,
@@ -93,7 +93,8 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
                 },
-                body: JSON.stringify(newBook)
+                body: JSON.stringify(newBook),
+                credentials: 'include'
             });
 
             if (!response.ok) {
@@ -107,9 +108,9 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
 
             // Reset form fields
             setName('');
-            setSelectedAuthors([]);
+            setSelectedAuthors('');
             setSelectedGenres([]);
-            setCover('');
+            setImageUrl('');
             setWeight('');
             setPublisher('');
             setWrittenYear('');
@@ -153,8 +154,8 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
                         <input
                             type="text"
                             id="authorList"
-                            value={authorList}
-                            onChange={(e) => setAuthorList(e.target.value)}
+                            value={selectedAuthors}
+                            onChange={(e) => setSelectedAuthors(e.target.value)}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                             required
                         />
@@ -169,12 +170,12 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="cover" className="block text-sm font-medium text-gray-700">Cover URL</label>
+                        <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700">ImageUrl URL</label>
                         <input
                             type="text"
-                            id="cover"
-                            value={cover}
-                            onChange={(e) => setCover(e.target.value)}
+                            id="imageUrl"
+                            value={imageUrl}
+                            onChange={(e) => setImageUrl(e.target.value)}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                             required
                         />
@@ -242,7 +243,7 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
                             value={soldCount}
                             onChange={(e) => setSoldCount(e.target.value)}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                            required
+                            readOnly
                         />
                     </div>
                     <div className="mb-4">

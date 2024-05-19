@@ -9,7 +9,7 @@ function SearchBar() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/product/getAll`);
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/product/getAll?page=1`);
             const jsonData = await response.json();
             setData(jsonData);
             setIsDataFetched(true)

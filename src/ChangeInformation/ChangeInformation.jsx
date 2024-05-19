@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function ChangeInformation() {
-    const [userName, setUserName] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -23,7 +23,8 @@ function ChangeInformation() {
                     credentials: 'include'
                 });
                 const data = await response.json();
-                setUserName(data.name);
+                console.log(data)
+                setUsername(data.username);
                 setEmail(data.email);
                 setPhone(data.phone);
                 setAddress(data.address);
@@ -46,7 +47,6 @@ function ChangeInformation() {
                 },
                 credentials: 'include',
                 body: JSON.stringify({
-                    userName: userName, // Username is not changeable
                     password: password,
                     email: email,
                     phone: phone,
@@ -74,8 +74,8 @@ function ChangeInformation() {
                     <input
                         id="userName"
                         type="text"
-                        value={userName}
-                        placeholder={userName}
+                        value={username}
+                        placeholder={username}
                         readOnly
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 bg-gray-100 cursor-not-allowed"
                     />
@@ -98,6 +98,7 @@ function ChangeInformation() {
                         type="email"
                         placeholder={email}
                         value={email}
+                        readOnly
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                     />

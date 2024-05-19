@@ -4,7 +4,7 @@
     border-radius: 8px;
     margin-bottom: 8px;
     clear: both;
-    float: left;
+    float: right;
 }
 
 .others {
@@ -13,5 +13,5 @@
     border-radius: 8px;
     margin-bottom: 8px;
     clear: both;
-    float: right;
+    float: left;
 }

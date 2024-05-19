@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { API_BASE_URL } from "../config";
+import Header from "../Components/Header/Header";
 
 function Cart() {
     const [cartList, setCartList] = useState([]);
-    const [address, setAddress] = useState("");
-    const [phone, setPhone] = useState("");
     const [note, setNote] = useState("");
     const [couponId, setCouponId] = useState("");
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         fetchData();
@@ -13,23 +14,21 @@ function Cart() {
 
     const fetchData = async () => {
         try {
-            // Lấy danh sách sản phẩm từ API nháp
-            const response = await fetch("https://jsonplaceholder.typicode.com/users");
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/order/getCart?page=${page}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
+                },
+                credentials: 'include'
+            });
             const data = await response.json();
-            const cartItems = data.map(item => ({ ...item, quantity: 0 }));
-            setCartList(cartItems);
+            data.forEach(element => {
+                element.book.quantity = 0;
+                setCartList(prev => [...prev, element.book]);
+            });
+
         } catch (error) {
             console.error("Error fetching cart items:", error);
-        }
-
-        // Lấy thông tin mặc định về địa chỉ và số điện thoại từ máy chủ
-        try {
-            const defaultInfoResponse = await fetch("https://yourserver.com/default-info");
-            const defaultInfo = await defaultInfoResponse.json();
-            setAddress(defaultInfo.address);
-            setPhone(defaultInfo.phone);
-        } catch (error) {
-            console.error("Error fetching default info:", error);
         }
     };
 
@@ -71,26 +70,23 @@ function Cart() {
             return item;
         });
         setCartList(updatedCart);
-    }
+    };
 
     const totalQuantity = cartList.reduce((total, item) => total + item.quantity, 0);
-    const totalPrice = cartList.reduce((total, item) => total + item.quantity * item.id, 0);
+    const totalPrice = cartList.reduce((total, item) => total + item.quantity * item.price, 0);
 
     const handleCheckout = async () => {
         try {
-            // Gửi yêu cầu đặt hàng lên máy chủ
-            const response = await fetch("https://yourserver.com/checkout", {
+            const response = await fetch("", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     orderList: cartList.filter(item => item.quantity > 0).map(item => ({ orderId: item.id, quantity: item.quantity })),
-                    address: address,
-                    phone: phone,
                     note: note,
                     couponId: couponId,
-                    pay: totalPrice // Giả sử pay là tổng giá tiền của các sản phẩm trong giỏ hàng
+                    pay: totalPrice
                 })
             });
             const data = await response.json();
@@ -103,71 +99,60 @@ function Cart() {
     const invoiceItems = cartList.filter((item) => item.quantity > 0);
 
     return (
-        <div>
+        <div className="container mx-auto">
+            <Header />
             {cartList.length === 0 ? (
-                <p>No items in the cart</p>
+                <p className="text-center text-lg mt-8">No items in the cart</p>
             ) : (
-                <div>
-                    <h2>Cart</h2>
-                    <ul>
-                        {cartList.map((item) => (
-                            <li key={item.id}>
-                                <div>
-                                    <span>{item.name}</span>
-                                    <button onClick={() => handleIncrement(item.id)}>+</button>
-                                    <button onClick={() => handleDecrement(item.id)}>-</button>
-                                    <button onClick={() => handleRemoveItem(item.id)}>Remove</button>
-                                </div>
-                                <div>
-                                    <label>
-                                        Quantity:{" "}
-                                        <input
-                                            type="number"
-                                            value={item.quantity}
-                                            onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
-                                        />
-                                    </label>
-                                    <span>Price: ${item.id}</span>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="md:col-span-2">
+                        <h2 className="text-2xl font-semibold mb-4">Cart</h2>
+                        <ul>
+                            {cartList.map((item) => (
+                                <li key={item.id} className="flex justify-between items-center bg-gray-100 p-4 mb-4">
+                                    <div className="flex items-center">
+                                        <img src={item.imageUrl} alt={item.name} className="w-32 h-32 mr-4" />
+                                        <span>{item.name}</span>
+                                    </div>
+                                    <div>
+                                        <button onClick={() => handleIncrement(item.id)} className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2">+</button>
+                                        <span>{item.quantity}</span>
+                                        <button onClick={() => handleDecrement(item.id)} className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2">-</button>
+                                        <button onClick={() => handleRemoveItem(item.id)} className="bg-red-500 text-white px-2 py-1 rounded-md ml-2">Remove</button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="md:col-span-1">
+                        <div className>
+                            <h2 className="text-2xl font-semibold mb-4">Invoice</h2>
+                            <ul>
+                                {invoiceItems.map((item) => (
+                                    <li key={item.id}>
+                                        {item.name} - Quantity: {item.quantity}
+                                    </li>
+                                ))}
+                            </ul>
+                            <div className="mt-4">
+                                <p className="text-lg">Total Quantity: {totalQuantity}</p>
+                                <p className="text-lg">Total Price: ${totalPrice}</p>
+                            </div>
+                            <div className="mt-4">
+                                <label className="block mb-2">
+                                    Note:
+                                    <input type="text" value={note} onChange={(e) => setNote(e.target.value)} className="border border-gray-400 px-2 py-1 rounded-md w-full" />
+                                </label>
+                                <label className="block mb-2">
+                                    Coupon ID:
+                                    <input type="text" value={couponId} onChange={(e) => setCouponId(e.target.value)} className="border border-gray-400 px-2 py-1 rounded-md w-full" />
+                                </label>
+                            </div>
+                            <button onClick={handleCheckout} className="bg-green-500 text-white px-4 py-2 rounded-md mt-4">Checkout</button>
+                        </div>
+                    </div>
                 </div>
             )}
-            <div>
-                <h2>Invoice</h2>
-                <ul>
-                    {invoiceItems.map((item) => (
-                        <li key={item.id}>
-                            {item.name} - Quantity: {item.quantity}
-                        </li>
-                    ))}
-                </ul>
-                <div>
-                    <p>Total Quantity: {totalQuantity}</p>
-                    <p>Total Price: ${totalPrice}</p>
-                </div>
-                <div>
-                    <label>
-                        Address:
-                        <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
-                    </label>
-                    <label>
-                        Phone:
-                        <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
-                    </label>
-                    <label>
-                        Note:
-                        <input type="text" value={note} onChange={(e) => setNote(e.target.value)} />
-                    </label>
-                    <label>
-                        Coupon ID:
-                        <input type="text" value={couponId} onChange={(e) => setCouponId(e.target.value)} />
-                    </label>
-                </div>
-                <button onClick={handleCheckout}>Checkout</button>
-            </div>
         </div>
     );
 }

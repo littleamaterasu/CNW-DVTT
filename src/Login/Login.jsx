@@ -41,6 +41,7 @@ function Login() {
             localStorage.setItem('CSRF', data.token);
             localStorage.setItem('id', data.userId);
             localStorage.setItem('role', data.role);
+            localStorage.setItem('username', username)
             navigate('/');
 
         } catch (error) {

@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Routes, Route } from 'react-router-dom';
-import AuthorList from './BookManage/AuthorList';
-import FAQList from './FAQManage/FAQList';
-import UserList from './UserManage/UserList';
+import AdminChat from '../Components/Chat/AdminChat';
 
 function Admin() {
     const navigate = useNavigate();
+    const [chat, setChat] = useState(false);
 
     if (localStorage.getItem('role') === 'ROLE_USER') navigate('/');
 
@@ -22,6 +21,8 @@ function Admin() {
 
     return (
         <div className="p-4">
+            <button onClick={() => setChat(true)}>Chat</button>
+            {chat && <AdminChat setShowChat={() => setChat(false)} />}
             <div className="text-right mb-4">
                 <button onClick={handleLogout} className="text-white bg-red-500 px-4 py-2 rounded">Log out</button>
             </div>
@@ -30,7 +31,13 @@ function Admin() {
                     Admin Accounts
                 </div>
                 <div onClick={() => HandleSwitchPage('/books')} className="bg-green-500 text-white p-8 rounded flex items-center justify-center cursor-pointer">
-                    Books and Authors
+                    Books
+                </div>
+                <div onClick={() => HandleSwitchPage('/category')} className="bg-green-500 text-white p-8 rounded flex items-center justify-center cursor-pointer">
+                    Category
+                </div>
+                <div onClick={() => HandleSwitchPage('/coupon')} className="bg-green-500 text-white p-8 rounded flex items-center justify-center cursor-pointer">
+                    Coupon
                 </div>
                 <div onClick={() => HandleSwitchPage('/FAQs')} className="bg-yellow-500 text-white p-8 rounded flex items-center justify-center cursor-pointer">
                     FAQs

@@ -8,7 +8,7 @@ function SignUpAdmin() {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phone, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
     const [role, setRole] = useState('');
 
@@ -16,7 +16,7 @@ function SignUpAdmin() {
         event.preventDefault();
 
         // Check if any field is empty
-        if (!username || !password || !name || !email || !phoneNumber || !address || !role) {
+        if (!username || !password || !name || !email || !phone || !address || !role) {
             toast.error("All fields are required!");
             return;
         }
@@ -34,7 +34,7 @@ function SignUpAdmin() {
                     password,
                     name,
                     email,
-                    phoneNumber,
+                    phone,
                     address
                 })
             });
@@ -91,7 +91,7 @@ function SignUpAdmin() {
                 <input
                     type="text"
                     placeholder="Your Phone Number"
-                    value={phoneNumber}
+                    value={phone}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />

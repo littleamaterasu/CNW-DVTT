@@ -81,7 +81,7 @@ function Header({ isAuthenticated }) {
                 </div>
             </div>
             {showCategory && <Category />}
-            {enableChat && (
+            {enableChat && localStorage.getItem('username') && (
                 <div>
                     <Chat setShowChat={disableChat} />
 
