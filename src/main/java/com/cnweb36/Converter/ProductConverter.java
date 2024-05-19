@@ -25,7 +25,7 @@ public class ProductConverter {
 		productEntity.setSoldCount(productDTO.getSoldCount());
 		productEntity.setWeight(productDTO.getWeight());
 		productEntity.setYear(productDTO.getYear());
-
+		productEntity.setAuthor(productDTO.getAuthor());
 		return productEntity;
 
 	}
@@ -64,8 +64,8 @@ public class ProductConverter {
 		productDTO.setCategory(
 				productEntity.getCategoryList().stream().map(e -> e.getName()).collect(Collectors.toList()));
 		// author
-		productDTO.setAuthor(productEntity.getAuthorList().stream().map(e -> e.getName()).collect(Collectors.toList()));
-
+		//productDTO.setAuthor(productEntity.getAuthorList().stream().map(e -> e.getName()).collect(Collectors.toList()));
+		productDTO.setAuthor(productEntity.getAuthor());
 		return productDTO;
 
 	}

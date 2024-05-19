@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.cnweb36.Converter.ProductConverter;
 import com.cnweb36.DTO.Entity.ProductDTO;
 import com.cnweb36.DTO.Response.Book;
-import com.cnweb36.Entity.AuthorEntity;
 import com.cnweb36.Entity.CategoryEntity;
 import com.cnweb36.Entity.ProductEntity;
 import com.cnweb36.Repository.AuthorRepository;
@@ -30,8 +29,6 @@ public class ProductService {
 	@Autowired
 	private ProductConverter productConverter;
 	@Autowired
-	private AuthorRepository authorRepository;
-	@Autowired
 	private CategoryRepository categoryRepository;
 	@Autowired
 	private ProviderRepository providerRepository;
@@ -39,11 +36,6 @@ public class ProductService {
 	public Long AddProduct(ProductDTO productDTO) {
 		
 		ProductEntity productEntity=productConverter.toEntity(productDTO);
-		Set<AuthorEntity> listAuthor=new HashSet<>();
-		for(String s: productDTO.getAuthor()) {
-			listAuthor.add(authorRepository.findByName(s));
-		}
-		productEntity.setAuthorList(listAuthor);
 		Set<CategoryEntity> listCategory=new HashSet<>();
 		for(String s: productDTO.getCategory()) {
 			listCategory.add(categoryRepository.findByName(s));

@@ -21,7 +21,7 @@ public class ProductDTO {
 	private String cover;
 	private String info;
 	private Integer weight;	
-	private List<String> author;
+	private String author;
 	private List<String> category;
 	private String provider;
 	
@@ -33,10 +33,10 @@ public class ProductDTO {
 	public void setProvider(String provider) {
 		this.provider = provider;
 	}
-	public List<String> getAuthor() {
+	public String getAuthor() {
 		return author;
 	}
-	public void setAuthor(List<String> author) {
+	public void setAuthor(String author) {
 		this.author = author;
 	}
 	public List<String> getCategory() {
