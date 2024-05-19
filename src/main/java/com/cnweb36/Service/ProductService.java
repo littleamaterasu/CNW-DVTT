@@ -34,18 +34,37 @@ public class ProductService {
 	private ProviderRepository providerRepository;
 	
 	public Long AddProduct(ProductDTO productDTO) {
-		
-		ProductEntity productEntity=productConverter.toEntity(productDTO);
-		Set<CategoryEntity> listCategory=new HashSet<>();
-		for(String s: productDTO.getCategory()) {
-			listCategory.add(categoryRepository.findByName(s));
+		ProductEntity productEntity=new ProductEntity();
+		if(productDTO.getId()!=null) {
+			// update
+			productEntity =productRepository.findOneById(productDTO.getId());
+			
+			productEntity.setCover(productDTO.getCover());
+			productEntity.setDiscount(productDTO.getDiscount());
+			productEntity.setImageUrl(productDTO.getImageUrl());
+			productEntity.setInfo(productDTO.getInfo());
+			productEntity.setName(productDTO.getName());
+			productEntity.setPage(productDTO.getPage());
+			productEntity.setPrice(productDTO.getPrice());
+			productEntity.setRemainedCount(productDTO.getRemainedCount());
+			productEntity.setSoldCount(productDTO.getSoldCount());
+			productEntity.setWeight(productDTO.getWeight());
+			productEntity.setYear(productDTO.getYear());
+			productEntity.setAuthor(productDTO.getAuthor());
+		}else {
+			//create
+			productEntity=productConverter.toEntity(productDTO);
 		}
-		productEntity.setCategoryList(listCategory);
-		
-		productEntity.setProvider(providerRepository.findByName(productDTO.getProvider()));
-		productEntity.setNumberRate(0);
-		productEntity.setRating(0f);
-		return productRepository.save(productEntity).getId();
+			Set<CategoryEntity> listCategory=new HashSet<>();
+			for(String s: productDTO.getCategory()) {
+				listCategory.add(categoryRepository.findByName(s));
+			}
+			productEntity.setCategoryList(listCategory);
+			
+			productEntity.setProvider(providerRepository.findByName(productDTO.getProvider()));
+			productEntity.setNumberRate(0);
+			productEntity.setRating(0f);
+			return productRepository.save(productEntity).getId();
 	}
 	
 	public List<Book> getAllBook(Integer page) {
