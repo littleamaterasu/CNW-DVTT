@@ -75,7 +75,7 @@ public class ChatAPI {
 		messageDTO.setUsername(message.getUsername());
 		messageDTO.setCreateDate(currDate);
 		String to="";
-		if(message.getFrom().compareTo("user")!=0) {
+		if(message.getFrom().compareTo("user")==0) {
 			to+="admin";
 		}else to+=message.getUsername();
 //		System.out.println(this.checkAdminconnection());
