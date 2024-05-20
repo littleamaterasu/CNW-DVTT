@@ -74,12 +74,12 @@ public class CategoryService {
 		return listBook;
 	}
 	
-	public String delete(Long id) {
-		CategoryEntity categoryEntity=categoryRepository.findEntityById(id);
+	public String delete(String name) {
+		CategoryEntity categoryEntity=categoryRepository.findByName(name);
 		if(categoryEntity!=null) {
 			categoryEntity.setStatus("-1");
 			categoryRepository.save(categoryEntity);
 			return "Oke";
-		}else return "Not found Entity with id= "+id;
+		}else return "Not found Entity with name= "+name;
 	}
 }

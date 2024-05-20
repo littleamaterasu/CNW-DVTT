@@ -50,10 +50,10 @@ public class CategoryAPI {
 	
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
 	@PostMapping("/delete")
-	public NoticeResponse delete(@RequestParam Long id) {
+	public NoticeResponse delete(@RequestParam String name) {
 		NoticeResponse noticeResponse=new NoticeResponse();
 		try {
-			noticeResponse.setContent(categoryService.delete(id));
+			noticeResponse.setContent(categoryService.delete(name));
 		} catch (Exception e) {
 			noticeResponse.setContent(e.getMessage());
 			noticeResponse.setStatus(-1l);
