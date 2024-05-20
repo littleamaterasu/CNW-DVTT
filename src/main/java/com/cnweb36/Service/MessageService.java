@@ -27,11 +27,16 @@ public class MessageService {
 	}
 	
 	public List<MessageDTO> userget(String username, Integer page) {
-
-		Pageable pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("createdDate").descending());
+		List<MessageEntity> listmessE;
+		if(page==null) {
+			listmessE=messageRepository.findByUsername(username, Sort.by("createdDate").descending());
+		}else {
+			Pageable pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("createdDate").descending());
+			listmessE=messageRepository.findMessByUser(username,pageWithTenElements);
+		}
 		
 		List<MessageDTO> listMess=new ArrayList<>();
-		for(MessageEntity m: messageRepository.findMessByUser(username,pageWithTenElements)) {
+		for(MessageEntity m: listmessE) {
 			listMess.add(new MessageDTO(m.getId() , m.getCreatedDate(), m.getModifiedDate(), m.getStatus(),
 										username, m.getFrom(), m.getContent()));	
 		}
@@ -39,7 +44,7 @@ public class MessageService {
 		return listMess;
 	}
 	
-	public List<MessageAdminResponse> getlistMessAndUser(Integer Day) {
+	public List<MessageAdminResponse> adminget(Integer Day) {
 		if(Day==null) Day=1;
 		List<MessageAdminResponse> listResult=new ArrayList<>();
 		Map<String,List<MessageDTO>> myMap =new HashMap<>();

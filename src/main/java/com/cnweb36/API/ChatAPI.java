@@ -41,7 +41,7 @@ public class ChatAPI {
         	
         	messageService.save(messageEntity);
         }
-        return CompletableFuture.completedFuture("Kết quả từ phương thức bất đồng bộ");
+        return CompletableFuture.completedFuture("Oke");
     }
 	
 //	@MessageMapping("/hello")
@@ -67,7 +67,7 @@ public class ChatAPI {
 	@MessageMapping("/hello")
 	public void sendto(SimpMessageHeaderAccessor sha,Message message) {
 		//System.out.println(sha.getUser().getName());
-		//this.saveToDatabase(message);
+		
 		MessageDTO messageDTO=new MessageDTO();
 		Date currDate= new Date();
 		messageDTO.setfrom(message.getFrom());
@@ -80,5 +80,6 @@ public class ChatAPI {
 		}else to+=message.getUsername();
 //		System.out.println(this.checkAdminconnection());
 		simpMessagingTemplate.convertAndSendToUser(to, "queue/reply",messageDTO);
+		this.saveToDatabase(message);
 	}
 }
