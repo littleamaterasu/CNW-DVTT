@@ -119,4 +119,13 @@ public class PaymentService {
 			return new PaymentResponse();
 		}
 	}
+	
+	public String delete(Long id) {
+		PaymentEntity paymentEntity=paymentRepository.findEntityById(id);
+		if(paymentEntity!=null) {
+			paymentEntity.setStatus("-1");
+			paymentRepository.save(paymentEntity);
+			return "Oke";
+		}else return "Not found Entity with id= "+id;
+	}
 }

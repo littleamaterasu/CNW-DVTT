@@ -133,4 +133,13 @@ public class OrderService {
 			return "Bạn không có quyền đánh giá sản phẩm này";
 		}
 	}
+	
+	public String delete(Long id) {
+		OrderEntity orderEntity=orderRepository.findEntityById(id);
+		if(orderEntity!=null) {
+			orderEntity.setStatus("-1");
+			orderRepository.save(orderEntity);
+			return "Oke";
+		}else return "Not found Entity with id= "+id;
+	}
 }

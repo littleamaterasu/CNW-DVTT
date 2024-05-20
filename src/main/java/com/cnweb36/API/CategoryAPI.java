@@ -47,4 +47,17 @@ public class CategoryAPI {
 	public List<Book> getAllProduct(@RequestParam String categoryName){
 		return categoryService.getAllProduct(categoryName);
 	}
+	
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@PostMapping("/delete")
+	public NoticeResponse delete(@RequestParam Long id) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		try {
+			noticeResponse.setContent(categoryService.delete(id));
+		} catch (Exception e) {
+			noticeResponse.setContent(e.getMessage());
+			noticeResponse.setStatus(-1l);
+		}
+		return noticeResponse;
+	}
 }

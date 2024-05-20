@@ -14,6 +14,7 @@ import com.cnweb36.Entity.ProductEntity;
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 	
+	@Query("select o from OrderEntity o where o.product=?1 and o.status !='-1'")
 	List<OrderEntity>  findAllByProduct(ProductEntity productEntity,Pageable pageable);
 	
 	@Query("select o from OrderEntity o where o.user=?1 and (o.status='3' or o.status='4')")
@@ -22,6 +23,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 	@Query("select o from OrderEntity o where o.user=?1 and o.status='0'")
 	List<OrderEntity> findcart(AccountEntity user, Pageable pageable);
 	
-	@Query("select o from OrderEntity o where o.id=?1")
+	@Query("select o from OrderEntity o where o.id=?1 and o.status!='-1'")
 	OrderEntity findEntityById(Long id);
 }

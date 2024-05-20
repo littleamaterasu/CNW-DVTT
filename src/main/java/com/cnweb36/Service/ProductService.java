@@ -16,10 +16,8 @@ import com.cnweb36.DTO.Entity.ProductDTO;
 import com.cnweb36.DTO.Response.Book;
 import com.cnweb36.Entity.CategoryEntity;
 import com.cnweb36.Entity.ProductEntity;
-import com.cnweb36.Repository.AuthorRepository;
 import com.cnweb36.Repository.CategoryRepository;
 import com.cnweb36.Repository.ProductRepository;
-import com.cnweb36.Repository.ProviderRepository;
 
 @Service
 public class ProductService {
@@ -30,8 +28,6 @@ public class ProductService {
 	private ProductConverter productConverter;
 	@Autowired
 	private CategoryRepository categoryRepository;
-	@Autowired
-	private ProviderRepository providerRepository;
 	
 	public Long AddProduct(ProductDTO productDTO) {
 		ProductEntity productEntity=new ProductEntity();
@@ -95,7 +91,7 @@ public class ProductService {
 	public List<Book> getwithkey(String keyword, Integer page) {
 		if(page==null) page=(int)1;
 		List<Book> listBook=new ArrayList<>();
-		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("modifiedDate").descending());
+		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("modifiedDate").descending());
 		for(ProductEntity e: productRepository.findByNameContaining(keyword, pageWithTenElements)) {
 			listBook.add(productConverter.toBook(e));
 		}
@@ -105,10 +101,19 @@ public class ProductService {
 	public List<Book> getTop10(Integer page) {
 		List<Book> listBook=new ArrayList<>();
 		if(page==null||page<1) page=1;  
-		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("soldCount").descending());
+		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("soldCount").descending());
 		for(ProductEntity e: productRepository.findAll(pageWithTenElements)) {
 			listBook.add(productConverter.toBook(e));
 		}
 		return listBook;
+	}
+	
+	public String delete(Long id) {
+		ProductEntity productEntity=productRepository.findOneById(id);
+		if(productEntity!=null) {
+		productEntity.setStatus("-1");
+		productRepository.save(productEntity);
+		return "Oke";
+		}else return "Not found Entity with id= "+id;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,5 +66,18 @@ public class ProductAPI {
 	@GetMapping("/getTopten")
 	public List<Book> gettopten(@RequestParam Integer page){
 		return productService.getTop10(page);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN_2') or hasRole('ROLE_ADMIN_3')")
+	@PostMapping("/delete")
+	public NoticeResponse delete(@RequestParam Long id) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		try {
+			noticeResponse.setContent(productService.delete(id));
+		} catch (Exception e) {
+			noticeResponse.setContent(e.getMessage());
+			noticeResponse.setStatus(-1l);
+		}
+		return noticeResponse;
 	}
 }

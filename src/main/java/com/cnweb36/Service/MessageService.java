@@ -71,4 +71,13 @@ public class MessageService {
 		
 		return listResult;
 	}
+	
+	public String delete(Long id) {
+		MessageEntity messageEntity=messageRepository.findEntityById(id);
+		if(messageEntity!=null) {
+			messageEntity.setStatus("-1");
+			messageRepository.save(messageEntity);
+			return "Oke";
+		}else return "Not found Entity with id= "+id;
+	}
 }

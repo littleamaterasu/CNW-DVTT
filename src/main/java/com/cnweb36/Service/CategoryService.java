@@ -44,12 +44,14 @@ public class CategoryService {
 		List<CategoryDTO> listCategory=new ArrayList<>();
 		
 		for(CategoryEntity e: categoryRepository.findAll()) {
+			if(e.getStatus().compareTo("-1")!=0) {
 			CategoryDTO categoryDTO=new CategoryDTO();
 			categoryDTO.setId(e.getId());
 			categoryDTO.setInfo(e.getInfo());
 			categoryDTO.setName(e.getName());
 			
 			listCategory.add(categoryDTO);
+			}
 		}
 		return listCategory;
 	}
@@ -60,13 +62,24 @@ public class CategoryService {
 		CategoryEntity categoryEntity=categoryRepository.findByName(categoryName);
 		List<Book> listBook=new ArrayList<>();
 		for(ProductEntity e: categoryEntity.getProductList()) {
+			if(e.getStatus().compareTo("-1")!=0) {
 			Book book =new Book();
 			book.setId(e.getId());
 			book.setImageUrl(e.getImageUrl());
 			book.setName(e.getName());
 			book.setPrice(e.getPrice());
 			listBook.add(book);
+			}
 		}
 		return listBook;
+	}
+	
+	public String delete(Long id) {
+		CategoryEntity categoryEntity=categoryRepository.findEntityById(id);
+		if(categoryEntity!=null) {
+			categoryEntity.setStatus("-1");
+			categoryRepository.save(categoryEntity);
+			return "Oke";
+		}else return "Not found Entity with id= "+id;
 	}
 }

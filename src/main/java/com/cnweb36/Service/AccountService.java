@@ -307,4 +307,13 @@ public class AccountService {
 		}
 		
 	}
+	
+	public String delete(Long id) {
+		AccountEntity accountEntity= accountRepository.findEntityById(id);
+		if(accountEntity!=null) {
+			accountEntity.setStatus("-1");
+			accountRepository.save(accountEntity);
+			return "Oke";
+		}else return "Not found Entity with id= "+id;
+	}
 }

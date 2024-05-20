@@ -51,4 +51,17 @@ public class PaymentAPI {
 		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
 		return paymentService.getPayment(username, paymentId);
 	}
+	
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@PostMapping("/delete")
+	public NoticeResponse delete(@RequestParam Long id) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		try {
+			noticeResponse.setContent(paymentService.delete(id));
+		} catch (Exception e) {
+			noticeResponse.setContent(e.getMessage());
+			noticeResponse.setStatus(-1l);
+		}
+		return noticeResponse;
+	}
 }

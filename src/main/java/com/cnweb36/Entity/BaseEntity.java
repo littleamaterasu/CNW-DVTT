@@ -39,7 +39,7 @@ public abstract class BaseEntity {
 	@Column(name = "modifiedDate")
 	private Date modifiedDate;
 	
-	@Column
+	@Column(columnDefinition = "varchar(5) default '0'")
 	private String status;
 	
 	public Long getId() { return id; }

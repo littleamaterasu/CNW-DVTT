@@ -13,11 +13,15 @@ import com.cnweb36.Entity.MessageEntity;
 @Repository
 public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
 	
-	@Query("select m from MessageEntity m where m.username=?1")
+	@Query("select m from MessageEntity m where m.username=?1 and m.status !='-1'")
 	List<MessageEntity> findMessByUser(String username,Pageable pageable);
 	
+	@Query("select m from MessageEntity m where m.username=?1 and m.status !='-1'")
 	List<MessageEntity> findByUsername(String username,Sort sort);
 	
-	@Query("select m from MessageEntity m where DATEDIFF(CURDATE(), m.createdDate) < ?1 order by m.createdDate")
+	@Query("select m from MessageEntity m where m.id=?1 and m.status !='-1'")
+	MessageEntity findEntityById(Long id);
+	
+	@Query("select m from MessageEntity m where DATEDIFF(CURDATE(), m.createdDate) < ?1 and m.status !='-1' order by m.createdDate")
 	List<MessageEntity> adminfindByDay(Integer Day);
 }
