@@ -18,19 +18,15 @@ import com.cnweb36.Entity.AccountEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AccountDetails implements UserDetails {
+	
   private static final long serialVersionUID = 1L;
-
   private Long id;
-
   private String username;
-
   private String email;
 
   @JsonIgnore
-  private String password;
-  
+  private String password;  
   private Date signoutTime;
-
   private Collection<? extends GrantedAuthority> authorities;
 
   public AccountDetails(Long id, String username, String email, String password, Date signoutTime,

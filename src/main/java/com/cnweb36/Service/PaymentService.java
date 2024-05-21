@@ -116,7 +116,7 @@ public class PaymentService {
 			return paymentResponse;
 			
 		}else {
-			return new PaymentResponse();
+			return null;
 		}
 	}
 }
