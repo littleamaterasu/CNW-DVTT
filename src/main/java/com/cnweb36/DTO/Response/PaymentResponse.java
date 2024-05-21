@@ -18,6 +18,7 @@ public class PaymentResponse {
 	private CouponDTO couponDTO;
 	private List<Book> listBook;
 	private List<Long> listOrderId;
+	private String payStatus;
 	
 	public Long getUserId() {
 		return userId;
@@ -85,7 +86,11 @@ public class PaymentResponse {
 	public void setListOrderId(List<Long> listOrderId) {
 		this.listOrderId = listOrderId;
 	}
-
-	
+	public String getPayStatus() {
+		return payStatus;
+	}
+	public void setPayStatus(String payStatus) {
+		this.payStatus = payStatus;
+	}
 	
 }
