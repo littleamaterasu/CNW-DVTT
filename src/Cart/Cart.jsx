@@ -7,6 +7,8 @@ function Cart() {
     const [note, setNote] = useState("");
     const [couponId, setCouponId] = useState("");
     const [page, setPage] = useState(1);
+    const [address, setAdress] = useState('');
+    const [phone, setPhone] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -22,10 +24,29 @@ function Cart() {
                 credentials: 'include'
             });
             const data = await response.json();
+            console.log(data)
             data.forEach(element => {
                 element.book.quantity = 0;
+                element.book.orderId = element.orderId;
                 setCartList(prev => [...prev, element.book]);
             });
+            console.log(cartList)
+
+        } catch (error) {
+            console.error("Error fetching cart items:", error);
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/account/getUser?id=${localStorage.getItem('id')}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
+                },
+                credentials: 'include'
+            });
+            const data = await response.json();
+            setAdress(data.address);
+            setPhone(data.phone);
 
         } catch (error) {
             console.error("Error fetching cart items:", error);
@@ -77,23 +98,28 @@ function Cart() {
 
     const handleCheckout = async () => {
         try {
-            const response = await fetch("", {
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/payment/post`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": localStorage.getItem('CSRF'),
                 },
                 body: JSON.stringify({
-                    orderList: cartList.filter(item => item.quantity > 0).map(item => ({ orderId: item.id, quantity: item.quantity })),
+                    orderList: cartList.filter(item => item.quantity > 0).map(item => ({ orderId: item.orderId, quantity: item.quantity })),
                     note: note,
+                    address: address,
+                    phone: phone,
                     couponId: couponId,
                     pay: totalPrice
-                })
+                }),
+                credentials: 'include'
             });
             const data = await response.json();
             console.log("Order placed:", data);
         } catch (error) {
             console.error("Error placing order:", error);
         }
+        console.log(cartList.filter(item => item.quantity > 0).map(item => ({ orderId: item.id, quantity: item.quantity })))
     };
 
     const invoiceItems = cartList.filter((item) => item.quantity > 0);
@@ -147,6 +173,8 @@ function Cart() {
                                     Coupon ID:
                                     <input type="text" value={couponId} onChange={(e) => setCouponId(e.target.value)} className="border border-gray-400 px-2 py-1 rounded-md w-full" />
                                 </label>
+                                <label className="block mb-2">Phone: {phone}</label>
+                                <label className="block mb-2">Adress: {address}</label>
                             </div>
                             <button onClick={handleCheckout} className="bg-green-500 text-white px-4 py-2 rounded-md mt-4">Checkout</button>
                         </div>

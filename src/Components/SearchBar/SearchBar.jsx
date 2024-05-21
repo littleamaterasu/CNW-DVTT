@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../config";
+import Book from "../../Book/Book";
 
 function SearchBar() {
     const [keyword, setKeyword] = useState('');
     const [data, setData] = useState([]);
+    const [id, setId] = useState(null);
     const [isDataFetched, setIsDataFetched] = useState(false);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [suggestedItems, setSuggestedItems] = useState([]);
+
+    const inputRef = useRef(null);
 
     const fetchData = async () => {
         try {
@@ -27,6 +33,13 @@ function SearchBar() {
     const handleInputChange = (event) => {
         const inputKeyword = event.target.value;
         setKeyword(inputKeyword);
+
+        // Filter suggestions based on input
+        const filteredItems = inputKeyword.length > 0 ? data.filter(item => item.name.includes(inputKeyword)).slice(0, 5) : [];
+        setSuggestedItems(filteredItems);
+
+        // Show suggestions
+        setShowSuggestions(true);
     };
 
     const navigate = useNavigate();
@@ -38,16 +51,29 @@ function SearchBar() {
         }
     };
 
-    const handleItemClick = (userId) => {
-        navigate(`/book/id/${userId}`);
+    const handleItemClick = (itemId) => {
+        setId(itemId);
+        setShowSuggestions(false);
     };
 
-    const filteredData = keyword.length > 0 ? (isDataFetched ? data.filter(item => item.name.includes(keyword)).slice(0, 5) : []) : [];
+    const handleClickOutside = (event) => {
+        if (inputRef.current && !inputRef.current.contains(event.target)) {
+            setShowSuggestions(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
-        <div>
+        <div ref={inputRef}>
             <form onSubmit={handleFormSubmit} className="flex items-center">
                 <input
+
                     type="text"
                     placeholder="Nhập từ khóa"
                     value={keyword}
@@ -61,17 +87,20 @@ function SearchBar() {
                     Search
                 </button>
             </form>
-            <ul className="mt-2">
-                {filteredData.map((item, index) => (
-                    <li
-                        key={index}
-                        onClick={() => handleItemClick(item.id)}
-                        className="py-2 px-3 border-b border-gray-200 cursor-pointer hover:bg-gray-100"
-                    >
-                        {item.name}
-                    </li>
-                ))}
-            </ul>
+            {showSuggestions && (
+                <ul className="mt-2" style={{ position: 'fixed', top: '50px', left: '39%', zIndex: '999', backgroundColor: '#fff', width: '20%' }}>
+                    {suggestedItems.map((item, index) => (
+                        <li
+                            key={index}
+                            onClick={() => handleItemClick(item.id)}
+                            className="py-2 px-3 border-b border-gray-200 cursor-pointer hover:bg-gray-100"
+                        >
+                            {item.name}
+                        </li>
+                    ))}
+                </ul>
+            )}
+            {id && <Book onClose={() => setId(null)} id={id} />}
         </div>
     );
 }

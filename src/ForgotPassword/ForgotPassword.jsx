@@ -7,6 +7,7 @@ import { API_BASE_URL } from '../config';
 function ForgotPassword() {
     const [email, setEmail] = useState('');
     const [otpSent, setOtpSent] = useState(false);
+    const [otpConfirm, setOtpConfirm] = useState('');
 
     const handleSendOtp = async () => {
         if (!email) {
@@ -15,16 +16,13 @@ function ForgotPassword() {
         }
 
         try {
-            const otp = Math.floor(100000 + Math.random() * 900000);
-
-            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/checkMail`, {
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/account/getOTP`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     username: email,
-                    otp
                 }),
             });
 
@@ -38,6 +36,38 @@ function ForgotPassword() {
             toast.error('Failed to send OTP. Please try again.');
         }
     };
+
+    const CheckOTP = async () => {
+        try {
+
+            // API?
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/account/getpass/mail`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
+                },
+                body: JSON.stringify({
+                    username: email,
+                    password: otpConfirm
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Password change failed');
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                toast.success('Password changed successfully.');
+            } else {
+                toast.error(data.message || 'Password change failed.');
+            }
+        } catch (error) {
+            toast.error('Password change failed. Please try again.');
+        }
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -54,7 +84,7 @@ function ForgotPassword() {
                 <div className="mb-4">
                     <input
                         type="text"
-                        placeholder="Your Email"
+                        placeholder="Your Username"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full p-2 border border-gray-300 rounded"
@@ -63,7 +93,18 @@ function ForgotPassword() {
                 <button type="button" onClick={handleSendOtp} className="w-full bg-blue-500 text-white p-2 rounded">
                     Send OTP
                 </button>
-                {otpSent && <p className="text-green-500 mt-4">OTP sent! Please check your email.</p>}
+                {otpSent &&
+                    <div className="mb-4">
+                        <input
+                            type="text"
+                            placeholder="OTP"
+                            value={otpConfirm}
+                            onChange={(e) => setOtpConfirm(e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded"
+                        />
+                        <button onClick={CheckOTP}>Submit OTP</button>
+                    </div>
+                }
             </form>
         </div>
     );

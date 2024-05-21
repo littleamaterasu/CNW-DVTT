@@ -47,7 +47,14 @@ function CouponList() {
             >
                 {showCouponCreate ? 'Hide Form' : 'Add Coupon'}
             </button>
-            {showCouponCreate && <CouponCreate couponList={coupons} onNewCoupon={handleNewCoupon} />}
+            {showCouponCreate && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <button className="close-button" onClick={handleFormToggle}>Close</button>
+                        <CouponCreate couponList={coupons} onNewCoupon={handleNewCoupon} />
+                    </div>
+                </div>
+            )}
             <ul>
                 {coupons.map((coupon, index) => (
                     <li key={index} className="border-b border-gray-300 py-4">

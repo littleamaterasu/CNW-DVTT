@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import GenreSelect from './GenreSelect';
@@ -10,6 +11,7 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [genreList, setGenreList] = useState([]);
     const [imageUrl, setImageUrl] = useState('');
+    const [imageFile, setImageFile] = useState(null); // Thêm state cho file ảnh
     const [weight, setWeight] = useState('');
     const [publisher, setPublisher] = useState('');
     const [writtenYear, setWrittenYear] = useState('');
@@ -23,24 +25,6 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
     const [page, setPage] = useState('');
 
     useEffect(() => {
-        // const fetchAuthors = async () => {
-        //     try {
-        //         const response = await fetch('', {
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
-        //             },
-        //         });
-        //         if (!response.ok) {
-        //             throw new Error('Failed to fetch authors');
-        //         }
-        //         const data = await response.json();
-        //         setAuthorList(data);
-        //     } catch (error) {
-        //         toast.error(error.message);
-        //     }
-        // };
-
         const fetchGenres = async () => {
             try {
                 const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/category/get`, {
@@ -53,7 +37,6 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
                 if (!response.ok) {
                     throw new Error('Failed to fetch genres');
                 }
-                console.log(response)
                 const data = await response.json();
                 setGenreList(data);
             } catch (error) {
@@ -61,18 +44,47 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
             }
         };
 
-        // fetchAuthors();
         fetchGenres();
     }, []);
 
+    const handleImageChange = (e) => {
+        setImageFile(e.target.files[0]);
+    };
+
+    const uploadImageToCloudinary = async () => {
+        if (!imageFile) return null;
+
+        const formData = new FormData();
+        formData.append('file', imageFile);
+        formData.append('upload_preset', 'ml_default'); // Thay YOUR_UPLOAD_PRESET bằng Upload Preset của bạn
+
+        try {
+            const response = await axios.post('https://api.cloudinary.com/v1_1/dmtiz34v1/image/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            console.log(response.data);
+            return response.data.secure_url;
+        } catch (error) {
+            toast.error('Failed to upload image to Cloudinary');
+            return null;
+        }
+    };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const uploadedImageUrl = await uploadImageToCloudinary();
+        if (!uploadedImageUrl) return;
 
         const newBook = {
             name,
             author: selectedAuthors,
             category: selectedGenres,
-            imageUrl,
+            imageUrl: uploadedImageUrl,
             weight,
             publisher,
             writtenYear,
@@ -83,7 +95,8 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
             year,
             info,
             provider,
-            page
+            page,
+            status: 0
         };
 
         try {
@@ -111,6 +124,7 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
             setSelectedAuthors('');
             setSelectedGenres([]);
             setImageUrl('');
+            setImageFile(null);
             setWeight('');
             setPublisher('');
             setWrittenYear('');
@@ -170,12 +184,11 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700">ImageUrl URL</label>
+                        <label htmlFor="imageFile" className="block text-sm font-medium text-gray-700">Image File</label>
                         <input
-                            type="text"
-                            id="imageUrl"
-                            value={imageUrl}
-                            onChange={(e) => setImageUrl(e.target.value)}
+                            type="file"
+                            id="imageFile"
+                            onChange={handleImageChange}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                             required
                         />

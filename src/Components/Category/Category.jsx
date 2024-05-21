@@ -2,31 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../config";
 
-function Category() {
-    const [categories, setCategories] = useState([]);
+function Category({ toggleCategory, categories }) {
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/category/get`);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch categories");
-                }
-                const data = await response.json();
-                console.log(data)
-                setCategories(data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchCategories();
-    }, []);
-
     const ShowBooksInCategory = (category) => {
+        toggleCategory(false);
         navigate(`/search/genre/${category}`);
-    }
+    };
 
     const splitCategoriesIntoColumns = (categories, itemsPerColumn) => {
         const columns = [];
@@ -39,20 +21,30 @@ function Category() {
     const columns = splitCategoriesIntoColumns(categories, 7);
 
     return (
-        <div className="flex flex-wrap justify-center">
-            {columns.map((column, columnIndex) => (
-                <ul key={columnIndex} className="w-1/3 p-4">
-                    {column.map(category => (
-                        <li
-                            key={category.id}
-                            onClick={() => ShowBooksInCategory(category.name)}
-                            className="cursor-pointer hover:text-blue-500"
-                        >
-                            {category.name}
-                        </li>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl relative">
+                <button
+                    onClick={() => toggleCategory(false)}
+                    className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+                >
+                    &times;
+                </button>
+                <div className="flex flex-wrap justify-center">
+                    {columns.map((column, columnIndex) => (
+                        <ul key={columnIndex} className="w-1/3 p-4">
+                            {column.map((category) => (
+                                <li
+                                    key={category.id}
+                                    onClick={() => ShowBooksInCategory(category.name)}
+                                    className="cursor-pointer hover:text-blue-500"
+                                >
+                                    {category.name}
+                                </li>
+                            ))}
+                        </ul>
                     ))}
-                </ul>
-            ))}
+                </div>
+            </div>
         </div>
     );
 }

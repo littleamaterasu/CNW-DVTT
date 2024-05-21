@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import GenreCreate from './GenreCreate';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { API_BASE_URL } from '../../config';
 
 function GenreList() {
     const [genres, setGenres] = useState([]);
@@ -10,7 +11,7 @@ function GenreList() {
     useEffect(() => {
         const fetchGenres = async () => {
             try {
-                const response = await fetch('');
+                const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/category/get`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch genres');
                 }
@@ -51,6 +52,7 @@ function GenreList() {
                 {genres.map((genre, index) => (
                     <li key={index}>
                         <h2>{genre.name}</h2>
+                        <h2>{genre.info}</h2>
                     </li>
                 ))}
             </ul>

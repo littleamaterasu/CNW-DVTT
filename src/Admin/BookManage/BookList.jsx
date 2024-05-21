@@ -8,6 +8,7 @@ import { API_BASE_URL } from '../../config';
 function BookList() {
     const [books, setBooks] = useState([]);
     const [showBookCreate, setShowBookCreate] = useState(false);
+    const [selectedBook, setSelectedBook] = useState(null); // State mới để lưu trữ thông tin của cuốn sách được chọn để chỉnh sửa
     const [page, setPage] = useState(1);
 
     useEffect(() => {
@@ -27,7 +28,6 @@ function BookList() {
             }
             const data = await response.json();
             setBooks(data);
-            console.log(data)
         } catch (error) {
             toast.error(error.message);
         }
@@ -40,6 +40,10 @@ function BookList() {
 
     const handleFormToggle = () => {
         setShowBookCreate(!showBookCreate);
+    };
+
+    const handleEditBook = (book) => {
+        setSelectedBook(book); // Cập nhật state mới với thông tin của cuốn sách được chọn để chỉnh sửa
     };
 
     const handleNextPage = () => {
@@ -77,6 +81,7 @@ function BookList() {
                             <h2 className="text-xl font-semibold mb-2">{book.name}</h2>
                             <p>Price: {book.price}</p>
                             <p>Sold Count: {book.soldCount}</p>
+                            <button onClick={() => handleEditBook(book)}>Edit</button> {/* Button để chỉnh sửa cuốn sách */}
                         </div>
                     </li>
                 ))}
@@ -91,3 +96,4 @@ function BookList() {
 }
 
 export default BookList;
+

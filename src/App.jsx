@@ -23,6 +23,8 @@ import SignUpAdmin from './Admin/AdminManage/SignUpAdmin';
 import FAQCreateForm from './Admin/FAQManage/FAQCreate';
 import UserList from './Admin/UserManage/UserList';
 import BookList from './Admin/BookManage/BookList';
+import CouponList from './Admin/Coupon/Coupon';
+import ChangePassword from './ChangePassword/ChangePassword';
 
 function App() {
   return (
@@ -35,7 +37,6 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/search/genre/:genreName" element={<SearchResults type="genre" />} />
           <Route path="/search/keyword/:keyword" element={<SearchResults type="keyword" />} />
-          <Route path="book/id/:id" element={<Book />} />
           <Route path="/user/FAQ" element={<FAQ />} />
           <Route path="/user/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
           <Route path="/user/changeInformation" element={<PrivateRoute><ChangeInformation /></PrivateRoute>} />
@@ -43,6 +44,7 @@ function App() {
           <Route path="/order/info/:id" element={<PrivateRoute><OrderInfo /></PrivateRoute>} />
           <Route path="/payment/info/:id" element={<PrivateRoute><PaymentInfo /></PrivateRoute>} />
           <Route path="/payment/list" element={<PrivateRoute><PaymentList /></PrivateRoute>} />
+          <Route path="/user/changepassword" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
 
           <Route path="/admin/*" element={
             <PrivateAdminRoute>
@@ -52,6 +54,7 @@ function App() {
                 <Route path="books" element={<BookList />} />
                 <Route path="FAQs" element={<FAQCreateForm />} />
                 <Route path="users" element={<UserList />} />
+                <Route path='coupon' element={<CouponList />} />
               </Routes>
             </PrivateAdminRoute>
           } />
