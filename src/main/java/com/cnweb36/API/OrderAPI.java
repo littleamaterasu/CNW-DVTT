@@ -47,7 +47,7 @@ public class OrderAPI {
 	
 	@PostMapping("/post")
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public NoticeResponse AddOrder(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken,@RequestBody OrderDTO orderDTO) {
+	public NoticeResponse AddOrder(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken, @RequestBody OrderDTO orderDTO) {
 		NoticeResponse noticeResponse=new NoticeResponse();
 		try {
 			String username=jwtUtility.getUserNameFromJwtToken(jwtToken);

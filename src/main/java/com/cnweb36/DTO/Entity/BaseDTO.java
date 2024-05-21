@@ -10,7 +10,7 @@ public class BaseDTO {
 	private Date createdDate;
 	private String modifiedBy;
 	private Date modifiedDate;
-	private String status;
+	private String status = "";
 //	private List<T> listResult = new ArrayList<>();
 	
 	public Long getId() {

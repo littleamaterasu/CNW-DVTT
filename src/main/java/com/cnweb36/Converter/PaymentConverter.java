@@ -15,7 +15,7 @@ public class PaymentConverter {
 		paymentEntity.setNote(paymentDTO.getNote());
 		paymentEntity.setPay(paymentDTO.getPay());
 		paymentEntity.setPhone(paymentDTO.getPhone());
-		
+		paymentEntity.setStatus(paymentDTO.getPayStatus());
 		return paymentEntity;
 	}
 	
@@ -25,6 +25,7 @@ public class PaymentConverter {
 		paymentDTO.setNote(paymentEntity.getNote());
 		paymentDTO.setPay(paymentEntity.getPay());
 		paymentDTO.setPhone(paymentEntity.getPhone());	
+		paymentDTO.setPayStatus(paymentEntity.getStatus());
 		return paymentDTO;
 	}
 	
@@ -38,6 +39,7 @@ public class PaymentConverter {
 		paymentResponse.setModifiedDate(paymentEntity.getModifiedDate());
 		paymentResponse.setStatus(paymentEntity.getStatus());
 		paymentResponse.setUserId(paymentEntity.getUser().getId());
+		paymentResponse.setPayStatus(paymentEntity.getStatus());
 		
 		return paymentResponse;
 	}

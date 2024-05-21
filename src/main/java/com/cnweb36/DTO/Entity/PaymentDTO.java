@@ -4,20 +4,15 @@ import java.util.Set;
 
 public class PaymentDTO {
 
-	private String address;
-	
-	private String phone;
-	
-	private String note;
-	
+	private String address;	
+	private String phone;	
+	private String note;	
 	private Float pay;
-
-	private Set<OrderDTO> orderList;
-	
+	private Set<OrderDTO> orderList;	
 	private Set<Long> paymentLogListid;
-
 	private Long couponId;
-
+	private String payStatus;
+	
 	public String getAddress() {
 		return address;
 	}
@@ -73,6 +68,13 @@ public class PaymentDTO {
 	public void setOrderList(Set<OrderDTO> orderList) {
 		this.orderList = orderList;
 	}
-	
+
+	public String getPayStatus() {
+		return payStatus;
+	}
+
+	public void setPayStatus(String payStatus) {
+		this.payStatus = payStatus;
+	}
 	
 }
