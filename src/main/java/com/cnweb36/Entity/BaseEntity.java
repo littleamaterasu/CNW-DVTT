@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -39,7 +40,8 @@ public abstract class BaseEntity {
 	@Column(name = "modifiedDate")
 	private Date modifiedDate;
 	
-	@Column
+	@Column(columnDefinition = "varchar(5)")
+	@ColumnDefault("'0'")
 	private String status;
 	
 	public Long getId() { return id; }

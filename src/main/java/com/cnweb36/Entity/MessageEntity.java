@@ -2,8 +2,6 @@ package com.cnweb36.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -12,22 +10,27 @@ public class MessageEntity extends BaseEntity {
 
 	@Column(name = "content")
 	private String content;
-
-	@ManyToOne
-	@JoinColumn(name = "admin_id", nullable = false)
-	private AccountEntity admin;
 	
-	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
-	private AccountEntity user;
+	@Column(name = "admin")
+	private String from;
+	
+	@Column(name = "username")
+	private String username;
 	
 	public String getContent() { return content; }
 	public void setContent(String content) { this.content = content; }
 
-	public AccountEntity getAdmin() { return admin; }
-	public void setAdmin_message(AccountEntity admin) { this.admin = admin; }
-
-	public AccountEntity getUser() { return user; }
-	public void setUser(AccountEntity user) { this.user = user; }	
+	public String getFrom() {
+		return from;
+	}
+	public void setFrom(String from) {
+		this.from = from;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	
 }

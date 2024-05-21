@@ -14,13 +14,10 @@ import org.springframework.stereotype.Service;
 import com.cnweb36.Converter.ProductConverter;
 import com.cnweb36.DTO.Entity.ProductDTO;
 import com.cnweb36.DTO.Response.Book;
-import com.cnweb36.Entity.AuthorEntity;
 import com.cnweb36.Entity.CategoryEntity;
 import com.cnweb36.Entity.ProductEntity;
-import com.cnweb36.Repository.AuthorRepository;
 import com.cnweb36.Repository.CategoryRepository;
 import com.cnweb36.Repository.ProductRepository;
-import com.cnweb36.Repository.ProviderRepository;
 
 @Service
 public class ProductService {
@@ -30,36 +27,40 @@ public class ProductService {
 	@Autowired
 	private ProductConverter productConverter;
 	@Autowired
-	private AuthorRepository authorRepository;
-	@Autowired
 	private CategoryRepository categoryRepository;
-	@Autowired
-	private ProviderRepository providerRepository;
 	
 	public Long AddProduct(ProductDTO productDTO) {
-		
-		ProductEntity productEntity=productConverter.toEntity(productDTO);
-		Set<AuthorEntity> listAuthor=new HashSet<>();
-		for(String s: productDTO.getAuthor()) {
-			listAuthor.add(authorRepository.findByName(s));
+		ProductEntity productEntity;
+		if(productDTO.getId()!=null) {
+			// update
+			productEntity =productRepository.findOneById(productDTO.getId());
+			productEntity=productConverter.toEntity(productEntity, productDTO);
+		}else {
+			//create
+			productEntity=productConverter.toEntity(productDTO);
 		}
-		productEntity.setAuthorList(listAuthor);
-		Set<CategoryEntity> listCategory=new HashSet<>();
-		for(String s: productDTO.getCategory()) {
-			listCategory.add(categoryRepository.findByName(s));
-		}
-		productEntity.setCategoryList(listCategory);
-		
-		productEntity.setProvider(providerRepository.findByName(productDTO.getProvider()));
-		productEntity.setNumberRate(0);
-		productEntity.setRating(0f);
-		return productRepository.save(productEntity).getId();
+			Set<CategoryEntity> listCategory=new HashSet<>();
+			for(String s: productDTO.getCategory()) {
+				listCategory.add(categoryRepository.findByName(s));
+			}
+			productEntity.setCategoryList(listCategory);
+			
+			productEntity.setNumberRate(0);
+			productEntity.setRating(0f);
+			productEntity.setStatus("0");			
+			return productRepository.save(productEntity).getId();
 	}
 	
 	public List<Book> getAllBook(Integer page) {
+		List<ProductEntity> listProduct;
+		if(page==null) {
+			listProduct= productRepository.findAll(Sort.by("modifiedDate").descending());
+		}else {
+			Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("modifiedDate").descending());
+			listProduct= productRepository.findAll(pageWithTenElements).toList();
+		}
 		List<Book> listBook=new ArrayList<>();
-		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("modifiedDate").descending());
-		for(ProductEntity e: productRepository.findAll(pageWithTenElements)) {
+		for(ProductEntity e: listProduct) {
 			listBook.add(productConverter.toBook(e));
 		}
 		return listBook;
@@ -78,7 +79,7 @@ public class ProductService {
 	public List<Book> getwithkey(String keyword, Integer page) {
 		if(page==null) page=(int)1;
 		List<Book> listBook=new ArrayList<>();
-		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("modifiedDate").descending());
+		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("modifiedDate").descending());
 		for(ProductEntity e: productRepository.findByNameContaining(keyword, pageWithTenElements)) {
 			listBook.add(productConverter.toBook(e));
 		}
@@ -88,10 +89,19 @@ public class ProductService {
 	public List<Book> getTop10(Integer page) {
 		List<Book> listBook=new ArrayList<>();
 		if(page==null||page<1) page=1;  
-		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("soldCount").descending());
+		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("soldCount").descending());
 		for(ProductEntity e: productRepository.findAll(pageWithTenElements)) {
 			listBook.add(productConverter.toBook(e));
 		}
 		return listBook;
+	}
+	
+	public String delete(Long id) {
+		ProductEntity productEntity=productRepository.findOneById(id);
+		if(productEntity!=null) {
+		productEntity.setStatus("-1");
+		productRepository.save(productEntity);
+		return "Oke";
+		}else return "Not found Entity with id= "+id;
 	}
 }

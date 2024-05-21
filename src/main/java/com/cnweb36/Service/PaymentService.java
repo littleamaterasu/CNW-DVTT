@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.cnweb36.Converter.CouponConverter;
@@ -14,6 +17,7 @@ import com.cnweb36.Converter.ProductConverter;
 import com.cnweb36.DTO.Entity.OrderDTO;
 import com.cnweb36.DTO.Entity.PaymentDTO;
 import com.cnweb36.DTO.Response.Book;
+import com.cnweb36.DTO.Response.PaymentListResponse;
 import com.cnweb36.DTO.Response.PaymentResponse;
 import com.cnweb36.Entity.AccountEntity;
 import com.cnweb36.Entity.OrderEntity;
@@ -96,6 +100,28 @@ public class PaymentService {
 		
 	}
 	
+	public List<PaymentListResponse> getAllPayment(String username,Integer page) {
+		AccountEntity accountEntity=accountRepository.findEntityByUsername(username);
+		if(accountEntity!=null) {
+		List<PaymentEntity> listPaymentEntities;
+		if(page==null) {
+			listPaymentEntities=paymentRepository.findAll(accountEntity, Sort.by("createdDate").descending());
+		}else {
+			Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("createdDate").descending());
+			listPaymentEntities=paymentRepository.findAll(accountEntity, pageWithTenElements).toList();
+		}
+		
+		List<PaymentListResponse> listPaymentListResponses=new ArrayList<>();
+		for(PaymentEntity p: listPaymentEntities) {
+			listPaymentListResponses.add(new PaymentListResponse(p.getId(), p.getCreatedDate(), p.getPay()));
+		}
+		
+		return listPaymentListResponses;
+		}else {
+			return null;
+		}
+	}
+	
 	//
 	public PaymentResponse getPayment(String username,Long paymentId)  {
 		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
@@ -118,5 +144,14 @@ public class PaymentService {
 		}else {
 			return null;
 		}
+	}
+	
+	public String delete(Long id) {
+		PaymentEntity paymentEntity=paymentRepository.findEntityById(id);
+		if(paymentEntity!=null) {
+			paymentEntity.setStatus("-1");
+			paymentRepository.save(paymentEntity);
+			return "Oke";
+		}else return "Not found Entity with id= "+id;
 	}
 }

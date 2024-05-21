@@ -25,6 +25,27 @@ public class ProductConverter {
 		productEntity.setSoldCount(productDTO.getSoldCount());
 		productEntity.setWeight(productDTO.getWeight());
 		productEntity.setYear(productDTO.getYear());
+		productEntity.setAuthor(productDTO.getAuthor());
+		productEntity.setProvider2(productDTO.getProvider());
+
+		return productEntity;
+
+	}
+	
+	public ProductEntity toEntity(ProductEntity productEntity,ProductDTO productDTO) {
+		productEntity.setCover(productDTO.getCover());
+		productEntity.setDiscount(productDTO.getDiscount());
+		productEntity.setImageUrl(productDTO.getImageUrl());
+		productEntity.setInfo(productDTO.getInfo());
+		productEntity.setName(productDTO.getName());
+		productEntity.setPage(productDTO.getPage());
+		productEntity.setPrice(productDTO.getPrice());
+		productEntity.setRemainedCount(productDTO.getRemainedCount());
+		productEntity.setSoldCount(productDTO.getSoldCount());
+		productEntity.setWeight(productDTO.getWeight());
+		productEntity.setYear(productDTO.getYear());
+		productEntity.setAuthor(productDTO.getAuthor());
+		productEntity.setProvider2(productDTO.getProvider());
 
 		return productEntity;
 
@@ -59,13 +80,14 @@ public class ProductConverter {
 		productDTO.setCreateDate(productEntity.getCreatedDate());
 		productDTO.setModifiedDate(productEntity.getModifiedDate());
 		// provide
-		productDTO.setProvider(productEntity.getProvider().getName());
+		//productDTO.setProvider(productEntity.getProvider().getName());
+		productDTO.setProvider(productEntity.getProvider2());
 		// category
 		productDTO.setCategory(
 				productEntity.getCategoryList().stream().map(e -> e.getName()).collect(Collectors.toList()));
 		// author
-		productDTO.setAuthor(productEntity.getAuthorList().stream().map(e -> e.getName()).collect(Collectors.toList()));
-
+		//productDTO.setAuthor(productEntity.getAuthorList().stream().map(e -> e.getName()).collect(Collectors.toList()));
+		productDTO.setAuthor(productEntity.getAuthor());
 		return productDTO;
 
 	}

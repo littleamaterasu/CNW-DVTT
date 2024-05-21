@@ -9,6 +9,6 @@ import com.cnweb36.Entity.PaymentLogEntity;
 @Repository
 public interface PaymentLogRepository extends JpaRepository<PaymentLogEntity, Long> {
 	
-	@Query("select p from PaymentLogEntity p where p.id=?1")
+	@Query("select p from PaymentLogEntity p where p.id=?1 and p.status !='-1'")
 	PaymentLogEntity findEntityById(Long id);
 }

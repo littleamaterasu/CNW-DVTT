@@ -27,11 +27,13 @@ public class CategoryService {
 			
 			newcategoryEntity.setName(categoryDTO.getName());
 			newcategoryEntity.setInfo(categoryDTO.getInfo());
-			
+			newcategoryEntity.setStatus("0");
+
 			noticeResponse.setStatus(categoryRepository.save(newcategoryEntity).getId());
 			noticeResponse.setContent("Create a category");
 		}else {
 			categoryEntity.setInfo(categoryDTO.getInfo());
+			categoryEntity.setStatus("0");
 			
 			noticeResponse.setStatus(categoryRepository.save(categoryEntity).getId());
 			noticeResponse.setContent("Update a category");
@@ -44,12 +46,14 @@ public class CategoryService {
 		List<CategoryDTO> listCategory=new ArrayList<>();
 		
 		for(CategoryEntity e: categoryRepository.findAll()) {
+			if(e.getStatus().compareTo("-1")!=0) {
 			CategoryDTO categoryDTO=new CategoryDTO();
 			categoryDTO.setId(e.getId());
 			categoryDTO.setInfo(e.getInfo());
 			categoryDTO.setName(e.getName());
 			
 			listCategory.add(categoryDTO);
+			}
 		}
 		return listCategory;
 	}
@@ -60,13 +64,24 @@ public class CategoryService {
 		CategoryEntity categoryEntity=categoryRepository.findByName(categoryName);
 		List<Book> listBook=new ArrayList<>();
 		for(ProductEntity e: categoryEntity.getProductList()) {
+			if(e.getStatus().compareTo("-1")!=0) {
 			Book book =new Book();
 			book.setId(e.getId());
 			book.setImageUrl(e.getImageUrl());
 			book.setName(e.getName());
 			book.setPrice(e.getPrice());
 			listBook.add(book);
+			}
 		}
 		return listBook;
+	}
+	
+	public String delete(String name) {
+		CategoryEntity categoryEntity=categoryRepository.findByName(name);
+		if(categoryEntity!=null) {
+			categoryEntity.setStatus("-1");
+			categoryRepository.save(categoryEntity);
+			return "Oke";
+		}else return "Not found Entity with name= "+name;
 	}
 }

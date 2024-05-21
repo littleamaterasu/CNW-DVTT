@@ -17,7 +17,7 @@ import com.cnweb36.DTO.Response.Book;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.Service.CategoryService;
 
-@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
+
 @RestController
 @RequestMapping("/category")
 public class CategoryAPI {
@@ -46,5 +46,18 @@ public class CategoryAPI {
 	@GetMapping("/getAllProduct")
 	public List<Book> getAllProduct(@RequestParam String categoryName){
 		return categoryService.getAllProduct(categoryName);
+	}
+	
+	@PreAuthorize("hasAnyRole('ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@PostMapping("/delete")
+	public NoticeResponse delete(@RequestParam String name) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		try {
+			noticeResponse.setContent(categoryService.delete(name));
+		} catch (Exception e) {
+			noticeResponse.setContent(e.getMessage());
+			noticeResponse.setStatus(-1l);
+		}
+		return noticeResponse;
 	}
 }

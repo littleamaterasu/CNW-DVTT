@@ -39,7 +39,7 @@ public class UserOTPEntity extends BaseEntity {
 	        }
 	         
 	        long currentTimeInMillis = System.currentTimeMillis();
-	        long otpRequestedTimeInMillis = super.getCreatedDate().getTime();
+	        long otpRequestedTimeInMillis = super.getModifiedDate().getTime();
 	         
 	        if (currentTimeInMillis-otpRequestedTimeInMillis>OTP_VALID_TIME) {
 	            // OTP expires

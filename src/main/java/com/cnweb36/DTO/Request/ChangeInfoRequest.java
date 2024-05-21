@@ -3,7 +3,6 @@ package com.cnweb36.DTO.Request;
 public class ChangeInfoRequest {
 	
 	private String  password;
-	private String email;
 	private String phone;
 	private String address;
 	public String getPassword() {
@@ -11,12 +10,6 @@ public class ChangeInfoRequest {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
 	}
 	public String getPhone() {
 		return phone;

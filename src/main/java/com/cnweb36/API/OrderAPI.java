@@ -23,7 +23,7 @@ import com.cnweb36.DTO.Response.OrderResponse;
 import com.cnweb36.Service.OrderService;
 import com.cnweb36.Service.Security.JwtUtility;
 
-@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
+
 @RestController
 @RequestMapping("/order")
 public class OrderAPI {
@@ -53,7 +53,11 @@ public class OrderAPI {
 			String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
 			Long id= orderService.addOrder(orderDTO,username);
 			noticeResponse.setStatus(id);
-			noticeResponse.setContent("Oke");
+			if(id!=-1l) {
+				noticeResponse.setContent("Oke");
+			}else {
+				noticeResponse.setContent("DUP");
+			}
 		} catch (Exception e) {
 			noticeResponse.setStatus(-1l);
 			noticeResponse.setContent("Something went wrong!");
@@ -103,5 +107,18 @@ public class OrderAPI {
 		} catch (Exception e) {
 			return new NoticeResponse(-1l, e.getMessage());
 		}
+	}
+	
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@PostMapping("/delete")
+	public NoticeResponse delete(@RequestParam Long id) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		try {
+			noticeResponse.setContent(orderService.delete(id));
+		} catch (Exception e) {
+			noticeResponse.setContent(e.getMessage());
+			noticeResponse.setStatus(-1l);
+		}
+		return noticeResponse;
 	}
 }

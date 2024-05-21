@@ -85,6 +85,7 @@ public class AccountService {
 
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_USER");
+			accountEntity.setStatus("0");
 
 			return accountRepository.save(accountEntity).getId();
 		}
@@ -103,6 +104,7 @@ public class AccountService {
 			
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1");
+			accountEntity.setStatus("0");
 
 			return accountRepository.save(accountEntity).getId();
 		}
@@ -117,7 +119,8 @@ public class AccountService {
 			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
 			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(accountDTO.getPassword());
-			
+			accountEntity.setStatus("0");
+
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2");
 
@@ -134,6 +137,7 @@ public class AccountService {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(accountDTO.getPassword());
 			
+			accountEntity.setStatus("0");
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2", "ROLE_ADMIN_3");
 
@@ -150,6 +154,7 @@ public class AccountService {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(admin3DTO.getPassword());
 			
+			accountEntity.setStatus("0");
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2", "ROLE_ADMIN_3");
 
@@ -192,12 +197,19 @@ public class AccountService {
 	
 	public List<UserResponse> getAllUser(Integer page) {
 		List<UserResponse> listUser=new ArrayList<>();
-		if(page==null||page<1) page=1;  
-		Pageable pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("createdDate").descending());
-		for(AccountEntity a: accountRepository.findByRolesContaining("ROLE_USER", pageWithTenElements)) {
+		List<AccountEntity> listacc;
+		if(page==null||page<1) {
+			listacc=accountRepository.findByRolesContaining("ROLE_USER", Sort.by("createdDate").descending());
+		}else {
+			Pageable pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("createdDate").descending());
+			listacc=accountRepository.findByRolesContaining("ROLE_USER", pageWithTenElements);
+		}
+		
+		for(AccountEntity a: listacc) {
 			UserResponse userResponse=new UserResponse();
 			userResponse.setId(a.getId());
 			userResponse.setName(a.getName());
+			userResponse.setUsername(a.getUsername());
 			listUser.add(userResponse);
 		}
 		return listUser;
@@ -211,9 +223,6 @@ public class AccountService {
 		if(encoder.matches(changeInfoRequest.getPassword(), accountEntity.getPassword())) {
 			accountEntity.setAddress(changeInfoRequest.getAddress());
 			accountEntity.setPhone(changeInfoRequest.getPhone());
-			if(accountEntity.getEmail()==null) {
-				accountEntity.setEmail(changeInfoRequest.getEmail());
-			}
 			accountRepository.save(accountEntity);
 			return "Oke";
 		}else {
@@ -239,16 +248,28 @@ public class AccountService {
 		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
 		if(accountEntity!=null) {
 			if(accountEntity.getEmail()!=null) {
-				UserOTPEntity userOTPEntity =new UserOTPEntity();
-				String OTP=userOTPEntity.generateString(8);
-				userOTPEntity.setCount(0);
-				userOTPEntity.setOTP(encoder.encode(OTP));
-				userOTPEntity.setUsername(username);
+				UserOTPEntity userOTPEntity;
+				String ROTP;
+				userOTPEntity=userOTPRepository.findEntityByUsername(username);
+				if(userOTPEntity==null) {
+					userOTPEntity=new UserOTPEntity();
+					String OTP=userOTPEntity.generateString(8);
+					ROTP=OTP;
+					userOTPEntity.setCount(0);
+					userOTPEntity.setOTP(encoder.encode(OTP));
+					userOTPEntity.setUsername(username);
+				}else {
+					String OTP=userOTPEntity.generateString(8);
+					ROTP=OTP;
+					userOTPEntity.setCount(0);
+					userOTPEntity.setOTP(encoder.encode(OTP));
+				}
+				
 				userOTPRepository.save(userOTPEntity);
 				
 				// send OTP by email
 				String subject="OTP from cnweb36 - Expire in 5 minutes! ";
-				String text="Your OTP    :     "+ OTP;
+				String text="Your OTP    :     "+ ROTP;
 				emailService.sendMessage(accountEntity.getEmail(), subject, text);
 				
 				return "Oke";
@@ -288,5 +309,28 @@ public class AccountService {
 		}else {
 			return "Chưa gửi OTP cho tài khoản này";
 		}
+	}
+	
+	public String checkmail(String otp, String email) {
+		try {
+		String subject="OTP from cnweb36 to check mail";
+		String text="Your OTP    :     "+ otp;
+		emailService.sendMessage(email, subject, text);
+		System.out.println(email);
+		System.out.println(otp);
+		return "Oke";
+		}catch (Exception e) {
+			return e.getMessage();
+		}
+		
+	}
+	
+	public String delete(Long id) {
+		AccountEntity accountEntity= accountRepository.findEntityById(id);
+		if(accountEntity!=null) {
+			accountEntity.setStatus("-1");
+			accountRepository.save(accountEntity);
+			return "Oke";
+		}else return "Not found Entity with id= "+id;
 	}
 }

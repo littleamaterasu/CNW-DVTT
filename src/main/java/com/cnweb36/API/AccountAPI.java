@@ -7,7 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +30,7 @@ import com.cnweb36.Service.Security.JwtUtility;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
+
 @RestController
 @RequestMapping("/account")
 public class AccountAPI {
@@ -41,6 +40,16 @@ public class AccountAPI {
 	
 	@Autowired
 	private JwtUtility jwtUtility;
+	
+	@PostMapping("/checkMail")
+	public NoticeResponse checkMail(@Valid @RequestBody OTPRequest otpRequest) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		String result= accountService.checkmail(otpRequest.getOtp(), otpRequest.getUsername());
+		noticeResponse.setContent(result);
+		noticeResponse.setStatus(0l);
+		
+		return noticeResponse;
+	}
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> accountSignin(@Valid @RequestBody SignInRequest signInRequest) {
@@ -233,6 +242,19 @@ public class AccountAPI {
 		} catch (Exception e) {
 			noticeResponse.setStatus(-1l);
 			noticeResponse.setContent(e.getMessage());
+		}
+		return noticeResponse;
+	}
+	
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@PostMapping("/delete")
+	public NoticeResponse delete(@RequestParam Long id) {
+		NoticeResponse noticeResponse=new NoticeResponse();
+		try {
+			noticeResponse.setContent(accountService.delete(id));
+		} catch (Exception e) {
+			noticeResponse.setContent(e.getMessage());
+			noticeResponse.setStatus(-1l);
 		}
 		return noticeResponse;
 	}
