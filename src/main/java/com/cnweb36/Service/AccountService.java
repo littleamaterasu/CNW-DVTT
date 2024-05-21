@@ -248,16 +248,28 @@ public class AccountService {
 		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
 		if(accountEntity!=null) {
 			if(accountEntity.getEmail()!=null) {
-				UserOTPEntity userOTPEntity =new UserOTPEntity();
-				String OTP=userOTPEntity.generateString(8);
-				userOTPEntity.setCount(0);
-				userOTPEntity.setOTP(encoder.encode(OTP));
-				userOTPEntity.setUsername(username);
+				UserOTPEntity userOTPEntity;
+				String ROTP;
+				userOTPEntity=userOTPRepository.findEntityByUsername(username);
+				if(userOTPEntity==null) {
+					userOTPEntity=new UserOTPEntity();
+					String OTP=userOTPEntity.generateString(8);
+					ROTP=OTP;
+					userOTPEntity.setCount(0);
+					userOTPEntity.setOTP(encoder.encode(OTP));
+					userOTPEntity.setUsername(username);
+				}else {
+					String OTP=userOTPEntity.generateString(8);
+					ROTP=OTP;
+					userOTPEntity.setCount(0);
+					userOTPEntity.setOTP(encoder.encode(OTP));
+				}
+				
 				userOTPRepository.save(userOTPEntity);
 				
 				// send OTP by email
 				String subject="OTP from cnweb36 - Expire in 5 minutes! ";
-				String text="Your OTP    :     "+ OTP;
+				String text="Your OTP    :     "+ ROTP;
 				emailService.sendMessage(accountEntity.getEmail(), subject, text);
 				
 				return "Oke";

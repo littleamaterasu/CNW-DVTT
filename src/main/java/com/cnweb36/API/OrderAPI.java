@@ -53,7 +53,11 @@ public class OrderAPI {
 			String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
 			Long id= orderService.addOrder(orderDTO,username);
 			noticeResponse.setStatus(id);
-			noticeResponse.setContent("Oke");
+			if(id!=-1l) {
+				noticeResponse.setContent("Oke");
+			}else {
+				noticeResponse.setContent("DUP");
+			}
 		} catch (Exception e) {
 			noticeResponse.setStatus(-1l);
 			noticeResponse.setContent("Something went wrong!");

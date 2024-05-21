@@ -52,21 +52,25 @@ public class OrderService {
 	public Long addOrder(OrderDTO orderRequest, String username) {
 		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
 		ProductEntity productEntity= productRepository.findOneById(orderRequest.getProductId());
-		OrderEntity orderEntity=new OrderEntity();
-		orderEntity.setUser(accountEntity);
-		orderEntity.setProduct(productEntity);
-		orderEntity.setStatus("0");
-		orderEntity.setQuantity(0);
-		orderEntity.setQuantity(orderRequest.getQuantity());
-		orderEntity.setPrice(orderRequest.getPrice());
+		if(orderRepository.findByUserAndProduct(accountEntity, productEntity)==null) {
+			OrderEntity orderEntity=new OrderEntity();
+			orderEntity.setUser(accountEntity);
+			orderEntity.setProduct(productEntity);
+			orderEntity.setStatus("0");
+			orderEntity.setQuantity(0);
+			orderEntity.setQuantity(orderRequest.getQuantity());
+			orderEntity.setPrice(orderRequest.getPrice());
+			
+			return orderRepository.save(orderEntity).getId();
+		}
 		
-		return orderRepository.save(orderEntity).getId();
+		else return -1l;
 	}
 	
 	public List<OrderResponse> getProductSold(String username, Integer page) {
 		List<OrderResponse> listBook=new ArrayList<>();
 		if(page==null||page<1) page=1;
-		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("modifiedDate").descending());
+		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("modifiedDate").descending());
 		AccountEntity accountEntity=accountRepository.findEntityByUsername(username);
 		for(OrderEntity o: orderRepository.findProductSold(accountEntity, pageWithTenElements)) {
 			OrderResponse orderResponse= new OrderResponse(o.getId(), o.getStatus());
@@ -80,7 +84,7 @@ public class OrderService {
 	public List<OrderResponse> getCart(String username, Integer page) {
 		List<OrderResponse> listBook=new ArrayList<>();
 		if(page==null||page<1) page=1;
-		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 2, Sort.by("modifiedDate").descending());
+		Pageable  pageWithTenElements = PageRequest.of((int)page-1, 10, Sort.by("modifiedDate").descending());
 		AccountEntity accountEntity=accountRepository.findEntityByUsername(username);
 		for(OrderEntity o: orderRepository.findcart(accountEntity, pageWithTenElements)) {
 			OrderResponse orderResponse= new OrderResponse(o.getId(), o.getStatus());

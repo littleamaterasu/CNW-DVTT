@@ -25,4 +25,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 	
 	@Query("select o from OrderEntity o where o.id=?1 and o.status!='-1'")
 	OrderEntity findEntityById(Long id);
+	
+	@Query("select o from OrderEntity o where o.user=?1 and o.product=?2 and o.status!='-1'")
+	OrderEntity findByUserAndProduct(AccountEntity user, ProductEntity product);
 }
