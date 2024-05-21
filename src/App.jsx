@@ -25,6 +25,7 @@ import UserList from './Admin/UserManage/UserList';
 import BookList from './Admin/BookManage/BookList';
 import CouponList from './Admin/Coupon/Coupon';
 import ChangePassword from './ChangePassword/ChangePassword';
+import BoughtProducts from './BoughtProducts/BoughtProduct';
 
 function App() {
   return (
@@ -41,8 +42,9 @@ function App() {
           <Route path="/user/cart" element={<PrivateRoute><Cart /></PrivateRoute>} />
           <Route path="/user/changeInformation" element={<PrivateRoute><ChangeInformation /></PrivateRoute>} />
           <Route path="/order/list" element={<PrivateRoute><OrderList /></PrivateRoute>} />
-          <Route path="/order/info/:id" element={<PrivateRoute><OrderInfo /></PrivateRoute>} />
-          <Route path="/payment/info/:id" element={<PrivateRoute><PaymentInfo /></PrivateRoute>} />
+          <Route path="/order/info/:orderId" element={<PrivateRoute><OrderInfo /></PrivateRoute>} />
+          <Route path="/order/boughtproducts" element={<PrivateRoute><BoughtProducts /></PrivateRoute>} />
+          <Route path="/payment/info/:paymentId" element={<PrivateRoute><PaymentInfo /></PrivateRoute>} />
           <Route path="/payment/list" element={<PrivateRoute><PaymentList /></PrivateRoute>} />
           <Route path="/user/changepassword" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
 

@@ -23,13 +23,7 @@ function Chat({ setShowChat }) {
                 newClient.subscribe('/user/queue/reply', message => {
                     setMessages(prev => [...prev, <OthersText message={JSON.parse(message.body).content} />]);
                 });
-
-                newClient.publish({
-                    destination: '/app/hello',
-
-                });
             },
-            debug: str => console.log(str),
         });
 
         newClient.activate();

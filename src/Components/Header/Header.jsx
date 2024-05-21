@@ -88,7 +88,7 @@ function Header({ }) {
                                     <Link to="/user/changePassword" className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200">Change Password</Link>
                                     <Link to="/order/list" className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200">Order List</Link>
                                     <Link to="/payment/list" className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200">Payment List</Link>
-                                    <Link to="" className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200">Bought Products</Link>
+                                    <Link to="/order/boughtproducts" className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200">Bought Products</Link>
                                     <span onClick={handleLogout} className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200 cursor-pointer">Logout</span>
                                 </div>
                             )}

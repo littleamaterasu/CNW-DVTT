@@ -29,12 +29,6 @@ function AdminChat({ setShowChat }) {
                     setUsers(prev => [...prev, username]);
 
                 });
-
-
-                // Publish a message to the server
-                newClient.publish({
-                    destination: '/app/hello',
-                });
             },
         });
 

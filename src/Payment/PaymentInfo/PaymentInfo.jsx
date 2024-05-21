@@ -5,6 +5,7 @@ import Header from "../../Components/Header/Header";
 
 function PaymentInfo() {
     const { paymentId } = useParams();
+    console.log(paymentId)
     const navigate = useNavigate();
     const [orderList, setOrderList] = useState([]);
 
@@ -14,7 +15,7 @@ function PaymentInfo() {
 
     const fetchOrderData = async (id) => {
         try {
-            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/payment/get?paymentId=${id}`, {
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/payment/get?paymentId=2`, {
                 method: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
@@ -25,7 +26,6 @@ function PaymentInfo() {
                 throw new Error("Failed to fetch order data");
             }
             const data = await response.json();
-            console.log(data)
             setOrderList(data);
         } catch (error) {
             console.error("Error fetching order data:", error);
@@ -37,13 +37,13 @@ function PaymentInfo() {
     };
 
     return (
-        <div>
+        <div className="bg-gray-100 min-h-screen">
             <Header />
-            <ul>
+            <ul className="mt-8">
                 {orderList.map((order) => (
-                    <li key={order.id}>
+                    <li key={order.id} className="border rounded-lg p-4 mb-4">
                         <div>{order.orderNumber}</div>
-                        <button onClick={() => handleShowOrder(order.id)}>Show Details</button>
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2" onClick={() => handleShowOrder(order.id)}>Show Details</button>
                     </li>
                 ))}
             </ul>

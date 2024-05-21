@@ -135,7 +135,7 @@ function Cart() {
                         <h2 className="text-2xl font-semibold mb-4">Cart</h2>
                         <ul>
                             {cartList.map((item) => (
-                                <li key={item.id} className="flex justify-between items-center bg-gray-100 p-4 mb-4">
+                                <li key={item.orderId} className="flex justify-between items-center bg-gray-100 p-4 mb-4">
                                     <div className="flex items-center">
                                         <img src={item.imageUrl} alt={item.name} className="w-32 h-32 mr-4" />
                                         <span>{item.name}</span>
