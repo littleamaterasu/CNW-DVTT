@@ -31,6 +31,25 @@ public class ProductConverter {
 		return productEntity;
 
 	}
+	
+	public ProductEntity toEntity(ProductEntity productEntity,ProductDTO productDTO) {
+		productEntity.setCover(productDTO.getCover());
+		productEntity.setDiscount(productDTO.getDiscount());
+		productEntity.setImageUrl(productDTO.getImageUrl());
+		productEntity.setInfo(productDTO.getInfo());
+		productEntity.setName(productDTO.getName());
+		productEntity.setPage(productDTO.getPage());
+		productEntity.setPrice(productDTO.getPrice());
+		productEntity.setRemainedCount(productDTO.getRemainedCount());
+		productEntity.setSoldCount(productDTO.getSoldCount());
+		productEntity.setWeight(productDTO.getWeight());
+		productEntity.setYear(productDTO.getYear());
+		productEntity.setAuthor(productDTO.getAuthor());
+		productEntity.setProvider2(productDTO.getProvider());
+
+		return productEntity;
+
+	}
 
 	public Book toBook(ProductEntity productEntity) {
 		Book book = new Book();

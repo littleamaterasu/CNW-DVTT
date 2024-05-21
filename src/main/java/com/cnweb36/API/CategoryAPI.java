@@ -48,7 +48,7 @@ public class CategoryAPI {
 		return categoryService.getAllProduct(categoryName);
 	}
 	
-	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@PreAuthorize("hasAnyRole('ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
 	@PostMapping("/delete")
 	public NoticeResponse delete(@RequestParam String name) {
 		NoticeResponse noticeResponse=new NoticeResponse();

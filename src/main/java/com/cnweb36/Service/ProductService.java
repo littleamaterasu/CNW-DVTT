@@ -30,24 +30,11 @@ public class ProductService {
 	private CategoryRepository categoryRepository;
 	
 	public Long AddProduct(ProductDTO productDTO) {
-		ProductEntity productEntity=new ProductEntity();
+		ProductEntity productEntity;
 		if(productDTO.getId()!=null) {
 			// update
 			productEntity =productRepository.findOneById(productDTO.getId());
-			
-			productEntity.setCover(productDTO.getCover());
-			productEntity.setDiscount(productDTO.getDiscount());
-			productEntity.setImageUrl(productDTO.getImageUrl());
-			productEntity.setInfo(productDTO.getInfo());
-			productEntity.setName(productDTO.getName());
-			productEntity.setPage(productDTO.getPage());
-			productEntity.setPrice(productDTO.getPrice());
-			productEntity.setRemainedCount(productDTO.getRemainedCount());
-			productEntity.setSoldCount(productDTO.getSoldCount());
-			productEntity.setWeight(productDTO.getWeight());
-			productEntity.setYear(productDTO.getYear());
-			productEntity.setAuthor(productDTO.getAuthor());
-			productEntity.setProvider2(productDTO.getProvider());
+			productEntity=productConverter.toEntity(productEntity, productDTO);
 		}else {
 			//create
 			productEntity=productConverter.toEntity(productDTO);
@@ -60,6 +47,7 @@ public class ProductService {
 			
 			productEntity.setNumberRate(0);
 			productEntity.setRating(0f);
+			productEntity.setStatus("0");			
 			return productRepository.save(productEntity).getId();
 	}
 	

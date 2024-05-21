@@ -27,11 +27,13 @@ public class CategoryService {
 			
 			newcategoryEntity.setName(categoryDTO.getName());
 			newcategoryEntity.setInfo(categoryDTO.getInfo());
-			
+			newcategoryEntity.setStatus("0");
+
 			noticeResponse.setStatus(categoryRepository.save(newcategoryEntity).getId());
 			noticeResponse.setContent("Create a category");
 		}else {
 			categoryEntity.setInfo(categoryDTO.getInfo());
+			categoryEntity.setStatus("0");
 			
 			noticeResponse.setStatus(categoryRepository.save(categoryEntity).getId());
 			noticeResponse.setContent("Update a category");

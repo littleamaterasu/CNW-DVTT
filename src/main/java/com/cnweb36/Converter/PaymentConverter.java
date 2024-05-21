@@ -19,6 +19,15 @@ public class PaymentConverter {
 		return paymentEntity;
 	}
 	
+	public PaymentEntity toEntity(PaymentEntity paymentEntity,PaymentDTO paymentDTO) {
+		paymentEntity.setAddress(paymentDTO.getAddress());
+		paymentEntity.setNote(paymentDTO.getNote());
+		paymentEntity.setPay(paymentDTO.getPay());
+		paymentEntity.setPhone(paymentDTO.getPhone());
+		
+		return paymentEntity;
+	}
+	
 	public PaymentDTO toDTO(PaymentEntity paymentEntity) {
 		PaymentDTO paymentDTO=new PaymentDTO();
 		paymentDTO.setAddress(paymentEntity.getAddress());

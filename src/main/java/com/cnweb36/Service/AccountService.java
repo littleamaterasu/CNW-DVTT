@@ -85,6 +85,7 @@ public class AccountService {
 
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_USER");
+			accountEntity.setStatus("0");
 
 			return accountRepository.save(accountEntity).getId();
 		}
@@ -103,6 +104,7 @@ public class AccountService {
 			
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1");
+			accountEntity.setStatus("0");
 
 			return accountRepository.save(accountEntity).getId();
 		}
@@ -117,7 +119,8 @@ public class AccountService {
 			AccountEntity accountEntity = accountConverter.toEntity(accountDTO);
 			//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(accountDTO.getPassword());
-			
+			accountEntity.setStatus("0");
+
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2");
 
@@ -134,6 +137,7 @@ public class AccountService {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(accountDTO.getPassword());
 			
+			accountEntity.setStatus("0");
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2", "ROLE_ADMIN_3");
 
@@ -150,6 +154,7 @@ public class AccountService {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			String password = encoder.encode(admin3DTO.getPassword());
 			
+			accountEntity.setStatus("0");
 			accountEntity.setPassword(password);
 			accountEntity.setRoles("ROLE_ADMIN_1", "ROLE_ADMIN_2", "ROLE_ADMIN_3");
 

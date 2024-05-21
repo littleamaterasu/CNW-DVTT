@@ -23,6 +23,7 @@ public class MessageService {
 	private MessageRepository messageRepository;
 	
 	public void save(MessageEntity messageEntity) {
+		messageEntity.setStatus("0");
 		messageRepository.save(messageEntity);
 	}
 	
