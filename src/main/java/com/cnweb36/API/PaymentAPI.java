@@ -1,9 +1,10 @@
 package com.cnweb36.API;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cnweb36.DTO.Entity.PaymentDTO;
 import com.cnweb36.DTO.Response.NoticeResponse;
+import com.cnweb36.DTO.Response.PaymentListResponse;
 import com.cnweb36.DTO.Response.PaymentResponse;
 import com.cnweb36.Service.PaymentService;
 import com.cnweb36.Service.Security.JwtUtility;
@@ -50,6 +52,13 @@ public class PaymentAPI {
 	public PaymentResponse getPayment(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken, @RequestParam(name="paymentId") Long paymentId) {
 		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
 		return paymentService.getPayment(username, paymentId);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@GetMapping("/getAllPayment")
+	public List<PaymentListResponse> getAllPayment(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken, @RequestParam(name="page",required = false) Integer page) {
+		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
+		return paymentService.getAllPayment(username, page);
 	}
 	
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
