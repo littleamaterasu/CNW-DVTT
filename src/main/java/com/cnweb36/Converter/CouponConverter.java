@@ -24,4 +24,35 @@ public class CouponConverter {
 		
 		return couponDTO;
 	}
+	
+	public CouponEntity toEntity(CouponDTO couponDTO) {
+		CouponEntity couponEntity=new CouponEntity();
+
+		couponEntity.setDiscountPercent(couponDTO.getDiscountPercent());
+		couponEntity.setDiscountValue(couponDTO.getDiscountValue());
+		couponEntity.setEndTime(couponDTO.getEndTime());
+		couponEntity.setInfo(couponDTO.getInfo());
+		couponEntity.setLimitCount(couponDTO.getLimit());
+		couponEntity.setMaxDiscount(couponDTO.getMaxDiscount());
+		couponEntity.setMinPrice(couponDTO.getMinPrice());
+		couponEntity.setName(couponDTO.getName());
+		couponEntity.setStartTime(couponDTO.getStartTime());
+		
+		return couponEntity;
+	}
+	
+	public CouponEntity toEntity(CouponEntity couponEntity,CouponDTO couponDTO) {
+
+		couponEntity.setDiscountPercent(couponDTO.getDiscountPercent());
+		couponEntity.setDiscountValue(couponDTO.getDiscountValue());
+		couponEntity.setEndTime(couponDTO.getEndTime());
+		couponEntity.setInfo(couponDTO.getInfo());
+		couponEntity.setLimitCount(couponDTO.getLimit());
+		couponEntity.setMaxDiscount(couponDTO.getMaxDiscount());
+		couponEntity.setMinPrice(couponDTO.getMinPrice());
+		couponEntity.setName(couponDTO.getName());
+		couponEntity.setStartTime(couponDTO.getStartTime());
+		
+		return couponEntity;
+	}
 }

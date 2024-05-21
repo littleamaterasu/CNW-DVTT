@@ -15,8 +15,8 @@ import jakarta.persistence.OneToMany;
 //import jakarta.persistence.JoinColumn;
 //import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="coupon")
@@ -28,7 +28,8 @@ public class CouponEntity extends BaseEntity {
 	@Column(nullable=false)
 	private int limitCount;
 	
-	@Size(min=0000, max=10000)
+	@Min(value =0000)
+    @Max(value = 10000)
 	@Column(nullable=false)
 	private int discountPercent;
 	
