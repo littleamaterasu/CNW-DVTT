@@ -16,8 +16,7 @@ public class PaymentResponse {
 	private Date modifiedDate;
 	private String status;
 	private CouponDTO couponDTO;
-	private List<Book> listBook;
-	private List<Long> listOrderId;
+	private List<OrderResponse> listOrder;
 	private String payStatus;
 	
 	public Long getUserId() {
@@ -68,11 +67,12 @@ public class PaymentResponse {
 	public void setCouponDTO(CouponDTO couponDTO) {
 		this.couponDTO = couponDTO;
 	}
-	public List<Book> getListBook() {
-		return listBook;
+
+	public List<OrderResponse> getListOrder() {
+		return listOrder;
 	}
-	public void setListBook(List<Book> listBook) {
-		this.listBook = listBook;
+	public void setListOrder(List<OrderResponse> listOrder) {
+		this.listOrder = listOrder;
 	}
 	public String getStatus() {
 		return status;
@@ -80,12 +80,7 @@ public class PaymentResponse {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public List<Long> getListOrderId() {
-		return listOrderId;
-	}
-	public void setListOrderId(List<Long> listOrderId) {
-		this.listOrderId = listOrderId;
-	}
+
 	public String getPayStatus() {
 		return payStatus;
 	}

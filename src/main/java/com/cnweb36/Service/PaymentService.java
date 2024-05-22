@@ -17,6 +17,7 @@ import com.cnweb36.Converter.ProductConverter;
 import com.cnweb36.DTO.Entity.OrderDTO;
 import com.cnweb36.DTO.Entity.PaymentDTO;
 import com.cnweb36.DTO.Response.Book;
+import com.cnweb36.DTO.Response.OrderResponse;
 import com.cnweb36.DTO.Response.PaymentListResponse;
 import com.cnweb36.DTO.Response.PaymentResponse;
 import com.cnweb36.Entity.AccountEntity;
@@ -128,15 +129,16 @@ public class PaymentService {
 		PaymentEntity paymentEntity=paymentRepository.findEntityById(paymentId);
 		if(paymentEntity.getUser().getId()==accountEntity.getId()) {
 			PaymentResponse paymentResponse=paymentConverter.toResponse(paymentEntity);
-			List<Long> orderId=new ArrayList<>();
-			List<Book> listBook= new ArrayList<>();
+			
+			List<OrderResponse> listOrderResponses=new ArrayList<>();
+			
 			for(OrderEntity o: paymentEntity.getOrderList()) {
 				Book book= productConverter.toBook(o.getProduct_order());
-				listBook.add(book);
-				orderId.add(o.getId());
+				OrderResponse orderResponse=new OrderResponse(o.getId(), o.getStatus());
+				orderResponse.setBook(book);
+				listOrderResponses.add(orderResponse);
 			}
-			paymentResponse.setListBook(listBook);
-			paymentResponse.setListOrderId(orderId);
+			paymentResponse.setListOrder(listOrderResponses);
 			
 			paymentResponse.setCouponDTO(couponConverter.toDTO(paymentEntity.getCoupon()));
 			return paymentResponse;

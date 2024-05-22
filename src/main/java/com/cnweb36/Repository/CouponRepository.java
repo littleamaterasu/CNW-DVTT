@@ -1,5 +1,7 @@
 package com.cnweb36.Repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,4 +16,7 @@ public interface CouponRepository extends JpaRepository<CouponEntity, Long> {
 	
 	@Query("select c from CouponEntity c where c.name=?1 and c.status!='-1'")
 	CouponEntity findEntityByName(String name);
+	
+	@Query("select c from CouponEntity c where c.status!='-1'")
+	List<CouponEntity> findAll();
 	}
