@@ -44,7 +44,7 @@ public class VnPayAPI {
 	@Autowired
 	private PaymentRepository paymentRepository;
 	
-	@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
+	//@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/vnpay/pay")
 	public String vnpayPayment(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken, @RequestParam(name="paymentId") Long paymentId, 
@@ -62,7 +62,7 @@ public class VnPayAPI {
 	}
 	
 	@CrossOrigin(origins = "${vnpay.crossOrigin}", maxAge = 3600)
-	@PostMapping("${vnpay.shortReturnUrl}")
+	@GetMapping("${vnpay.shortReturnUrl}")
 	public String vnpayPaymentReturn(HttpServletRequest request) {
 		int paymentStatus = vnpayService.paymentReturn(request);
         Long paymentId = Long.valueOf(request.getParameter("vnp_OrderInfo"));
@@ -71,7 +71,7 @@ public class VnPayAPI {
 //        String totalPrice = request.getParameter("vnp_Amount");
         
 		PaymentEntity paymentEntity = paymentRepository.findEntityById(paymentId);
-		paymentEntity.setStatus(paymentStatus == 1 ? "paymentSuccess" : "paymentFail");
+		paymentEntity.setStatus(paymentStatus == 1 ? "1" : "-1");
 		paymentRepository.save(paymentEntity);
         return paymentStatus == 1 ? "ordersuccess" : "orderfail";
 	}

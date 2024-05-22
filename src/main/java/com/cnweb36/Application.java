@@ -22,7 +22,15 @@ public class Application {
 						.allowedOrigins("http://localhost:5173")
 						.allowCredentials(true)
 						.allowedHeaders("*")
-						.allowedMethods("*");
+						.allowedMethods("*")
+						.maxAge(3600);
+				registry.addMapping("/payment")
+						.allowedOrigins("https://sandbox.vnpayment.vn")
+						.allowCredentials(true)
+						.allowedHeaders("*")
+						.allowedMethods("*")
+						.maxAge(3600);
+				
 			}
 		};
 	}

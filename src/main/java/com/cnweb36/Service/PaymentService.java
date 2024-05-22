@@ -91,7 +91,7 @@ public class PaymentService {
 //		}
 //		paymentEntity.setPaymentLogList(listpaymentlog);
 		paymentEntity.setCoupon(couponRepository.findEntityById(paymentDTO.getCouponId()));
-		paymentEntity.setStatus("1"); // payment dang cho thanh toan
+		paymentEntity.setStatus("0"); // payment dang cho thanh toan
 		PaymentEntity paymentEntity2= paymentRepository.save(paymentEntity);
 		for(OrderEntity o: listOrder) {
 			o.setPayment(paymentEntity2);

@@ -44,6 +44,7 @@ public class CouponAPI {
 	public NoticeResponse delete(@RequestParam Long id) {
 		NoticeResponse noticeResponse=new NoticeResponse();
 		try {
+			noticeResponse.setStatus(id);
 			noticeResponse.setContent(couponService.delete(id));
 		} catch (Exception e) {
 			noticeResponse.setContent(e.getMessage());
