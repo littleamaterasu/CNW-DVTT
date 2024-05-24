@@ -2,6 +2,7 @@ package com.cnweb36.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -23,11 +24,13 @@ import com.cnweb36.DTO.Response.PaymentResponse;
 import com.cnweb36.Entity.AccountEntity;
 import com.cnweb36.Entity.OrderEntity;
 import com.cnweb36.Entity.PaymentEntity;
+import com.cnweb36.Entity.ProductEntity;
 import com.cnweb36.Repository.AccountRepository;
 import com.cnweb36.Repository.CouponRepository;
 import com.cnweb36.Repository.OrderRepository;
 import com.cnweb36.Repository.PaymentLogRepository;
 import com.cnweb36.Repository.PaymentRepository;
+import com.cnweb36.Repository.ProductRepository;
 
 @Service
 public class PaymentService {
@@ -48,6 +51,8 @@ public class PaymentService {
 	private CouponConverter couponConverter;
 	@Autowired
 	private CouponRepository couponRepository;
+	@Autowired
+	private ProductRepository productRepository;
 	
 	public Long addPayment(PaymentDTO paymentDTO, String username) throws Exception {
 		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
@@ -61,10 +66,14 @@ public class PaymentService {
 				// order dang cho thanh toan
 				if(username.compareTo(orderEntity.getUser().getUsername())==0) {
 					if(orderEntity.getStatus().compareTo("0")==0) {
-						orderEntity.setStatus("1");
-						orderEntity.setQuantity(o.getQuantity());
-						orderRepository.save(orderEntity);
-						listOrder.add(orderEntity);
+							if(o.getQuantity()<=orderEntity.getProduct_order().getRemainedCount()) {
+							orderEntity.setStatus("1");
+							orderEntity.setQuantity(o.getQuantity());
+							orderRepository.save(orderEntity);
+							listOrder.add(orderEntity);
+						}else {
+							throw new Exception("Sản phẩm "+ orderEntity.getProduct_order().getName()+ "không còn đủ số lượng!");
+						}
 					}else {
 						throw new Exception("This order has starus  "+ orderEntity.getStatus()+ "not equal 0");
 					}
@@ -151,6 +160,19 @@ public class PaymentService {
 		for(OrderEntity o: paymentEntity.getOrderList()) {
 			o.setStatus(stutus);
 			orderRepository.save(o);
+		}
+	}
+	
+	public void updateNumber(PaymentEntity payment) {
+		for(OrderEntity o: payment.getOrderList()) {
+			ProductEntity productEntity=o.getProduct_order();
+			Integer sold,remain;
+			sold=productEntity.getSoldCount()+o.getQuantity();
+			remain=productEntity.getRemainedCount()-o.getQuantity();
+			productEntity.setSoldCount(sold);
+			productEntity.setRemainedCount(remain);
+			
+			productRepository.save(productEntity);
 		}
 	}
 	
