@@ -288,7 +288,7 @@ public class AccountService {
 			if(userOTPEntity.OTPisValid()) {
 				if(encoder.matches(OTP,userOTPEntity.getOTP())) {
 					// set new password and send
-					String newPassword=userOTPEntity.generateString(12);
+					String newPassword=userOTPEntity.generateString(8);
 					accountEntity.setPassword(encoder.encode(newPassword));
 					accountRepository.save(accountEntity);
 					

@@ -47,17 +47,17 @@ public class VnPayAPI {
 	//@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/vnpay/pay")
-	public String vnpayPayment(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken, @RequestParam(name="paymentId") Long paymentId, 
+	public NoticeResponse vnpayPayment(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken, @RequestParam(name="paymentId") Long paymentId, 
 			HttpServletRequest request) {
 		String username = jwtUtility.getUserNameFromJwtToken(jwtToken);
 		PaymentResponse paymentResponse = paymentService.getPayment(username, paymentId);
 		if (paymentResponse != null && paymentResponse.getUserId() == accountRepository.findEntityByUsername(username).getId()) {
 	        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
 	        String vnpayUrl = vnpayService.createPayment(paymentResponse.getPay(), paymentId.toString(), baseUrl);
-	        return vnpayUrl;
+	        return new NoticeResponse(0l, vnpayUrl);
 	        
 		} else {
-			return "";
+			return new NoticeResponse();
 		}
 	}
 	
@@ -74,7 +74,7 @@ public class VnPayAPI {
 		if(paymentStatus==1) {
 			paymentEntity.setStatus("1");
 			//order đang vận chuyển
-			paymentService.setPaymentOrderStatus(paymentEntity,"2");
+			paymentService.setPaymentOrderStatus(paymentEntity,"3");
 		}else {
 			paymentEntity.setStatus("-1");
 			paymentService.setPaymentOrderStatus(paymentEntity,"-1");

@@ -52,7 +52,8 @@ public class OrderService {
 	public Long addOrder(OrderDTO orderRequest, String username) {
 		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
 		ProductEntity productEntity= productRepository.findOneById(orderRequest.getProductId());
-		if(orderRepository.findByUserAndProduct(accountEntity, productEntity)==null) {
+		OrderEntity orderEntity2=orderRepository.findByUserAndProduct(accountEntity, productEntity);
+		if(orderEntity2==null || orderEntity2.getStatus().compareTo("0")!=0) {
 			OrderEntity orderEntity=new OrderEntity();
 			orderEntity.setUser(accountEntity);
 			orderEntity.setProduct(productEntity);
