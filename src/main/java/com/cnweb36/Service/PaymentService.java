@@ -23,7 +23,6 @@ import com.cnweb36.DTO.Response.PaymentResponse;
 import com.cnweb36.Entity.AccountEntity;
 import com.cnweb36.Entity.OrderEntity;
 import com.cnweb36.Entity.PaymentEntity;
-import com.cnweb36.Entity.PaymentLogEntity;
 import com.cnweb36.Repository.AccountRepository;
 import com.cnweb36.Repository.CouponRepository;
 import com.cnweb36.Repository.OrderRepository;
@@ -148,6 +147,29 @@ public class PaymentService {
 		}
 	}
 	
+	public void setPaymentOrderStatus(PaymentEntity paymentEntity,String stutus) {
+		for(OrderEntity o: paymentEntity.getOrderList()) {
+			o.setStatus(stutus);
+			orderRepository.save(o);
+		}
+	}
+	
+	public String paymentRecived(String username, Long paymentId) {
+		AccountEntity accountEntity=accountRepository.findEntityByUsername(username);
+		PaymentEntity paymentEntity=paymentRepository.findEntityById(paymentId);
+		if(paymentEntity!=null) {
+			if(accountEntity.getRoles().contains("ROLE_ADMIN_1") 
+			  || paymentEntity.getUser().getUsername().compareTo(username)==0) {
+				paymentEntity.setStatus("2");
+				paymentRepository.save(paymentEntity);
+				// Set order đã vận chuyển thành công
+				this.setPaymentOrderStatus(paymentEntity, "3");
+				return "Oke";
+			}else {
+				return "Conflict user and payment";
+			}
+		}else return "Not found payment with id = "+paymentId;
+	}
 	public String delete(Long id) {
 		PaymentEntity paymentEntity=paymentRepository.findEntityById(id);
 		if(paymentEntity!=null) {

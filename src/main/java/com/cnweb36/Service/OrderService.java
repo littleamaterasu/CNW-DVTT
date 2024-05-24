@@ -118,6 +118,7 @@ public class OrderService {
 				orderEntity.setRate(ratingRequest.getRate());
 				if(ratingRequest.getLikeOrDislike()==1) orderEntity.setLike(1);
 				else orderEntity.setDislike(1);
+				orderEntity.setStatus("4");
 				orderRepository.save(orderEntity);
 				
 				// set product rate

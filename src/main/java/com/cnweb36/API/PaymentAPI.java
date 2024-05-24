@@ -70,6 +70,24 @@ public class PaymentAPI {
 	}
 	
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@GetMapping("/recived")
+	public NoticeResponse paymentRecived(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken, @RequestParam Long paymentId) {
+		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
+		NoticeResponse noticeResponse=new NoticeResponse();
+		try {
+			String result = paymentService.paymentRecived(username, paymentId);
+			if(result.compareTo("Oke")==0) {
+				noticeResponse.setStatus(0l);
+			}else noticeResponse.setStatus(-1l);
+			noticeResponse.setContent(result);
+		} catch (Exception e) {
+			noticeResponse.setContent(e.getMessage());
+			noticeResponse.setStatus(-1l);
+		}
+		return noticeResponse;
+	}
+	
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
 	@PostMapping("/delete")
 	public NoticeResponse delete(@RequestParam Long id) {
 		NoticeResponse noticeResponse=new NoticeResponse();
@@ -81,4 +99,5 @@ public class PaymentAPI {
 		}
 		return noticeResponse;
 	}
+	
 }

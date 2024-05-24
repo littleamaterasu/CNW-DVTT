@@ -313,7 +313,7 @@ public class AccountService {
 	
 	public String checkmail(String otp, String email) {
 		try {
-		String subject="OTP from cnweb36 to check mail";
+		String subject="OTP from cnweb36 check mail";
 		String text="Your OTP    :     "+ otp;
 		emailService.sendMessage(email, subject, text);
 		System.out.println(email);

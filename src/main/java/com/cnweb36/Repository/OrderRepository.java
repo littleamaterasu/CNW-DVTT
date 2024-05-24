@@ -23,6 +23,9 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 	@Query("select o from OrderEntity o where o.user=?1 and o.status='0'")
 	List<OrderEntity> findcart(AccountEntity user, Pageable pageable);
 	
+	@Query("select o from OrderEntity o where o.user=?1 and o.status='2'")
+	List<OrderEntity> findOrderTransport(AccountEntity user, Pageable pageable);
+	
 	@Query("select o from OrderEntity o where o.id=?1 and o.status!='-1'")
 	OrderEntity findEntityById(Long id);
 	

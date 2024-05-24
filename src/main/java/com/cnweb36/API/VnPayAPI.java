@@ -71,8 +71,20 @@ public class VnPayAPI {
 //        String totalPrice = request.getParameter("vnp_Amount");
         
 		PaymentEntity paymentEntity = paymentRepository.findEntityById(paymentId);
-		paymentEntity.setStatus(paymentStatus == 1 ? "1" : "-1");
+		if(paymentStatus==1) {
+			paymentEntity.setStatus("1");
+			//order đang vận chuyển
+			paymentService.setPaymentOrderStatus(paymentEntity,"2");
+		}else {
+			paymentEntity.setStatus("-1");
+			paymentService.setPaymentOrderStatus(paymentEntity,"-1");
+		}
 		paymentRepository.save(paymentEntity);
-        return paymentStatus == 1 ? "ordersuccess" : "orderfail";
+		return paymentStatus == 1 ? "ordersuccess" : "orderfail";
+//		paymentEntity.setStatus(paymentStatus == 1 ? "1" : "-1");
+//		//order đang vận chuyển
+//		paymentService.setPaymentOrderStatus(paymentEntity,"2");
+//		paymentRepository.save(paymentEntity);
+//        return paymentStatus == 1 ? "ordersuccess" : "orderfail";
 	}
 }
