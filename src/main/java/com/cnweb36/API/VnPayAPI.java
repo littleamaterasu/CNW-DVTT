@@ -75,6 +75,7 @@ public class VnPayAPI {
 			paymentEntity.setStatus("1");
 			//order đang vận chuyển
 			paymentService.setPaymentOrderStatus(paymentEntity,"3");
+			paymentService.updateNumber(paymentEntity);
 		}else {
 			paymentEntity.setStatus("-1");
 			paymentService.setPaymentOrderStatus(paymentEntity,"-1");
