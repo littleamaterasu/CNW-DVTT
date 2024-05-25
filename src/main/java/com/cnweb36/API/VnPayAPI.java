@@ -23,6 +23,7 @@ import com.cnweb36.Entity.OrderEntity;
 import com.cnweb36.Entity.PaymentEntity;
 import com.cnweb36.Repository.AccountRepository;
 import com.cnweb36.Repository.PaymentRepository;
+import com.cnweb36.Service.CouponService;
 import com.cnweb36.Service.PaymentService;
 import com.cnweb36.Service.Security.JwtUtility;
 import com.cnweb36.Service.VnPay.VnPayService;
@@ -43,6 +44,8 @@ public class VnPayAPI {
 	private AccountRepository accountRepository;
 	@Autowired
 	private PaymentRepository paymentRepository;
+	@Autowired
+	private CouponService couponService;
 	
 	//@CrossOrigin(origins = "${cnweb36.crossOrigin}", allowCredentials = "true", maxAge = 3600)
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -73,9 +76,10 @@ public class VnPayAPI {
 		PaymentEntity paymentEntity = paymentRepository.findEntityById(paymentId);
 		if(paymentStatus==1) {
 			paymentEntity.setStatus("1");
-			//order đang vận chuyển
+			
 			paymentService.setPaymentOrderStatus(paymentEntity,"3");
 			paymentService.updateNumber(paymentEntity);
+			couponService.minusCoupon(paymentEntity.getCoupon());
 		}else {
 			paymentEntity.setStatus("-1");
 			paymentService.setPaymentOrderStatus(paymentEntity,"-1");

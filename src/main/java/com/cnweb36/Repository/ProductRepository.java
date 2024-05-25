@@ -19,6 +19,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 	@Query("select p from ProductEntity p where p.status !='-1'")
 	Page<ProductEntity> findAll(Pageable pageable);
 	
+	@Query("select p from ProductEntity p where p.status !='-1'")
+	List<ProductEntity> findAll();
+	
 	@Query("select p from ProductEntity p where p.name like %?1% and p.status !='-1'")
 	List<ProductEntity> findByNameContaining(String keyword, Pageable pageable);
 }

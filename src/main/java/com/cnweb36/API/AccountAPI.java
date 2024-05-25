@@ -24,8 +24,10 @@ import com.cnweb36.DTO.Request.SignInRequest;
 import com.cnweb36.DTO.Response.NoticeResponse;
 import com.cnweb36.DTO.Response.SignInResponse;
 import com.cnweb36.DTO.Response.SignUpResponse;
+import com.cnweb36.DTO.Response.StatisticResponse;
 import com.cnweb36.DTO.Response.UserResponse;
 import com.cnweb36.Service.AccountService;
+import com.cnweb36.Service.StatisticService;
 import com.cnweb36.Service.Security.JwtUtility;
 
 import jakarta.validation.Valid;
@@ -37,6 +39,9 @@ public class AccountAPI {
 
 	@Autowired
 	private AccountService accountService;
+	
+	@Autowired
+	private StatisticService statisticService;
 	
 	@Autowired
 	private JwtUtility jwtUtility;
@@ -257,5 +262,11 @@ public class AccountAPI {
 			noticeResponse.setStatus(-1l);
 		}
 		return noticeResponse;
+	}
+	
+	@PreAuthorize("hasAnyRole('ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@GetMapping("/statistic")
+	public StatisticResponse getstatistic(@RequestParam Long id) {
+		return statisticService.getstatistic();
 	}
 }

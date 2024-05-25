@@ -43,6 +43,15 @@ public class CouponService {
 		return listCouponDTO;
 	}
 	
+	public void minusCoupon(CouponEntity couponEntity) {
+		Integer number=couponEntity.getLimitCount();
+		if(number>0) {
+		number-=1;
+		couponEntity.setLimitCount(number);
+		couponRepository.save(couponEntity);
+		}
+	}
+	
 	public String delete(Long id) {
 		CouponEntity couponEntity=couponRepository.findEntityByid(id);
 		if(couponEntity!=null) {
