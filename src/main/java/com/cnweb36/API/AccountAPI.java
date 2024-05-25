@@ -26,6 +26,7 @@ import com.cnweb36.DTO.Response.SignInResponse;
 import com.cnweb36.DTO.Response.SignUpResponse;
 import com.cnweb36.DTO.Response.StatisticResponse;
 import com.cnweb36.DTO.Response.UserResponse;
+import com.cnweb36.DTO.Response.UserStatisticResponse;
 import com.cnweb36.Service.AccountService;
 import com.cnweb36.Service.StatisticService;
 import com.cnweb36.Service.Security.JwtUtility;
@@ -266,7 +267,14 @@ public class AccountAPI {
 	
 	@PreAuthorize("hasAnyRole('ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
 	@GetMapping("/statistic")
-	public StatisticResponse getstatistic(@RequestParam Long id) {
+	public StatisticResponse getstatistic() {
 		return statisticService.getstatistic();
+	}
+	
+	@PreAuthorize("hasAnyRole('USER')")
+	@GetMapping("/userStatistic")
+	public UserStatisticResponse getUserstatistic(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken) {
+		String username=jwtUtility.getUserNameFromJwtToken(jwtToken);
+		return statisticService.getStaticUser(username);
 	}
 }

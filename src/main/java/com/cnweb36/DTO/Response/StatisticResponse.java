@@ -3,11 +3,11 @@ package com.cnweb36.DTO.Response;
 public class StatisticResponse {
 	
 	private Integer numberSold; // doanh số bán trong tuần
-	private Integer numberRemain;
+	private Integer numberRemain;// tổng số sp còn lại
 	private Float[] income= new Float[13]; // lợi nhuận theo từng tháng 
-	private Float incomePerWeek;
-	private Integer numberAccount;
-	private Integer numberProduct;
+	private Float incomePerWeek; // lợi nhuận từ chủ nhật tuần trc -> hiện tại
+	private Integer numberAccount; //số lượng người dùng
+	private Integer numberProduct;  //số lượng sảm phẩm( số loại sách)
 	public Integer getNumberSold() {
 		return numberSold;
 	}

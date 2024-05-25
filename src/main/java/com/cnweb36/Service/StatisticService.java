@@ -3,11 +3,15 @@ package com.cnweb36.Service;
 import java.time.Period;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.cnweb36.DTO.Response.StatisticResponse;
+import com.cnweb36.DTO.Response.UserStatisticResponse;
+import com.cnweb36.Entity.AccountEntity;
 import com.cnweb36.Entity.OrderEntity;
 import com.cnweb36.Entity.PaymentEntity;
 import com.cnweb36.Entity.ProductEntity;
@@ -51,7 +55,8 @@ public class StatisticService {
 			income[i] = (float) 0;
         }
 		float incomePerW= 0;
-		int x=this.getCalender() ; //số ngày kể từ chủ nhật 
+		int x=this.getCalender()-1 ; //số ngày kể từ chủ nhật
+		if(x==0) x=7;
 		// tính toán lợi nhuận trong năm 2024
 		for(PaymentEntity p: paymentRepository.findAllSold(2024)) {
 			Date date=new Date();
@@ -73,5 +78,24 @@ public class StatisticService {
 			statisticResponse.setNumberSold(numbersold);
 		}
 		return statisticResponse;
+	}
+	
+	public UserStatisticResponse getStaticUser(String username) {
+		AccountEntity accountEntity=accountRepository.findEntityByUsername(username);
+		if(accountEntity!=null) {
+		List<PaymentEntity> listPay=paymentRepository.findAll(accountEntity, Sort.by("id").descending());
+		Integer numberPay=0;
+		Float paid=(float) 0.0;
+		for(PaymentEntity p: listPay) {
+			if(p.getStatus().compareTo("1")==0) {
+				numberPay++;
+				paid+=p.getPay();
+			}
+		}
+		
+		return new UserStatisticResponse(numberPay, paid);
+		}else {
+			return null;
+		}
 	}
 }

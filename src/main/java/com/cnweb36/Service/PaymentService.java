@@ -147,8 +147,9 @@ public class PaymentService {
 				listOrderResponses.add(orderResponse);
 			}
 			paymentResponse.setListOrder(listOrderResponses);
-			
+			if(paymentEntity.getCoupon()!=null) {
 			paymentResponse.setCouponDTO(couponConverter.toDTO(paymentEntity.getCoupon()));
+			}
 			return paymentResponse;
 			
 		}else {
