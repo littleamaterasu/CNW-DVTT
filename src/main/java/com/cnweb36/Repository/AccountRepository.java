@@ -30,6 +30,6 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 	@Query("select a from AccountEntity a where a.roles like %?1% and a.status!='-1'")
 	List<AccountEntity> findByRolesContaining(String userRole,Sort sort);
 	
-	@Query("select count(a) from AccountEntity a where a.roles = ROLE_USER and a.status!='-1'")
+	@Query("select count(a) from AccountEntity a where a.roles = 'ROLE_USER' and a.status!='-1'")
 	long count();
 }

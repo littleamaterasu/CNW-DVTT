@@ -21,7 +21,7 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 	@Query("select p from PaymentEntity p where p.user=?1 and p.status !='-1'")
 	List<PaymentEntity> findAll(AccountEntity user,Sort sort);
 	
-	@Query("select p from PaymentEntity p where YEAR(p.createdDate) =?1 and p.status =='1'")
+	@Query("select p from PaymentEntity p where YEAR(p.createdDate) =?1 and p.status ='1'")
 	List<PaymentEntity> findAllSold(int yaer);
 	
 	@Query("select p from PaymentEntity p where p.user=?1 and p.status !='-1'")
