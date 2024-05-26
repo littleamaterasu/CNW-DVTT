@@ -115,6 +115,12 @@ public class OrderService {
 		if(accountEntity.getId()==orderEntity.getUser().getId()) {
 			if(orderEntity.getStatus().compareTo("3")==0
 			 ||orderEntity.getStatus().compareTo("4")==0) {
+				Boolean newrate=true;
+				Integer oldRate=0;
+				if(orderEntity.getRate()!=null) {
+					newrate=false;
+					oldRate=orderEntity.getRate();
+				}
 				orderEntity.setComment(ratingRequest.getComment());
 				orderEntity.setRate(ratingRequest.getRate());
 				if(ratingRequest.getLikeOrDislike()==1) orderEntity.setLike(1);
@@ -125,12 +131,20 @@ public class OrderService {
 				// set product rate
 				if(ratingRequest.getRate()!=null) {
 					ProductEntity productEntity=orderEntity.getProduct_order();
-					Float rate= productEntity.getRating();
-					Integer numberRate=productEntity.getNumberRate();
-					Float newRate=((rate*numberRate)+ratingRequest.getRate())/(numberRate+1);
-					productEntity.setRating(newRate);
-					productEntity.setNumberRate(numberRate+1);
-					productRepository.save(productEntity);
+					if(newrate) {
+						Float rate= productEntity.getRating();
+						Integer numberRate=productEntity.getNumberRate();
+						Float newRate=((rate*numberRate)+ratingRequest.getRate())/(numberRate+1);
+						productEntity.setRating(newRate);
+						productEntity.setNumberRate(numberRate+1);
+						productRepository.save(productEntity);
+					}else {
+						Float rate= productEntity.getRating();
+						Integer numberRate=productEntity.getNumberRate();
+						Float newRate=((rate*numberRate)- oldRate +ratingRequest.getRate())/(numberRate);
+						productEntity.setRating(newRate);
+						productRepository.save(productEntity);
+					}
 				}
 				return "Cảm ơn bạn đã đánh giá";
 			}else {
