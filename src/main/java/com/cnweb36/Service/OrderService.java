@@ -123,14 +123,15 @@ public class OrderService {
 				orderRepository.save(orderEntity);
 				
 				// set product rate
-				ProductEntity productEntity=orderEntity.getProduct_order();
-				Float rate= productEntity.getRating();
-				Integer numberRate=productEntity.getNumberRate();
-				Float newRate=((rate*numberRate)+ratingRequest.getRate())/(numberRate+1);
-				productEntity.setRating(newRate);
-				productEntity.setNumberRate(numberRate+1);
-				productRepository.save(productEntity);
-				
+				if(ratingRequest.getRate()!=null) {
+					ProductEntity productEntity=orderEntity.getProduct_order();
+					Float rate= productEntity.getRating();
+					Integer numberRate=productEntity.getNumberRate();
+					Float newRate=((rate*numberRate)+ratingRequest.getRate())/(numberRate+1);
+					productEntity.setRating(newRate);
+					productEntity.setNumberRate(numberRate+1);
+					productRepository.save(productEntity);
+				}
 				return "Cảm ơn bạn đã đánh giá";
 			}else {
 				return "Bạn chưa thể đánh giá sản phẩm này";
