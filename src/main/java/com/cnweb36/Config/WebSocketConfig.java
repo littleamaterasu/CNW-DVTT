@@ -30,12 +30,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
          //registry.addEndpoint("/chat").setAllowedOriginPatterns("http://172.11.12.60:5173");
          registry
          		.addEndpoint("/hello")
-         		.setAllowedOrigins(CORS_URl)
+         		.setAllowedOrigins(CORS_URl,"http://localhost:5173")
          		.setAllowedOriginPatterns(CORS_URl).withSockJS();
          
          registry
          		.addEndpoint("/hello")
-		  		.setAllowedOrigins(CORS_URl)
+		  		.setAllowedOrigins(CORS_URl,"http://localhost:5173")
 		  		.setAllowedOriginPatterns(CORS_URl);
          
     }
