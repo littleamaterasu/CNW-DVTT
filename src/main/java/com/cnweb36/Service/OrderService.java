@@ -52,22 +52,24 @@ public class OrderService {
 	public Long addOrder(OrderDTO orderRequest, String username) {
 		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
 		ProductEntity productEntity= productRepository.findOneById(orderRequest.getProductId());
-		OrderEntity orderEntity2=orderRepository.findByUserAndProduct(accountEntity, productEntity);
-		System.out.println(orderEntity2.getStatus());
-		if(orderEntity2==null || orderEntity2.getStatus().compareTo("0")!=0) {
-			OrderEntity orderEntity=new OrderEntity();
-			orderEntity.setUser(accountEntity);
-			orderEntity.setProduct(productEntity);
-			orderEntity.setStatus("0");
-			orderEntity.setQuantity(0);
-			orderEntity.setQuantity(orderRequest.getQuantity());
-			orderEntity.setPrice(orderRequest.getPrice());
-			
-			System.out.println("Oke");
-			return orderRepository.save(orderEntity).getId();
+		try {
+			OrderEntity orderEntity2=orderRepository.findByUserAndProductWithStatus0(accountEntity, productEntity);
+			if(orderEntity2==null) {
+				OrderEntity orderEntity=new OrderEntity();
+				orderEntity.setUser(accountEntity);
+				orderEntity.setProduct(productEntity);
+				orderEntity.setStatus("0");
+				orderEntity.setQuantity(0);
+				orderEntity.setQuantity(orderRequest.getQuantity());
+				orderEntity.setPrice(orderRequest.getPrice());
+				return orderRepository.save(orderEntity).getId();
+			} else return -1l;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return -1l;
 		}
 		
-		else return -1l;
+		
 	}
 	
 	public List<OrderResponse> getProductSold(String username, Integer page) {
