@@ -37,7 +37,6 @@ function Cart() {
                 element.book.orderId = element.orderId;
                 setCartList(prev => [...prev, element.book]);
             });
-
         } catch (error) {
             console.error("Error fetching cart items:", error);
         }
@@ -111,10 +110,9 @@ function Cart() {
     };
 
     const totalQuantity = cartList.reduce((total, item) => total + item.quantity, 0);
-    const totalPrice = cartList.reduce((total, item) => total + item.quantity * item.price, 0);
+    const totalPrice = cartList.reduce((total, item) => total + item.quantity * item.price * (item.discountPercent ? 1 - item.discountPercent / 100.0 : 1), 0);
 
     const getCouponDiscount = () => {
-        console.log(coupons, couponId)
         const coupon = coupons.find(coupon => coupon.id == couponId && totalPrice >= coupon.minPrice);
         if (!coupon) return 0;
         const discount = coupon.discountPercent ? (totalPrice * coupon.discountPercent / 100) : coupon.discountValue;
@@ -154,23 +152,26 @@ function Cart() {
     const invoiceItems = cartList.filter((item) => item.quantity > 0);
 
     return (
-        <div className="container mx-auto">
+        <div
+            className="min-h-screen bg-cover bg-center"
+            style={{ backgroundImage: "url('../../cart.jpg')" }}
+        >
             <Header />
             <ToastContainer />
             {cartList.length === 0 ? (
-                <p className="text-center text-lg mt-8">No items in the cart</p>
+                <p className="text-center text-5xl text-black mt-8">No items in the cart</p>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="md:col-span-2">
-                        <div className="inline-block p-2 bg-gray-200 rounded-full">
-                            <FontAwesomeIcon icon={faShoppingCart} className="text-gray-600" />
-                        </div>
-                        <ul className="border-2 border-black shadow-lg rounded-lg m-20 p-10">
+                        <ul className="border-2 shadow-lg bg-gray-200 rounded-lg m-10 p-10">
                             {cartList.map((item) => (
                                 <li key={item.orderId} className="flex justify-between items-center bg-gray-100 mb-10 mt-10 p-5">
                                     <div className="flex items-center">
                                         <img src={item.imageUrl} alt={item.name} className="w-32 h-32 mr-4" />
-                                        <span>{item.name}</span>
+                                        <div>
+                                            <h2 className="text-2xl">{item.name}</h2>
+                                            <p>{item.price} VND</p>
+                                        </div>
                                     </div>
                                     <div>
                                         <button onClick={() => handleIncrement(item.id)} className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2">+</button>
@@ -183,7 +184,7 @@ function Cart() {
                         </ul>
                     </div>
                     <div className="md:col-span-1">
-                        <div className="border-2 border-black shadow-lg rounded-lg mr-20 mt-20 mb-20 p-10 bg-gray-80">
+                        <div className="border-2 shadow-lg bg-gray-200 rounded-lg m-10 p-10 bg-gray-80">
                             <h2 className="text-2xl font-semibold m-10">Invoice</h2>
                             <ul>
                                 {invoiceItems.map((item) => (

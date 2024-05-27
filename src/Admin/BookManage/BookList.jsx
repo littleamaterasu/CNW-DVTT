@@ -5,6 +5,11 @@ import BookEdit from './BookEdit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { API_BASE_URL } from '../../config';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
 
 function BookList() {
     const [books, setBooks] = useState([]);
@@ -66,18 +71,22 @@ function BookList() {
     };
 
     return (
-        <div className="book-list-container bg-gray-900 bg-cover bg-center p-4" >
+        <div className="book-list-container bg-gray-900 min-h-screen bg-cover bg-center p-4" >
             <ToastContainer />
-            <h4 className="text-white font-medium mb-4">
-                <Link to="/admin">Admin homepage</Link> / Book List
-            </h4>
+            <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold text-white">Book List</h1>
+                <Link to="/admin" className="text-white">
+                    <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
+                    Back to Admin
+                </Link>
+            </div>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleFormToggle}>
-                {showBookCreate ? 'Hide Form' : 'Add Book'}
+                <FontAwesomeIcon icon={faPlus} className="mr-2" /> Add new book
             </button>
-            <button onClick={fetchBooks} className="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Reload</button>
+            <button onClick={fetchBooks} className="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"><FontAwesomeIcon icon={faSync} className="mr-2" /> Reload</button>
             <div className="flex justify-between my-4">
-                <button onClick={handlePrevPage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled={page === 1}>Previous Page</button>
-                <button onClick={handleNextPage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next Page</button>
+                <button onClick={handlePrevPage} className="text-white font-bold py-2 px-4 rounded" disabled={page === 1}><FontAwesomeIcon icon={faArrowLeft} className="mr-2" /> Previous Page</button>
+                <button onClick={handleNextPage} className="text-white font-bold py-2 px-4 rounded">Next Page <FontAwesomeIcon icon={faArrowRight} className="ml-2" /></button>
             </div>
             {showBookCreate && (
                 <BookCreate
@@ -96,7 +105,7 @@ function BookList() {
             <ul className="grid grid-cols-5 gap-4">
                 {books.map((book, index) => (
                     <li key={index} className="bg-white shadow-md rounded-lg p-4">
-                        <img className="w-full h-auto rounded-md mb-2" src={book.imageUrl} alt="Book cover" />
+                        <img className="w-full h-48 object-cover mb-4 rounded" src={book.imageUrl} alt="Book cover" />
                         <div>
                             <h2 className="text-lg font-semibold mb-2">{book.name}</h2>
                             <p>Price: {book.price}</p>

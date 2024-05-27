@@ -69,9 +69,13 @@ function ForgotPassword() {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div
+            className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
+            style={{ backgroundImage: "url('../../Bookswall_generated.jpg')" }}
+        >
+            <div className="absolute inset-0 bg-black opacity-50"></div>
             <ToastContainer />
-            <form className="bg-white p-6 rounded shadow-md w-80">
+            <form className="relative bg-white p-6 rounded shadow-md w-80">
                 <div className="flex justify-between mb-4">
                     <Link to="/">
                         <button type="button" className="text-blue-500">Home</button>
@@ -101,11 +105,13 @@ function ForgotPassword() {
                             onChange={(e) => setOtpConfirm(e.target.value)}
                             className="w-full p-2 border border-gray-300 rounded"
                         />
-                        <button onClick={CheckOTP}>Submit OTP</button>
+                        <button onClick={CheckOTP} className="w-full bg-blue-500 text-white p-2 rounded mt-2">Submit OTP</button>
                     </div>
                 }
             </form>
+
         </div>
+
     );
 }
 

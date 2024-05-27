@@ -7,6 +7,8 @@ import Chat from '../Chat/Chat';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faComments, faQuestionCircle, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons/faCartShopping';
+import { faListAlt } from '@fortawesome/free-solid-svg-icons/faListAlt';
 
 function Header({ }) {
     const [showCategory, setShowCategory] = useState(false);
@@ -62,11 +64,33 @@ function Header({ }) {
         setShowUserMenu(!showUserMenu);
     };
 
-    const handleLogout = () => {
-        localStorage.setItem('id', '');
-        localStorage.setItem('CSRF', '');
-        localStorage.setItem('role', '');
-        navigate('/login'); // Redirect to login page after logout
+    const handleLogout = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/account/signout`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": localStorage.getItem("CSRF")
+                },
+                credentials: "include",
+
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to logout");
+            }
+
+            // Xóa thông tin đăng nhập từ local storage
+            localStorage.setItem("id", "");
+            localStorage.setItem("CSRF", "");
+            localStorage.setItem("role", "");
+
+            // Điều hướng người dùng đến trang đăng nhập
+            navigate("/login");
+        } catch (error) {
+            console.error("Error logging out:", error);
+            // Xử lý lỗi nếu cần thiết
+        }
     };
 
     return (
@@ -74,22 +98,23 @@ function Header({ }) {
             <div className="flex justify-between items-center">
                 <div className="flex space-x-4">
                     <Link to="/" className="text-blue-500 hover:text-blue-700">
-                        <FontAwesomeIcon icon={faHome} />
+                        Home <FontAwesomeIcon icon={faHome} />
                     </Link>
-                    <span onClick={toggleCategory} className="text-gray-800 hover:text-gray-900 cursor-pointer">Categories</span>
+                    <span onClick={toggleCategory} className="text-gray-800 hover:text-gray-900 cursor-pointer">Categories <FontAwesomeIcon icon={faListAlt} /></span>
                 </div>
                 <SearchBar />
                 <div className="flex space-x-4">
 
                     {localStorage.getItem('id') ? (
                         <>
-                            <span onClick={toggleUserMenu} className="text-yellow-500 hover:text-yellow-700 cursor-pointer">
-                                <FontAwesomeIcon icon={faUser} />
-                            </span>
-                            <Link to="/user/cart" className="text-gray-500 hover:text-gray-700">Cart</Link>
+
+                            <Link to="/user/cart" className="text-gray-500 hover:text-gray-700"><FontAwesomeIcon icon={faCartShopping} /> Cart</Link>
 
                             <span onClick={EnableChat} className="text-teal-500 hover:text-teal-700 cursor-pointer">
-                                <FontAwesomeIcon icon={faComments} />
+                                <FontAwesomeIcon icon={faComments} /> Chat with admin
+                            </span>
+                            <span onClick={toggleUserMenu} className="text-yellow-500 hover:text-yellow-700 cursor-pointer">
+                                <FontAwesomeIcon icon={faUser} /> User
                             </span>
                             {showUserMenu && (
                                 <div ref={userMenuRef} className="absolute bg-white shadow-md rounded">

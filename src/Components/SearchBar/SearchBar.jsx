@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../../config";
 import Book from "../../Book/Book";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
 
 function SearchBar() {
     const [keyword, setKeyword] = useState('');
@@ -84,7 +86,7 @@ function SearchBar() {
                     type="submit"
                     className="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 >
-                    Search
+                    <FontAwesomeIcon icon={faSearch} />
                 </button>
             </form>
             {showSuggestions && (

@@ -100,7 +100,7 @@ function CategoryList() {
             <ul className="mt-4">
                 {categories.map((category, index) => (
                     <li key={index} className="mx-20 border-b border-gray-300 py-4">
-                        <h1 className="text-white font-semibold mb-2">{category.name}</h1>
+                        <h1 className="text-white text-3xl font-semibold mb-2">{category.name}</h1>
                         <p className="text-white">Info: {category.info}</p>
                         <button
                             className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mt-2"

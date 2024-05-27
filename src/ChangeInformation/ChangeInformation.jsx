@@ -65,11 +65,11 @@ function ChangeInformation() {
     };
 
     return (
-        <div>
+        <div className="bg-gray-900 min-h-screen">
             <Header />
             <ToastContainer />
-            <div style={{ backgroundImage: "url('../../user.avif')" }}>
-                <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8">
+            <div className="bg-gray-900 min-h-screen">
+                <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10 p-10 bg-gray-200">
                     <div className="mb-4">
                         <label htmlFor="userName" className="block text-gray-700">Username</label>
                         <input

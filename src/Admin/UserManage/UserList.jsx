@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSync } from '@fortawesome/free-solid-svg-icons';
+import { faSync, faArrowLeft, faEnvelope, faTrash } from '@fortawesome/free-solid-svg-icons';
 import 'react-toastify/dist/ReactToastify.css';
 import User from '../../Components/User';
 import { API_BASE_URL } from '../../config';
@@ -104,21 +104,23 @@ function UserList() {
     };
 
     return (
-        <div className="p-4 bg-dark-blue min-h-screen text-white">
+        <div className="p-4 bg-gray-900 min-h-screen text-white">
             <ToastContainer />
             <div className="flex justify-between items-center mb-4">
-                <button
-                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
-                    onClick={() => navigate('/admin')}
-                >
-                    Go to Admin
-                </button>
+
                 <button
                     className="flex items-center bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
                     onClick={fetchUsers}
                 >
                     <FontAwesomeIcon icon={faSync} className="mr-2" />
                     Reload
+                </button>
+                <button
+                    className="text-white px-4 py-2 rounded hover:bg-gray-700 flex items-center"
+                    onClick={() => navigate('/admin')}
+                >
+                    <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
+                    Go to Admin
                 </button>
             </div>
 
@@ -136,21 +138,23 @@ function UserList() {
                             <p className="text-gray-400">{user.email}</p>
                             <div className="flex space-x-2 mt-2">
                                 <button
-                                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
+                                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700 flex items-center"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleDeleteUser(user.id);
                                     }}
                                 >
+                                    <FontAwesomeIcon icon={faTrash} className="mr-1" />
                                     Delete
                                 </button>
                                 <button
-                                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700"
+                                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700 flex items-center"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         openModal(user.id);
                                     }}
                                 >
+                                    <FontAwesomeIcon icon={faEnvelope} className="mr-1" />
                                     Send Email
                                 </button>
                             </div>

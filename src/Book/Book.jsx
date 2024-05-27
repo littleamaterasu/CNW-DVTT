@@ -68,14 +68,14 @@ function Book({ id, onClose }) {
 
     if (!data) {
         return (
-            <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50">
+            <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-50">
                 <p className="text-white">Loading...</p>
             </div>
         );
     }
 
     return (
-        <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 overflow-auto">
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 overflow-auto z-50">
             <ToastContainer />
             <div className="relative w-full max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6">
                 <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
@@ -87,7 +87,7 @@ function Book({ id, onClose }) {
                     </div>
                     <div className="md:w-2/3 md:ml-6 mt-4 md:mt-0">
                         <h1 className="text-2xl font-bold mb-2">{data.name}</h1>
-                        <p className="text-xl font-semibold text-gray-700 mb-2">${data.price} <span className="text-sm text-red-500">{data.discount ? `(Discount: ${data.discount}%)` : ''}</span></p>
+                        <p className="text-xl font-semibold text-gray-700 mb-2">{Math.floor(data.price / (1 - data.discount / 100.0))}VND <span className="text-sm text-red-500">{data.discount ? `(Discount: ${data.discount}%)` : ''}</span></p>
                         <p className="text-gray-600 mb-2">Sold: {data.soldCount}</p>
                         <p className="text-gray-600 mb-2">In Stock: {data.remainedCount}</p>
                         <p className="text-gray-600 mb-2">Year: {data.year}</p>
@@ -105,7 +105,6 @@ function Book({ id, onClose }) {
                 </div>
                 <h2 className="text-xl font-bold mb-4">Comments</h2>
                 <div className="mt-6 h-40 overflow-y-auto">
-
                     <div className="space-y-4">
                         {comments.map((comment, index) => (
                             <div key={index} className="border p-4 rounded-lg">

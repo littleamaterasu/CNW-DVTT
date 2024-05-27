@@ -4,30 +4,33 @@ import 'react-toastify/dist/ReactToastify.css';
 import { API_BASE_URL } from '../../config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTicketAlt } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
+import { Link } from 'react-router-dom';
 
 function CouponList() {
     const [coupons, setCoupons] = useState([]);
     const [showCouponCreate, setShowCouponCreate] = useState(false);
+    const fetchCoupons = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/coupon/getAll`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch coupons');
+            }
+            const data = await response.json();
+            setCoupons(data);
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
 
     useEffect(() => {
-        const fetchCoupons = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/coupon/getAll`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error('Failed to fetch coupons');
-                }
-                const data = await response.json();
-                setCoupons(data);
-            } catch (error) {
-                toast.error(error.message);
-            }
-        };
-
         fetchCoupons();
     }, []);
 
@@ -41,17 +44,33 @@ function CouponList() {
     };
 
     return (
-        <div className="p-4 bg-gray-900 min-h-screen">
+        <div className="book-list-container bg-gray-900 min-h-screen bg-cover bg-center p-4">
             <ToastContainer />
-            <h1 className="text-2xl font-bold mb-4 text-white">Coupon List</h1>
+            <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold text-white">Coupon List</h1>
+                <Link to="/admin" className="text-white">
+                    <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
+                    Back to Admin
+                </Link>
+            </div>
+
             <button
-                className="bg-white text-black font-bold py-2 px-4 rounded mb-4"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
                 onClick={handleFormToggle}
             >
-                {showCouponCreate ? 'Hide Form' : 'Add Coupon'}
+                <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                Add New Coupon
             </button>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <button
+                onClick={fetchCoupons}
+                className="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+            >
+                <FontAwesomeIcon icon={faSync} className="mr-2" />
+                Reload
+            </button>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4">
                 {coupons.map((coupon, index) => (
                     <div key={index} className="relative bg-white p-6 rounded shadow-lg">
                         <FontAwesomeIcon icon={faTicketAlt} className="absolute top-0 right-0 m-2 text-gray-600" />
@@ -68,15 +87,16 @@ function CouponList() {
                     </div>
                 ))}
             </div>
+
             {showCouponCreate && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-
                         <CouponCreate couponList={coupons} onNewCoupon={handleNewCoupon} onClose={handleFormToggle} />
                     </div>
                 </div>
             )}
         </div>
+
     );
 }
 
@@ -145,9 +165,9 @@ function CouponCreate({ onNewCoupon, couponList, onClose }) {
 
     return (
         <div className='fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50'>
-            <button className="close-button text-white absolute top-4 right-4" onClick={onClose}>Close</button>
             <div className='bg-white p-6 rounded shadow-lg w-11/12 md:w-1/2 lg:w-1/3 max-h-full overflow-y-auto'>
                 <form onSubmit={handleSubmit}>
+
                     <div className="mb-4">
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
                         <input
@@ -176,7 +196,7 @@ function CouponCreate({ onNewCoupon, couponList, onClose }) {
                             type="number"
                             id="discountPercent"
                             value={discountPercent}
-                            onChange={(e) => setDiscountPercent(e.target.value)}
+                            onChange={(e) => e <= 100 ? (e >= 0 ? setDiscountPercent(e.target.value) : setDiscountPercent(0)) : setDiscountPercent(100)}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                             required
                         />
@@ -246,9 +266,14 @@ function CouponCreate({ onNewCoupon, couponList, onClose }) {
                             required
                         />
                     </div>
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Submit
-                    </button>
+
+                    <div className='flex justify-between'>
+                        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Submit
+                        </button>
+                        <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" onClick={onClose}>Close Form</button>
+                    </div>
+
                 </form>
             </div>
         </div>

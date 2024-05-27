@@ -45,9 +45,9 @@ function ChangePassword() {
     };
 
     return (
-        <div>
+        <div className="bg-gray-900 min-h-screen">
             <Header />
-            <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <div className="flex items-center justify-center mt-10">
 
                 <ToastContainer />
 

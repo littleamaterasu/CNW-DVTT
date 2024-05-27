@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../config";
 import Book from "../Book/Book";
 import Header from "../Components/Header/Header";
+import { Link } from "react-router-dom";
 
 function BoughtProducts() {
     const [list, setList] = useState([]);
@@ -26,6 +27,7 @@ function BoughtProducts() {
                 }
                 const data = await response.json();
                 setList(data);
+                console.log(list)
             } catch (error) {
                 console.error("Error fetching product data:", error);
             }
@@ -53,31 +55,26 @@ function BoughtProducts() {
             if (!response.ok) {
                 throw new Error("Failed to rate the product");
             }
-            // Clear the form after rating successfully
             setSelectedProduct(null);
             setComment("");
             setRate(0);
             setLikeOrDislike(-1);
-            // You may want to reload the list of products after rating
-            // Or update the specific product's rating in the list
         } catch (error) {
             console.error("Error rating the product:", error);
         }
     };
 
     return (
-        <div className="container mx-auto p-4">
+        <div>
             <Header />
-            <h2 className="text-2xl font-bold mb-4">Bought Products</h2>
-            <Link to="/">
-                <button type="button" className="text-blue-500">Home</button>
-            </Link>
+            <h2 className="text-2xl font-bold mb-4 mr-10">Bought Products</h2>
             {list.length === 0 && <p>No products left</p>}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 m-10">
                 {list.map(item => (
-                    <div key={item.book.id} className="bg-white shadow-md rounded-lg overflow-hidden" onClick={() => setSelectedBookId(item.book.id)}>
+                    <div key={item.orderId} className="bg-white shadow-md rounded-lg overflow-hidden" onClick={() => setSelectedBookId(item.book.id)}>
                         <img src={item.book.imageUrl} alt={item.book.name} className="w-full h-48 object-cover" />
                         <div className="p-4">
+                            <h1>Product in order number: {item.orderId}</h1>
                             <h3 className="text-lg font-semibold">{item.book.name}</h3>
                             <p className="text-gray-600">Price: ${item.book.price}</p>
                             <p className="text-gray-600">Sold Count: {item.book.soldCount}</p>

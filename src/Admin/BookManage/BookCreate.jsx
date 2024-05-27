@@ -86,7 +86,7 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
             category: selectedGenres,
             imageUrl: uploadedImageUrl,
             weight,
-            price,
+            price: price * (1 - discount / 100.0),
             discount,
             soldCount,
             remainedCount,
@@ -197,7 +197,7 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
                             type="number"
                             id="weight"
                             value={weight}
-                            onChange={(e) => setWeight(e.target.value)}
+                            onChange={(e) => e >= 0 ? setWeight(e.target.value) : setWeight(0)}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                             required
                         />
@@ -208,7 +208,7 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
                             type="number"
                             id="price"
                             value={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            onChange={(e) => e >= 0 ? setPrice(e.target.value) : setPrice(0)}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                             required
                         />
@@ -219,7 +219,7 @@ function BookCreate({ bookList, setShowBookCreate, onNewBook }) {
                             type="number"
                             id="discount"
                             value={discount}
-                            onChange={(e) => setDiscount(e.target.value)}
+                            onChange={(e) => e <= 100 ? (e >= 0 ? setDiscount(e.target.value) : setDiscount(0)) : setDiscount(100)}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                             required
                         />

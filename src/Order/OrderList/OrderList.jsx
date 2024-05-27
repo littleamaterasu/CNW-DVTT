@@ -5,6 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "../../Components/Header/Header";
 import { API_BASE_URL } from "../../config";
 import OrderInfo from "../OrderInfo/OrderInfo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faList } from "@fortawesome/free-solid-svg-icons/faList";
 
 function OrderList() {
     const [orderList, setOrderList] = useState([]);
@@ -36,25 +38,32 @@ function OrderList() {
         fetchOrders();
     }, []);
 
+    const navigate = useNavigate();
+
+    const handleShowOrderInfo = (orderId) => {
+        navigate(`/order/info/${orderId}`);
+    };
 
     return (
-        <div>
+        <div className="bg-gray-900 min-h-screen pb-10">
             <ToastContainer />
             <Header />
-            <h2 className="text-2xl font-bold m-4 ">Order List</h2>
-            <ul>
-                {orderList.map((order) => (
-                    <li key={order.orderId} onClick={() => setOrder(order)} className="border rounded-lg p-4 ml-40 mb-4 mr-40 p-10 cursor-pointer hover:bg-gray-100">
-                        <div className="flex justify-between items-center">
-                            <div className="flex flex-col">
-                                <div className="text-lg font-bold">Order ID: {order.orderId}</div>
-                                <div>Book: {order.book.name}</div>
+            <div className="mx-auto max-w-4xl px-4 py-8">
+                <h2 className="text-3xl text-white font-bold m-4 "><FontAwesomeIcon icon={faList} /> Order List</h2>
+                <ul>
+                    {orderList.map((order) => (
+                        <li key={order.orderId} onClick={() => setOrder(order)} className="bg-gray-100 rounded-md p-4 mb-4 cursor-pointer hover:bg-gray-200">
+                            <div className="flex justify-between items-center">
+                                <div className="flex flex-col">
+                                    <div className="text-lg font-bold">Order ID: {order.orderId}</div>
+                                    <div>Book: {order.book.name}</div>
+                                </div>
+                                <div className="text-lg font-bold">{status[order.status]}</div>
                             </div>
-                            <div className="text-lg font-bold">{status[order.status]}</div>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+                        </li>
+                    ))}
+                </ul>
+            </div>
             {order && <OrderInfo order={order} onclose={() => setOrder(null)} />}
         </div>
     );

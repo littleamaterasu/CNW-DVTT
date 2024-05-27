@@ -85,7 +85,11 @@ function Login() {
                     Login
                 </button>
                 {error && <div className="mt-2 text-red-500">{error}</div>}
+                <div className="text-center mt-4">
+                    <Link to="/forgot-password" className="text-blue-500">Forgot Password?</Link>
+                </div>
             </form>
+
         </div>
     );
 }

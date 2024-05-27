@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Client } from "@stomp/stompjs";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { API_BASE_URL } from "../../config";
+import { API_BASE_URL, SOCKET_BASE_URL } from "../../config";
 import { OthersText, SelfText } from "./ChatText/ChatText";
 
 function Chat({ setShowChat }) {
@@ -15,7 +15,7 @@ function Chat({ setShowChat }) {
         // Fetch initial messages from API
         const fetchMessages = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/message/user`, {
+                const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/message/user?page=1`, {
                     headers: {
                         'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
                     },
@@ -38,7 +38,7 @@ function Chat({ setShowChat }) {
         fetchMessages();
 
         const newClient = new Client({
-            brokerURL: `ws://localhost:8081/hello`,
+            brokerURL: `${SOCKET_BASE_URL[import.meta.env.MODE]}/hello`,
             connectHeaders: {
                 username: localStorage.getItem('username'),
             },
