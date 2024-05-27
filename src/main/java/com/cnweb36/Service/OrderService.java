@@ -53,6 +53,7 @@ public class OrderService {
 		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
 		ProductEntity productEntity= productRepository.findOneById(orderRequest.getProductId());
 		OrderEntity orderEntity2=orderRepository.findByUserAndProduct(accountEntity, productEntity);
+		System.out.println(orderEntity2.getStatus());
 		if(orderEntity2==null || orderEntity2.getStatus().compareTo("0")!=0) {
 			OrderEntity orderEntity=new OrderEntity();
 			orderEntity.setUser(accountEntity);
@@ -62,6 +63,7 @@ public class OrderService {
 			orderEntity.setQuantity(orderRequest.getQuantity());
 			orderEntity.setPrice(orderRequest.getPrice());
 			
+			System.out.println("Oke");
 			return orderRepository.save(orderEntity).getId();
 		}
 		

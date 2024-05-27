@@ -17,7 +17,7 @@ import com.cnweb36.Service.Socket.UserInterceptor;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-	private String CORS_URl="http://localhost:5173";
+	private String CORS_URl="https://cnw-frontend.onrender.com";
 	
 	@Override
     public void configureMessageBroker(MessageBrokerRegistry config) {

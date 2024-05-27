@@ -19,7 +19,7 @@ public class Application {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:5173")
+						.allowedOrigins("http://localhost:5173","https://cnw-frontend.onrender.com")
 						.allowCredentials(true)
 						.allowedHeaders("*")
 						.allowedMethods("*")
@@ -30,7 +30,6 @@ public class Application {
 						.allowedHeaders("*")
 						.allowedMethods("*")
 						.maxAge(3600);
-				
 			}
 		};
 	}
