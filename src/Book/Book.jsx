@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { API_BASE_URL } from '../config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import StarRating from '../Components/StarRating';
 
 function Book({ id, onClose }) {
     const [data, setData] = useState(null);
+    const [comments, setComments] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,6 +25,23 @@ function Book({ id, onClose }) {
         fetchData();
     }, [id]);
 
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/order/getAllComment?productId=${id}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch comments');
+                }
+                const commentData = await response.json();
+                setComments(commentData.filter(comment => comment.rate !== null)); // Filter out comments with null rates
+            } catch (error) {
+                console.error("Error fetching comments:", error);
+            }
+        };
+
+        fetchComments();
+    }, [id]);
+
     const addToCart = async (productId, price) => {
         try {
             const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/order/post`, {
@@ -31,7 +50,7 @@ function Book({ id, onClose }) {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
                 },
-                body: JSON.stringify({ productId: productId, price: price }),
+                body: JSON.stringify({ productId, price }),
                 credentials: 'include'
             });
 
@@ -39,7 +58,7 @@ function Book({ id, onClose }) {
                 throw new Error('Failed to add to cart');
             }
 
-            const result = await response.json();
+            await response.json();
             toast.success('Added to cart successfully!');
         } catch (error) {
             toast.error('Error adding to cart');
@@ -56,7 +75,7 @@ function Book({ id, onClose }) {
     }
 
     return (
-        <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50">
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 overflow-auto">
             <ToastContainer />
             <div className="relative w-full max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6">
                 <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
@@ -82,6 +101,22 @@ function Book({ id, onClose }) {
                         <div className="flex space-x-4 mt-4">
                             <button onClick={() => addToCart(data.id, data.price)} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">Add to Cart</button>
                         </div>
+                    </div>
+                </div>
+                <h2 className="text-xl font-bold mb-4">Comments</h2>
+                <div className="mt-6 h-40 overflow-y-auto">
+
+                    <div className="space-y-4">
+                        {comments.map((comment, index) => (
+                            <div key={index} className="border p-4 rounded-lg">
+                                <div className="font-semibold">User: {comment.userName}</div>
+                                <div className="flex items-center mt-2">
+                                    <StarRating rating={comment.rate} />
+                                </div>
+                                <p className="mt-2">{comment.comment}</p>
+                                <p className="text-gray-500 text-sm mt-1">{comment.createdTime}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

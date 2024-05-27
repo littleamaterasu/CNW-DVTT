@@ -5,10 +5,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../config';
 import Chat from '../Chat/Chat';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faComments, faQuestionCircle, faUser } from '@fortawesome/free-solid-svg-icons';
 
 function Header({ }) {
     const [showCategory, setShowCategory] = useState(false);
-    const [categories, setCategories] = useState([])
+    const [categories, setCategories] = useState([]);
     const [enableChat, setEnableChat] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const navigate = useNavigate();
@@ -37,7 +39,7 @@ function Header({ }) {
                 const data = await response.json();
                 setCategories(data);
             } catch (error) {
-                toast.error(error);
+                toast.error(error.message);
             }
         };
 
@@ -71,19 +73,27 @@ function Header({ }) {
         <div className="bg-white shadow-md p-4">
             <div className="flex justify-between items-center">
                 <div className="flex space-x-4">
-                    <Link to="/" className="text-blue-500 hover:text-blue-700">Home</Link>
+                    <Link to="/" className="text-blue-500 hover:text-blue-700">
+                        <FontAwesomeIcon icon={faHome} />
+                    </Link>
                     <span onClick={toggleCategory} className="text-gray-800 hover:text-gray-900 cursor-pointer">Categories</span>
                 </div>
                 <SearchBar />
                 <div className="flex space-x-4">
-                    <span onClick={EnableChat} className="text-teal-500 hover:text-teal-700 cursor-pointer">Chat</span>
-                    <Link to="/user/FAQ" className="text-purple-500 hover:text-purple-700">FAQs</Link>
+
                     {localStorage.getItem('id') ? (
                         <>
+                            <span onClick={toggleUserMenu} className="text-yellow-500 hover:text-yellow-700 cursor-pointer">
+                                <FontAwesomeIcon icon={faUser} />
+                            </span>
                             <Link to="/user/cart" className="text-gray-500 hover:text-gray-700">Cart</Link>
-                            <span onClick={toggleUserMenu} className="text-yellow-500 hover:text-yellow-700 cursor-pointer">User</span>
+
+                            <span onClick={EnableChat} className="text-teal-500 hover:text-teal-700 cursor-pointer">
+                                <FontAwesomeIcon icon={faComments} />
+                            </span>
                             {showUserMenu && (
-                                <div ref={userMenuRef} className="absolute bg-white shadow-md mt-2 rounded p-2">
+                                <div ref={userMenuRef} className="absolute bg-white shadow-md rounded">
+
                                     <Link to="/user/changeInformation" className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200">Change Information</Link>
                                     <Link to="/user/changePassword" className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200">Change Password</Link>
                                     <Link to="/order/list" className="block w-full text-left px-4 py-2 rounded hover:bg-gray-200">Order List</Link>
@@ -105,7 +115,6 @@ function Header({ }) {
             {enableChat && localStorage.getItem('username') && (
                 <div>
                     <Chat setShowChat={disableChat} />
-
                 </div>
             )}
         </div>

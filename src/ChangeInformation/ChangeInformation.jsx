@@ -68,69 +68,72 @@ function ChangeInformation() {
         <div>
             <Header />
             <ToastContainer />
-            <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8">
-                <div className="mb-4">
-                    <label htmlFor="userName" className="block text-gray-700">Username</label>
+            <div style={{ backgroundImage: "url('../../user.avif')" }}>
+                <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8">
+                    <div className="mb-4">
+                        <label htmlFor="userName" className="block text-gray-700">Username</label>
+                        <input
+                            id="userName"
+                            type="text"
+                            value={username}
+                            placeholder={username}
+                            readOnly
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 bg-gray-100 cursor-not-allowed"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="password" className="block text-gray-700">Password</label>
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="email" className="block text-gray-700">Email</label>
+                        <input
+                            id="email"
+                            type="email"
+                            placeholder={email}
+                            value={email}
+                            readOnly
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="phone" className="block text-gray-700">Phone</label>
+                        <input
+                            id="phone"
+                            type="tel"
+                            placeholder={phone}
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="address" className="block text-gray-700">Address</label>
+                        <input
+                            id="address"
+                            type="text"
+                            placeholder={address}
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                        />
+                    </div>
                     <input
-                        id="userName"
-                        type="text"
-                        value={username}
-                        placeholder={username}
-                        readOnly
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 bg-gray-100 cursor-not-allowed"
+                        type="submit"
+                        value="Submit"
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                     />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="password" className="block text-gray-700">Password</label>
-                    <input
-                        id="password"
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="email" className="block text-gray-700">Email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        placeholder={email}
-                        value={email}
-                        readOnly
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="phone" className="block text-gray-700">Phone</label>
-                    <input
-                        id="phone"
-                        type="tel"
-                        placeholder={phone}
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="address" className="block text-gray-700">Address</label>
-                    <input
-                        id="address"
-                        type="text"
-                        placeholder={address}
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                    />
-                </div>
-                <input
-                    type="submit"
-                    value="Submit"
-                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-                />
-            </form>
+                </form>
+            </div>
+
         </div>
     );
 }

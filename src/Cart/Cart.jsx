@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { API_BASE_URL } from "../config";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import Header from "../Components/Header/Header";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import dayjs from 'dayjs';
 
 function Cart() {
     const [cartList, setCartList] = useState([]);
     const [note, setNote] = useState("");
     const [couponId, setCouponId] = useState("");
+    const [coupons, setCoupons] = useState([]);
     const [page, setPage] = useState(1);
-    const [address, setAdress] = useState('');
+    const navigate = useNavigate();
+    const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
 
     useEffect(() => {
         fetchData();
+        fetchCoupons();
     }, []);
 
     const fetchData = async () => {
@@ -24,13 +32,11 @@ function Cart() {
                 credentials: 'include'
             });
             const data = await response.json();
-            console.log(data)
             data.forEach(element => {
                 element.book.quantity = 0;
                 element.book.orderId = element.orderId;
                 setCartList(prev => [...prev, element.book]);
             });
-            console.log(cartList)
 
         } catch (error) {
             console.error("Error fetching cart items:", error);
@@ -45,22 +51,33 @@ function Cart() {
                 credentials: 'include'
             });
             const data = await response.json();
-            setAdress(data.address);
+            setAddress(data.address);
             setPhone(data.phone);
 
         } catch (error) {
-            console.error("Error fetching cart items:", error);
+            console.error("Error fetching user data:", error);
         }
     };
 
-    const handleQuantityChange = (id, newQuantity) => {
-        const updatedCart = cartList.map((item) => {
-            if (item.id === id) {
-                return { ...item, quantity: newQuantity };
-            }
-            return item;
-        });
-        setCartList(updatedCart);
+    const fetchCoupons = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/coupon/getAll`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
+                },
+                credentials: 'include'
+            });
+            const data = await response.json();
+            const validCoupons = data.filter(coupon =>
+                dayjs(coupon.endTime).isAfter(dayjs()) &&
+                coupon.limit > 0
+            );
+            setCoupons(validCoupons);
+
+        } catch (error) {
+            console.error("Error fetching coupons:", error);
+        }
     };
 
     const handleIncrement = (id) => {
@@ -96,6 +113,14 @@ function Cart() {
     const totalQuantity = cartList.reduce((total, item) => total + item.quantity, 0);
     const totalPrice = cartList.reduce((total, item) => total + item.quantity * item.price, 0);
 
+    const getCouponDiscount = () => {
+        console.log(coupons, couponId)
+        const coupon = coupons.find(coupon => coupon.id == couponId && totalPrice >= coupon.minPrice);
+        if (!coupon) return 0;
+        const discount = coupon.discountPercent ? (totalPrice * coupon.discountPercent / 100) : coupon.discountValue;
+        return Math.min(discount, coupon.maxDiscount);
+    };
+
     const handleCheckout = async () => {
         try {
             const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/payment/post`, {
@@ -110,16 +135,20 @@ function Cart() {
                     address: address,
                     phone: phone,
                     couponId: couponId,
-                    pay: totalPrice
+                    pay: totalPrice - getCouponDiscount()
                 }),
                 credentials: 'include'
             });
             const data = await response.json();
-            console.log("Order placed:", data);
+            if (data.status === -1) {
+                toast.error(data.content);
+                return;
+            } else {
+                navigate('/payment/list');
+            }
         } catch (error) {
             console.error("Error placing order:", error);
         }
-        console.log(cartList.filter(item => item.quantity > 0).map(item => ({ orderId: item.id, quantity: item.quantity })))
     };
 
     const invoiceItems = cartList.filter((item) => item.quantity > 0);
@@ -127,15 +156,18 @@ function Cart() {
     return (
         <div className="container mx-auto">
             <Header />
+            <ToastContainer />
             {cartList.length === 0 ? (
                 <p className="text-center text-lg mt-8">No items in the cart</p>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="md:col-span-2">
-                        <h2 className="text-2xl font-semibold mb-4">Cart</h2>
-                        <ul>
+                        <div className="inline-block p-2 bg-gray-200 rounded-full">
+                            <FontAwesomeIcon icon={faShoppingCart} className="text-gray-600" />
+                        </div>
+                        <ul className="border-2 border-black shadow-lg rounded-lg m-20 p-10">
                             {cartList.map((item) => (
-                                <li key={item.orderId} className="flex justify-between items-center bg-gray-100 p-4 mb-4">
+                                <li key={item.orderId} className="flex justify-between items-center bg-gray-100 mb-10 mt-10 p-5">
                                     <div className="flex items-center">
                                         <img src={item.imageUrl} alt={item.name} className="w-32 h-32 mr-4" />
                                         <span>{item.name}</span>
@@ -151,8 +183,8 @@ function Cart() {
                         </ul>
                     </div>
                     <div className="md:col-span-1">
-                        <div className>
-                            <h2 className="text-2xl font-semibold mb-4">Invoice</h2>
+                        <div className="border-2 border-black shadow-lg rounded-lg mr-20 mt-20 mb-20 p-10 bg-gray-80">
+                            <h2 className="text-2xl font-semibold m-10">Invoice</h2>
                             <ul>
                                 {invoiceItems.map((item) => (
                                     <li key={item.id}>
@@ -163,6 +195,8 @@ function Cart() {
                             <div className="mt-4">
                                 <p className="text-lg">Total Quantity: {totalQuantity}</p>
                                 <p className="text-lg">Total Price: ${totalPrice}</p>
+                                <p className="text-lg">Discount: -${getCouponDiscount()}</p>
+                                <p className="text-lg">Final Price: ${totalPrice - getCouponDiscount()}</p>
                             </div>
                             <div className="mt-4">
                                 <label className="block mb-2">
@@ -170,11 +204,19 @@ function Cart() {
                                     <input type="text" value={note} onChange={(e) => setNote(e.target.value)} className="border border-gray-400 px-2 py-1 rounded-md w-full" />
                                 </label>
                                 <label className="block mb-2">
-                                    Coupon ID:
-                                    <input type="text" value={couponId} onChange={(e) => setCouponId(e.target.value)} className="border border-gray-400 px-2 py-1 rounded-md w-full" />
+                                    Coupon:
+                                    <select value={couponId} onChange={(e) => setCouponId(e.target.value)} className="border border-gray-400 px-2 py-1 rounded-md w-full">
+                                        <option value="">Select a coupon</option>
+                                        {coupons.map(coupon => (
+                                            <option key={coupon.id} value={coupon.id} style={{ overflowX: 'scroll' }}>
+                                                {coupon.name} - {coupon.minPrice <= totalPrice ? `Min: $${coupon.minPrice}, Max Discount: ${coupon.maxDiscount}VND------` : `Not eligible`}
+                                            </option>
+
+                                        ))}
+                                    </select>
                                 </label>
                                 <label className="block mb-2">Phone: {phone}</label>
-                                <label className="block mb-2">Adress: {address}</label>
+                                <label className="block mb-2">Address: {address}</label>
                             </div>
                             <button onClick={handleCheckout} className="bg-green-500 text-white px-4 py-2 rounded-md mt-4">Checkout</button>
                         </div>

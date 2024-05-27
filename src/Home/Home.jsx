@@ -3,11 +3,16 @@ import Header from '../Components/Header/Header';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
 import Book from '../Book/Book';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTicketAlt } from '@fortawesome/free-solid-svg-icons';
+import dayjs from 'dayjs';
 
 function Home() {
+    console.log(import.meta.env.MODE)
     const navigate = useNavigate();
     const [top5, setTop5] = useState([]);
     const [id, setId] = useState(null);
+    const [coupons, setCoupons] = useState([]);
 
     useEffect(() => {
         const role = localStorage.getItem('role');
@@ -27,25 +32,55 @@ function Home() {
             }
         };
 
+        const fetchCouponList = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/coupon/getAll`);
+                const data = await response.json();
+                const filteredCoupons = data.filter(coupon => dayjs(coupon.endTime).isAfter(dayjs()));
+                setCoupons(filteredCoupons);
+            } catch (error) {
+                console.error('Error fetching coupons:', error);
+            }
+        };
+
+        fetchCouponList();
         fetchTop5Books();
     }, []);
 
     return (
-        <div className="bg-gray-100 min-h-screen">
-            <Header />
-            <div className="container mx-auto py-8">
-                <h2 className="text-3xl font-bold text-center mb-8">Top 5 Bestselling Books</h2>
-                <div className="flex flex-wrap justify-center space-x-6 space-y-6">
-                    {top5.map((book, index) => (
-                        <div key={book.id} onClick={() => setId(book.id)} className={`flex-none bg-white rounded-lg shadow-lg p-4 w-64 ${index > 2 ? 'mt-6' : ''}`}>
-                            <img src={book.imageUrl} alt={book.name} className="w-full h-48 object-cover mb-4 rounded" />
-                            <h3 className="text-xl font-semibold mb-2">{book.name}</h3>
-                            <p className="text-gray-600">Sold: {book.soldCount}</p>
-                        </div>
-                    ))}
+        <div className="bg-cover bg-center min-h-screen" style={{ backgroundImage: "url('../../Bookswall_generated.jpg')" }}>
+            <div className="bg-black bg-opacity-50 min-h-screen">
+                <Header />
+                <div className="container mx-auto py-8">
+                    <h2 className="text-3xl font-bold text-center mb-8 text-white">Top 10 Bestselling Books</h2>
+                    <div className="flex flex-wrap justify-center space-x-6 space-y-6">
+                        {top5.map((book, index) => (
+                            <div key={book.id} onClick={() => setId(book.id)} className={`flex-none bg-white rounded-lg shadow-lg p-4 w-64 ${index > 2 ? 'mt-6' : ''}`}>
+                                <img src={book.imageUrl} alt={book.name} className="w-full h-48 object-cover mb-4 rounded" />
+                                <h3 className="text-xl font-semibold mb-2">{book.name}</h3>
+                                <p className="text-gray-600">Sold: {book.soldCount}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <h2 className="text-2xl font-bold text-center mt-12 mb-4 text-white">Available Coupons</h2>
+                    <div className="flex flex-wrap justify-center space-x-6 space-y-6">
+                        {coupons.map((coupon, index) => (
+                            <div key={coupon.id} className="flex-none bg-white rounded-lg shadow-lg p-4 w-64">
+                                <div className="flex items-center mb-4">
+                                    <FontAwesomeIcon icon={faTicketAlt} className="text-yellow-500 text-3xl mr-2" />
+                                    <h3 className="text-xl font-semibold">{coupon.name}</h3>
+                                </div>
+                                <p className="text-gray-600">ID: {coupon.id}</p>
+                                <p className="text-gray-600">Quantity: {coupon.limit}</p>
+                                <p className="text-gray-600">Min Order: {coupon.minPrice}VND</p>
+                                <p className="text-gray-600">Max Discount: {coupon.maxDiscount}VND</p>
+                                <p className="text-gray-600">Expires: {dayjs(coupon.endTime).format('DD-MM-YYYY')}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
+                {id && <Book onClose={() => setId(null)} id={id} />}
             </div>
-            {id && <Book onClose={() => setId(null)} id={id} />}
         </div>
     );
 }

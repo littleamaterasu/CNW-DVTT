@@ -51,9 +51,10 @@ function Login() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('../../Bookswall_generated.jpg')" }}>
+            <div className="absolute inset-0 bg-black opacity-50"></div>
             <ToastContainer />
-            <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-80">
+            <form onSubmit={handleSubmit} className="relative bg-white p-6 rounded shadow-md w-80">
                 <div className="flex justify-between mb-4">
                     <Link to="/">
                         <button type="button" className="text-blue-500">Home</button>

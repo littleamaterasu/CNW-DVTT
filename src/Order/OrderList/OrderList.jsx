@@ -9,7 +9,6 @@ import OrderInfo from "../OrderInfo/OrderInfo";
 function OrderList() {
     const [orderList, setOrderList] = useState([]);
     const [order, setOrder] = useState(null)
-    const navigate = useNavigate();
     const status = ['Removed', 'Awaiting payment', 'On delivering', 'Delivered']
 
     useEffect(() => {

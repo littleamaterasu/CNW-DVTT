@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Client } from "@stomp/stompjs";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,8 +11,36 @@ function AdminChat({ setShowChat }) {
     const [input, setInput] = useState("");
     const [client, setClient] = useState(null);
     const [currentChat, setCurrentChat] = useState('');
+    const [newMessages, setNewMessages] = useState({}); // Track new messages for each user
+    const chatContainerRef = useRef(null); // Create a ref for the chat container
 
     useEffect(() => {
+        // Fetch initial messages from API
+        const fetchMessages = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/message/admin?Day=2`, {
+                    headers: {
+                        'X-CSRF-TOKEN': localStorage.getItem('CSRF'),
+                    },
+                    credentials: 'include'
+                });
+                const data = await response.json();
+
+                // Transform data
+                const formattedMessages = data.reduce((acc, { username, listMess }) => {
+                    acc[username] = listMess.map(mess =>
+                        mess.from === 'user' ? <OthersText message={mess.content} /> : <SelfText message={mess.content} />);
+                    return acc;
+                }, {});
+                setMessages(formattedMessages);
+                setUsers(data.map(({ username }) => username));
+            } catch (error) {
+                toast.error("Failed to load initial messages");
+            }
+        };
+
+        fetchMessages();
+
         const newClient = new Client({
             brokerURL: `ws://localhost:8081/hello`,
             connectHeaders: {
@@ -26,8 +54,8 @@ function AdminChat({ setShowChat }) {
                         ...prev,
                         [username]: [...(prev[username] || []), <OthersText message={content} />]
                     }));
-                    setUsers(prev => [...prev, username]);
-
+                    setUsers(prev => [...new Set([...prev, username])]); // Ensures unique users
+                    setNewMessages(prev => ({ ...prev, [username]: true })); // Mark new message for the user
                 });
             },
         });
@@ -39,6 +67,13 @@ function AdminChat({ setShowChat }) {
             newClient.deactivate();
         };
     }, []);
+
+    useEffect(() => {
+        // Scroll to bottom whenever messages are updated
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+    }, [messages, currentChat]);
 
     const handleSend = () => {
         if (input.trim() && client && currentChat) {
@@ -58,6 +93,11 @@ function AdminChat({ setShowChat }) {
         }
     };
 
+    const handleUserClick = (user) => {
+        setCurrentChat(user);
+        setNewMessages(prev => ({ ...prev, [user]: false })); // Clear new message notification for the user
+    };
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
             <ToastContainer />
@@ -71,25 +111,29 @@ function AdminChat({ setShowChat }) {
                 </button>
 
                 <div className="flex space-x-2 border border-gray-300 overflow-x-scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100">
-                    {users
-                        .filter((user, index, self) => self.indexOf(user) === index) // Lọc các phần tử duy nhất
-                        .map((user, index) => (
-                            <div
-                                key={index}
-                                onClick={() => setCurrentChat(user)}
-                                className="flex-shrink-0 cursor-pointer text-blue-600 hover:text-blue-800 p-2"
-                            >
-                                {user}
-                            </div>
-                        ))
-                    }
+                    {users.map((user, index) => (
+                        <div
+                            key={index}
+                            onClick={() => handleUserClick(user)}
+                            className="flex-shrink-0 cursor-pointer text-blue-600 hover:text-blue-800 p-2 relative"
+                        >
+                            {user}
+                            {newMessages[user] && (
+                                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                                    !
+                                </span>
+                            )}
+                        </div>
+                    ))}
                 </div>
-
 
                 {currentChat ? (
                     <div>
                         <h2 className="text-2xl mb-4">Chat with {currentChat}</h2>
-                        <div className="chat-text h-40 overflow-y-auto p-2 mb-2 border border-gray-300 rounded">
+                        <div
+                            className="chat-text h-40 overflow-y-auto p-2 mb-2 border border-gray-300 rounded"
+                            ref={chatContainerRef} // Attach the ref to the chat container
+                        >
                             {messages[currentChat] ? messages[currentChat].map((message, index) => (
                                 <div key={index}>{message}</div>
                             )) : <div>No messages yet</div>}

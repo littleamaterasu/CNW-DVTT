@@ -40,7 +40,6 @@ function ForgotPassword() {
     const CheckOTP = async () => {
         try {
 
-            // API?
             const response = await fetch(`${API_BASE_URL[import.meta.env.MODE]}/account/getpass/mail`, {
                 method: 'POST',
                 headers: {

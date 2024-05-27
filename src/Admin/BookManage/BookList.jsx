@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import BookCreate from './BookCreate';
+import BookEdit from './BookEdit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { API_BASE_URL } from '../../config';
@@ -8,12 +9,13 @@ import { API_BASE_URL } from '../../config';
 function BookList() {
     const [books, setBooks] = useState([]);
     const [showBookCreate, setShowBookCreate] = useState(false);
-    const [selectedBook, setSelectedBook] = useState(null); // State mới để lưu trữ thông tin của cuốn sách được chọn để chỉnh sửa
+    const [showBookEdit, setShowBookEdit] = useState(false);
+    const [selectedBookId, setSelectedBookId] = useState(null);
     const [page, setPage] = useState(1);
 
     useEffect(() => {
         fetchBooks();
-    }, [page]); // Trigger fetchBooks whenever the page changes
+    }, [page]);
 
     const fetchBooks = async () => {
         try {
@@ -38,16 +40,23 @@ function BookList() {
         setShowBookCreate(false);
     };
 
+    const handleUpdatedBook = (updatedBook) => {
+        const updatedBooks = books.map(book => book.id === updatedBook.id ? updatedBook : book);
+        setBooks(updatedBooks);
+        setShowBookEdit(false);
+    };
+
     const handleFormToggle = () => {
         setShowBookCreate(!showBookCreate);
     };
 
-    const handleEditBook = (book) => {
-        setSelectedBook(book); // Cập nhật state mới với thông tin của cuốn sách được chọn để chỉnh sửa
+    const handleEditBook = (bookId) => {
+        setSelectedBookId(bookId);
+        setShowBookEdit(true);
     };
 
     const handleNextPage = () => {
-        if (books.length() > 0) setPage(page + 1);
+        if (books.length > 0) setPage(page + 1);
     };
 
     const handlePrevPage = () => {
@@ -57,15 +66,19 @@ function BookList() {
     };
 
     return (
-        <div className="book-list p-4">
+        <div className="book-list-container bg-gray-900 bg-cover bg-center p-4" >
             <ToastContainer />
-            <h4 className="text-lg font-medium mb-4">
+            <h4 className="text-white font-medium mb-4">
                 <Link to="/admin">Admin homepage</Link> / Book List
             </h4>
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleFormToggle}>
                 {showBookCreate ? 'Hide Form' : 'Add Book'}
             </button>
             <button onClick={fetchBooks} className="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Reload</button>
+            <div className="flex justify-between my-4">
+                <button onClick={handlePrevPage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled={page === 1}>Previous Page</button>
+                <button onClick={handleNextPage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next Page</button>
+            </div>
             {showBookCreate && (
                 <BookCreate
                     bookList={books}
@@ -73,27 +86,28 @@ function BookList() {
                     onNewBook={handleNewBook}
                 />
             )}
-            <ul className="mt-4">
+            {showBookEdit && selectedBookId && (
+                <BookEdit
+                    bookId={selectedBookId}
+                    setShowBookEdit={setShowBookEdit}
+                    onBookUpdated={handleUpdatedBook}
+                />
+            )}
+            <ul className="grid grid-cols-5 gap-4">
                 {books.map((book, index) => (
-                    <li key={index} className="border-b border-gray-300 py-4 flex items-start">
-                        <img className="w-auto max-h-48 object-cover rounded" src={book.imageUrl} alt="img" />
-                        <div className="ml-4">
-                            <h2 className="text-xl font-semibold mb-2">{book.name}</h2>
+                    <li key={index} className="bg-white shadow-md rounded-lg p-4">
+                        <img className="w-full h-auto rounded-md mb-2" src={book.imageUrl} alt="Book cover" />
+                        <div>
+                            <h2 className="text-lg font-semibold mb-2">{book.name}</h2>
                             <p>Price: {book.price}</p>
                             <p>Sold Count: {book.soldCount}</p>
-                            <button onClick={() => handleEditBook(book)}>Edit</button> {/* Button để chỉnh sửa cuốn sách */}
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2" onClick={() => handleEditBook(book.id)}>Edit</button>
                         </div>
                     </li>
                 ))}
             </ul>
-
-            <div className="flex justify-between mt-4">
-                <button onClick={handlePrevPage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled={page === 1}>Previous Page</button>
-                <button onClick={handleNextPage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Next Page</button>
-            </div>
         </div>
     );
 }
 
 export default BookList;
-

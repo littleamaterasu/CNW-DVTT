@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate, Routes, Route } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AdminChat from '../Components/Chat/AdminChat';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserShield, faBook, faTags, faTicketAlt, faQuestionCircle, faUsers, faChartLine, faComments } from '@fortawesome/free-solid-svg-icons';
 
 function Admin() {
     const navigate = useNavigate();
@@ -20,30 +22,34 @@ function Admin() {
     };
 
     return (
-        <div className="p-4">
-            <button onClick={() => setChat(true)}>Chat</button>
-            {chat && <AdminChat setShowChat={() => setChat(false)} />}
-            <div className="text-right mb-4">
-                <button onClick={handleLogout} className="text-white bg-red-500 px-4 py-2 rounded">Log out</button>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-                <div onClick={() => HandleSwitchPage('/create')} className="bg-blue-500 text-white p-8 rounded flex items-center justify-center cursor-pointer">
-                    Admin Accounts
+        <div className="bg-cover bg-center min-h-screen" style={{ backgroundImage: "url('../../public/Bookswall_generated.jpg')" }}>
+            <div className="bg-black bg-opacity-50 min-h-screen p-4">
+                <div className="flex justify-between mb-4">
+                    <button onClick={() => setChat(true)} className="text-white bg-blue-500 px-4 py-2 rounded-full flex items-center hover:bg-blue-600">
+                        <FontAwesomeIcon icon={faComments} className="mr-2" /> Chat
+                    </button>
+                    <button onClick={handleLogout} className="text-white bg-red-500 px-4 py-2 rounded">Log out</button>
                 </div>
-                <div onClick={() => HandleSwitchPage('/books')} className="bg-green-500 text-white p-8 rounded flex items-center justify-center cursor-pointer">
-                    Books
-                </div>
-                <div onClick={() => HandleSwitchPage('/category')} className="bg-green-500 text-white p-8 rounded flex items-center justify-center cursor-pointer">
-                    Category
-                </div>
-                <div onClick={() => HandleSwitchPage('/coupon')} className="bg-green-500 text-white p-8 rounded flex items-center justify-center cursor-pointer">
-                    Coupon
-                </div>
-                <div onClick={() => HandleSwitchPage('/FAQs')} className="bg-yellow-500 text-white p-8 rounded flex items-center justify-center cursor-pointer">
-                    FAQs
-                </div>
-                <div onClick={() => HandleSwitchPage('/users')} className="bg-purple-500 text-white p-8 rounded flex items-center justify-center cursor-pointer">
-                    User Accounts
+                {chat && <AdminChat setShowChat={() => setChat(false)} />}
+                <div className="grid grid-cols-2 gap-4">
+                    <div onClick={() => HandleSwitchPage('/create')} className="bg-white bg-opacity-50 text-black p-20 mb-10 ml-20 rounded-2xl flex items-center justify-center cursor-pointer hover:bg-opacity-75">
+                        <FontAwesomeIcon icon={faUserShield} className="mr-2" /> Admin Accounts
+                    </div>
+                    <div onClick={() => HandleSwitchPage('/books')} className="bg-white bg-opacity-50 text-black p-20 mb-10 mr-20 rounded-2xl flex items-center justify-center cursor-pointer hover:bg-opacity-75">
+                        <FontAwesomeIcon icon={faBook} className="mr-2" /> Books
+                    </div>
+                    <div onClick={() => HandleSwitchPage('/category')} className="bg-white bg-opacity-50 text-black p-20 mb-10 ml-20 rounded-2xl flex items-center justify-center cursor-pointer hover:bg-opacity-75">
+                        <FontAwesomeIcon icon={faTags} className="mr-2" /> Category
+                    </div>
+                    <div onClick={() => HandleSwitchPage('/coupon')} className="bg-white bg-opacity-50 text-black p-20 mb-10 mr-20 rounded-2xl flex items-center justify-center cursor-pointer hover:bg-opacity-75">
+                        <FontAwesomeIcon icon={faTicketAlt} className="mr-2" /> Coupon
+                    </div>
+                    <div onClick={() => HandleSwitchPage('/users')} className="bg-white bg-opacity-50 text-black p-20 mb-10 ml-20 rounded-2xl flex items-center justify-center cursor-pointer hover:bg-opacity-75">
+                        <FontAwesomeIcon icon={faUsers} className="mr-2" /> User Accounts
+                    </div>
+                    <div onClick={() => HandleSwitchPage('/statistic')} className="bg-white bg-opacity-50 text-black p-20 mb-10 mr-20 rounded-2xl flex items-center justify-center cursor-pointer hover:bg-opacity-75">
+                        <FontAwesomeIcon icon={faChartLine} className="mr-2" /> Statistic
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,24 +57,3 @@ function Admin() {
 }
 
 export default Admin;
-
-// Placeholder components for routes
-function CreateAdmin() {
-    return <div>Create Admin Page</div>;
-}
-
-function BooksAndAuthors() {
-    return <div>Books and Authors Page</div>;
-}
-
-function FAQs() {
-    return <div>FAQs Page</div>;
-}
-
-function UserAccounts() {
-    return <div>User Accounts Page</div>;
-}
-
-function DefaultAdminPage() {
-    return <div>Welcome to the Admin Dashboard</div>;
-}
