@@ -63,7 +63,7 @@ public class PaymentAPI {
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
-	@GetMapping("/getAllPayment")
+	@GetMapping("/getAllPaymentAdmin")
 	public List<PaymentListResponse> getAllPaymentAdmin() {
 		return paymentService.getAllPaymentAdmin();
 	}
