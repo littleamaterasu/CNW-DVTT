@@ -40,6 +40,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
          
     }
     
+    //them mot interceptor de tien xu li moi yeu cau den
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
     registration.interceptors(new UserInterceptor());

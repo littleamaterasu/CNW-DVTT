@@ -62,6 +62,12 @@ public class PaymentAPI {
 		}
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN_1', 'ADMIN_2', 'ADMIN_3')")
+	@GetMapping("/getAllPayment")
+	public List<PaymentListResponse> getAllPaymentAdmin() {
+		return paymentService.getAllPaymentAdmin();
+	}
+	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/getAllPayment")
 	public List<PaymentListResponse> getAllPayment(@CookieValue("${cnweb36.jwtCookieName}") String jwtToken, @RequestParam(name="page",required = false) Integer page) {

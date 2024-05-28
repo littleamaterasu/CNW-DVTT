@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -62,7 +63,16 @@ public class AccountAPI {
 		SignInDTO signInDTO = accountService.accountSignin(signInRequest);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.SET_COOKIE, signInDTO.getJwtCookie());
+		ResponseCookie cookie = ResponseCookie.from("${cnweb36.jwtCookieName}",signInDTO.getJwtCookie())
+                .domain("onrender.com") // Thiết lập domain
+                .path("/") // Thiết lập path
+                .secure(true) // Thiết lập secure
+                .httpOnly(true) // Nếu cần thiết, bạn có thể thiết lập httpOnly ở đây
+                .build();
+
+        headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
+
+		//headers.add(HttpHeaders.SET_COOKIE, signInDTO.getJwtCookie());
 
 		return ResponseEntity.ok().headers(headers)
 				.body(new SignInResponse(signInDTO.getId(), signInDTO.getRoleList(), signInDTO.getCsrfToken()));

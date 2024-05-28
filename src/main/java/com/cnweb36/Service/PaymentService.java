@@ -135,6 +135,20 @@ public class PaymentService {
 		}
 	}
 	
+	public List<PaymentListResponse> getAllPaymentAdmin() {
+		List<PaymentEntity> listPaymentEntities=paymentRepository.findAll(Sort.by("createdDate").descending());
+		List<PaymentListResponse> listPaymentListResponses=new ArrayList<>();
+		for(PaymentEntity p: listPaymentEntities) {
+			String listname="";
+			for(OrderEntity o: p.getOrderList()) {
+				listname=listname.concat(o.getProduct_order().getName()).concat(" ");
+			}
+			listPaymentListResponses.add(new PaymentListResponse(p.getId(), p.getCreatedDate(), p.getPay(), p.getStatus(), listname));
+		}
+		
+		return listPaymentListResponses;
+	}
+	
 	//
 	public PaymentResponse getPayment(String username,Long paymentId)  {
 		AccountEntity accountEntity= accountRepository.findEntityByUsername(username);
